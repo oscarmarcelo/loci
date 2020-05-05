@@ -1,0 +1,82 @@
+@import ../../abstracts/index
+
+
+
+.select-menu
+  height: 100%
+  display: flex
+  flex-direction: column
+
+  &__search
+    border-bottom: 1px solid var(--inspector-separator)
+    padding: 6px 10px 4px
+    display: flex
+    align-items: center
+    flex-shrink: 0
+
+    &--hidden
+      display: none
+
+    &-icon
+      stroke: var(--inspector-secondary-label-text) // TODO: Can't use alpha.
+        linecap: round
+      width: 11px
+      height: 11px
+      margin-right: 7px
+
+    &-input
+      border: 0
+      padding: 0 0 2px
+      flex-grow: 1
+      letter-spacing: 0
+
+      @media (prefers-color-scheme: dark)
+        background: transparent
+
+      &:focus
+        box-shadow: none
+
+  &__list
+    padding-bottom: 3px
+    flex-grow: 1
+    overflow-y: auto
+
+  &__group
+    display: flex
+    flex-direction: column
+
+    &:not(&--hidden) ~ &
+      border-top: 1px solid var(--inspector-separator)
+
+    &--hidden
+      display: none
+
+  &__heading
+    margin: 12px 10px 6px
+
+  &__item
+    border-radius: 4px
+    height: 24px
+    max-width: 100%
+    margin: 0 4px 1px
+    padding: 0 6px
+    text:
+      align: left
+      overflow: ellipsis
+    font-size: 11px
+    letter-spacing: .05px
+    overflow: hidden
+    white-space: nowrap
+
+    &:first-child
+      margin-top: 4px
+
+    &--current
+      background: var(--inspector-separator)
+
+    &--selected
+      color: var(--token-selected-text)
+      background: var(--token-data-selected-background)
+
+    &--hidden
+      display: none

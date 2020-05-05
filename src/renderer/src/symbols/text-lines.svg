@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="5px" height="5px" viewBox="0 0 5 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>text-lines</title>
+    <desc>Created with Sketch.</desc>
+    <g id="text-lines" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <line x1="0.5" y1="4.5" x2="2.5" y2="4.5" id="line"></line>
+        <line x1="0.5" y1="2.5" x2="4.5" y2="2.5" id="line"></line>
+        <line x1="0.5" y1="0.5" x2="4.5" y2="0.5" id="line"></line>
+    </g>
+</svg>

@@ -1,0 +1,18 @@
+/*
+ * ========================================================
+ * layout/main/wrapper
+ * ========================================================
+ */
+
+.wrapper
+  height: 100%
+  display: grid
+  grid:
+    template:
+      columns: [sidebar-start small-titlebar-start] 132px [small-titlebar-end sidebar-end bg-start main-start titlebar-start] calc(100vw - 132px) [titlebar-end main-end bg-end]
+      rows: [bg-start small-titlebar-start titlebar-start] 29px [small-titlebar-end titlebar-end sidebar-start main-start] calc(100vh - 29px) [sidebar-end main-end bg-end]
+
+  &__bg
+    outline: 1px solid var(--inspector-border) //rgba(#000, .2)
+    background: var(--inspector-background)
+    grid-area: bg

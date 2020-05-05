@@ -1,0 +1,35 @@
+template#gender
+  //- TODO [>=1.0.0]: Old version with buttons. Remove this if not used.
+
+  //- .button-group
+  //-   .button-group__list
+  //-     button.button-group__button(aria-title="Both Genders" title="Use all names." aria-pressed)
+  //-       +icon('both-genders').button-group__icon
+
+  //-     button.button-group__button(aria-title="Male" title="Use only male names.")
+  //-       +icon('male').button-group__icon
+
+  //-     button.button-group__button(aria-title="Female" title="Use only female names.")
+  //-       +icon('female').button-group__icon
+
+  //-   .button-group__label Gender
+
+
+  .button-group
+    .button-group__list
+      label.button-group__control(aria-title="Both Genders" title="Use all names.")
+        input.button-group__reference(type="radio" name="gender" value="both")
+        .button-group__mask
+          +icon('both-genders').button-group__icon
+
+      label.button-group__control(aria-title="Male" title="Use only male names.")
+        input.button-group__reference(type="radio" name="gender" value="male")
+        .button-group__mask
+          +icon('male').button-group__icon
+
+      label.button-group__control(aria-title="Female" title="Use only female names.")
+        input.button-group__reference(type="radio" name="gender" value="female")
+        .button-group__mask
+          +icon('female').button-group__icon
+
+    .button-group__label Gender

@@ -1,0 +1,154 @@
+extends _extends/_layout
+
+
+
+block styles
+  link(rel="stylesheet", href="../assets/styles/layout/main.css")
+  link(rel="stylesheet", href="../assets/styles/pages/main.css")
+
+
+
+block body
+  .wrapper
+    .wrapper__bg
+
+
+    //- TODO: Remove this if not needed. Remove also related CSS and JS.
+    //- .traffic-lights.traffic-lights--active(data-app-region="drag")
+      div.traffic-lights__button.traffic-lights__button--close(data-app-region="no-drag") 􀆄
+
+
+    //- Just to make the sidebar top draggable.
+    div(data-app-region="drag")
+
+
+    .titlebar(data-app-region="drag") Loci
+
+
+    .sidebar
+      .sidebar__list
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Names
+          .sidebar__item-data.sidebar__item-data--active
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Cities
+          .sidebar__item-data
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Names/Female Names
+          .sidebar__item-data
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Pets
+          .sidebar__item-data.sidebar__item-data--active
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Time
+          .sidebar__item-data.sidebar__item-data--active
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name IBAN
+          .sidebar__item-data
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Phone Numbers
+          .sidebar__item-data
+            +icon('data').sidebar__item-data-icon
+
+        .sidebar__item
+          .sidebar__item-icon
+          .sidebar__item-name Colors
+          .sidebar__item-data
+            +icon('data').sidebar__item-data-icon
+
+      .sidebar__footer
+        button 􀅼
+        button 􀄂
+
+
+    .main
+      .token-box.main__filler
+        .token-box__scroller
+          .token-box__input.data-editor-input(contenteditable spellcheck="false")
+
+        //- TODO [>=1.0.0]: Use data-popover instead of select.
+        //- button.token-box__chevron
+        div.token-box__chevron
+          select.token-box__select(style="min-width: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; opacity: 0")
+          +icon('chevron-down').token-box__chevron-icon
+
+
+      hr
+
+
+      .heading-2 Limit
+
+
+      .combo-field.limits
+        .input-combo
+          .number-input
+            input.number-input__reference.limits__min(type="number" min=0 placeholder="Min")
+
+            button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+              +icon('spinner-up').number-input__spinner-icon
+
+            button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+              +icon('spinner-down').number-input__spinner-icon
+
+
+          .number-input
+            input.number-input__reference.limits__max(type="number" min=0 placeholder="Max")
+
+            button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+              +icon('spinner-up').number-input__spinner-icon
+
+            button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+              +icon('spinner-down').number-input__spinner-icon
+
+
+        .select
+          select.select__reference(size=1)
+            option Characters
+            option Words
+
+          +icon('chevron-up-down').select__icon
+
+
+      .checkable.mt-10
+        label.checkable__control
+          input.checkable__reference(type="checkbox")
+
+          .checkable__mask
+            +icon('check').checkable__icon
+
+          .checkable__label Truncate with ellipsis
+
+
+      hr.fill-edges
+      .main__footer
+        button.button Import&hellip;
+        button.button Apply
+
+
+
+block scripts
+  script(src="../assets/scripts/components/traffic-lights.js")
+  script(src="../assets/scripts/components/token-box.js")
+  script(src="../assets/scripts/components/token.js")
+  script(src="../assets/scripts/components/number-input.js")
+  script(src="../assets/scripts/data.js")
+  script(src="../assets/scripts/pages/main.js")

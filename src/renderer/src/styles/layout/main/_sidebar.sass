@@ -1,0 +1,79 @@
+/*
+ * ========================================================
+ * layout/main/sidebar
+ * ========================================================
+ */
+
+.sidebar
+  margin-bottom: 10px
+  grid-area: sidebar
+  display: flex
+  flex-direction: column
+
+  &__list
+    flex-grow: 1
+    overflow-y: auto
+    margin-top: -5px
+
+  &__item
+    $element: &
+
+    font-size: 11px
+    letter-spacing: 0.05px
+    display: flex
+    align-items: center
+    padding: 5px 8px
+    width: calc(100% - .5px)
+    position: relative
+
+    &--active
+      &::after
+        content: ''
+        background: rgba(#000, .15)
+        position: absolute
+        top: 0
+        right: 0
+        bottom: 0
+        left: 0
+        transform: translateX(-.5px)
+
+    &-icon
+      border-radius: 4px
+      width: 15px
+      height: 15px
+      margin-right: 8px
+      flex-shrink: 0
+      background: rgba(255,59,48,0.20)
+      border: 1px solid rgba(255,59,48,0.20)
+
+    &-name
+      max-width: 100%
+      overflow: hidden
+      white-space: nowrap
+      text-overflow: ellipsis
+      flex-grow: 1
+
+    &-data
+      width: 15px
+      height: 15px
+      flex-shrink: 0
+      display: flex
+      justify-content: center
+      align-items: center
+
+      #{$element}:not(:hover):not(#{$element}--active) &:not(#{&}--active)
+        display: none
+
+      &-icon
+        fill: rgba(#7B7B7B, .25)
+        stroke: #7B7B7B
+          width: .75px
+        width: 11px
+        height: 11px
+
+  &__footer
+    color: #7B7B7B
+    margin: 0 8px
+    display: flex
+    justify-content: space-between
+    line-height: 21px

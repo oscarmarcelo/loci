@@ -1,0 +1,27 @@
+/*
+ * ========================================================
+ * pages/popover
+ * ========================================================
+ */
+
+@import ../abstracts/index
+
+.token-settings-form
+  display: flex
+  flex-direction: column
+
+.token-custom-settings
+  display: inherit
+  flex-direction: inherit
+
+  &:empty + hr
+    display: none
+
+.field-appearance
+  margin-top: -12px
+
+  input[type="range"]
+    flex-grow: 1
+
+  .number-input
+    width: 38px

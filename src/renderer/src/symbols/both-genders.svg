@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="11px" viewBox="0 0 16 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>both-genders</title>
+    <desc>Created with Sketch.</desc>
+    <g id="both-genders" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" cx="10.5" cy="6.5" r="3"></circle>
+        <line x1="12.75" y1="4.25" x2="15.5" y2="1.5" id="Line-2"></line>
+        <polyline id="Path-4" points="12.5 1.5 15.5 1.5 15.5 4.5"></polyline>
+        <circle id="Oval" cx="3.5" cy="3.5" r="3"></circle>
+        <line x1="3.5" y1="6.5" x2="3.5" y2="10.5" id="Line"></line>
+        <line x1="1.5" y1="8.5" x2="5.5" y2="8.5" id="Line-3"></line>
+    </g>
+</svg>

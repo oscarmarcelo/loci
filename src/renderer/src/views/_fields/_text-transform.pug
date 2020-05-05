@@ -1,0 +1,29 @@
+template#text-transform
+  //- TODO [>=1.0.0]: Old version with buttons. Remove this if not used.
+
+  //- .button-group
+  //-   .button-group__list
+  //-     button.button-group__button(aria-title="No Transform" title="No letter casing." aria-pressed) Aa
+  //-     button.button-group__button(aria-title="Capitalize" title="Capitalize words.") Aa Bb
+  //-     button.button-group__button(aria-title="Uppercase" title="Use uppercase characters.") AA
+  //-     button.button-group__button(aria-title="Lowercase" title="Use lowercase characters.") aa
+
+  //-   .button-group__label Transform
+
+
+  .button-group
+    .button-group__list
+      label.button-group__control(aria-title="No Transform" title="No letter casing." aria-pressed)
+        input.button-group__reference(type="radio" name="text-transform" value="none")
+        .button-group__mask ⊘
+      label.button-group__control(aria-title="Capitalize" title="Capitalize words.")
+        input.button-group__reference(type="radio" name="text-transform" value="capitalize")
+        .button-group__mask Aa
+      label.button-group__control(aria-title="Uppercase" title="Use uppercase characters.")
+        input.button-group__reference(type="radio" name="text-transform" value="uppercase")
+        .button-group__mask AA
+      label.button-group__control(aria-title="Lowercase" title="Use lowercase characters.")
+        input.button-group__reference(type="radio" name="text-transform" value="lowercase")
+        .button-group__mask aa
+
+    .button-group__label Transform

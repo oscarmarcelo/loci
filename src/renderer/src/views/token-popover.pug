@@ -1,0 +1,50 @@
+extends _extends/_layout
+
+block styles
+  link(rel="stylesheet", href="../assets/styles/layout/popover.css")
+  link(rel="stylesheet", href="../assets/styles/pages/token-popover.css")
+
+block body
+  include _fields/_heading-2
+  include _fields/_separator
+  include _fields/_languages
+  include _fields/_gender
+  include _fields/_text-transform
+  include _fields/_checkbox
+
+  .popover.popover--bottom
+    .popover__caret
+    .popover__body
+      form.token-settings-form
+        .heading-1 Data
+        .select
+          select.select__reference.js-data-list(name="data")
+          +icon('chevron-up-down').select__icon
+
+        hr
+
+        .token-custom-settings
+
+        hr
+
+        .heading-2 Chance of Appearance
+
+        .combo-field.field-appearance
+          input(type="range" min=0 max=100 value=100 data-range="appearance")
+
+          .number-input
+            input.number-input__reference(type="number" name="appearance" min=0 max=100 step=1 value=100 data-range="appearance")
+            button.number-input__spinner.number-input__spinner--up(type="button" tabindex=-1)
+              +icon('spinner-up').number-input__spinner-icon
+            button.number-input__spinner.number-input__spinner--down(type="button" tabindex=-1)
+              +icon('spinner-down').number-input__spinner-icon
+            .number-input__unit %
+
+block scripts
+  script(src="../assets/scripts/components/button-group.js")
+  script(src="../assets/scripts/components/number-input.js")
+  script(src="../assets/scripts/components/range.js")
+  script(src="../assets/scripts/layout/popover.js")
+  script(src="../assets/scripts/data.js")
+  script(src="../assets/scripts/fields.js")
+  script(src="../assets/scripts/pages/token-popover.js")

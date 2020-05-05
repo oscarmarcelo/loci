@@ -1,0 +1,32 @@
+/*
+ * ========================================================
+ * components/input-combo
+ * ========================================================
+ */
+
+.input-combo
+  display: inline-flex
+
+  > input,
+  .number-input
+    width: 100%
+
+    &:not(:last-child),
+    &:not(:last-child) .number-input__reference,
+    &:not(:last-child) .number-input__spinner,
+      border:
+        top-right-radius: 0
+        bottom-right-radius: 0
+
+    &:not(:first-child)
+      margin-left: -1px
+
+    &:not(:first-child),
+    &:not(:first-child) .number-input__reference
+      border:
+        top-left-radius: 0
+        bottom-left-radius: 0
+
+  > input:focus,
+  > .number-input:focus-within
+    z-index: 1

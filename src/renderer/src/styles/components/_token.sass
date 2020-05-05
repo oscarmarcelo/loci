@@ -1,0 +1,57 @@
+/*
+ * ========================================================
+ * components/token
+ * ========================================================
+ */
+
+.token
+  $block: &
+
+  outline: 0
+  border-radius: 3px
+  background: var(--token-background)
+  color: var(--token-text)
+  max-width: 100%
+  margin: 1px
+  padding: 3px 5px
+  display: inline-block
+  white-space: pre
+  text-overflow: ellipsis
+  overflow: hidden
+  font-size: 11px
+  line-height: 12px
+  letter-spacing: -0.07px
+
+  &--selected
+    background: var(--token-selected-background)
+    color: var(--token-selected-text)
+
+  &--newline
+    color: var(--inspector-secondary-label-text) //#BFBFBF
+
+  &--data
+    background: var(--token-data-background)
+
+    &#{$block}--male
+      background: var(--color-male)
+
+    &#{$block}--female
+      background: var(--color-female)
+
+    &#{$block}--selected
+      background: var(--token-data-selected-background)
+
+      &#{$block}--male
+        background: var(--color-male-highlighted)
+
+      &#{$block}--female
+        background: var(--color-female-highlighted)
+
+  &__icon
+    stroke: currentColor
+      linecap: round
+    width: 5px
+    height: 5px
+    margin-right: 3px
+    vertical-align: 1px
+    opacity: .5

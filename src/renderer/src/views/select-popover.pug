@@ -1,0 +1,28 @@
+extends _extends/_layout
+
+block styles
+  link(rel="stylesheet", href="../assets/styles/layout/popover.css")
+  link(rel="stylesheet", href="../assets/styles/layout/select-menu.css")
+  link(rel="stylesheet", href="../assets/styles/pages/token-popover.css")
+
+block body
+  .popover.popover--bottom
+    .popover__caret
+    .popover__body.popover__body--full-height.popover__body--no-padding
+      .select-menu
+        label.select-menu__search
+          +icon('magnifier').select-menu__search-icon
+          input.select-menu__search-input(placeholder="Search Data")
+        .select-menu__list
+          include _faker-list
+
+          each group in fakerList
+            .select-menu__group
+              .select-menu__heading.heading-1= group.title
+
+              each item in group.items
+                button.select-menu__item(class=(item.value === 'firstName' ? 'select-menu__item--current' : null) data-value=item.value)= item.name
+
+block scripts
+  script(src="../assets/scripts/layout/popover.js")
+  script(src="../assets/scripts/layout/select-menu.js")

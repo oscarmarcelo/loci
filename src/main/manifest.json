@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "identifier": "com.oscarmarcelo.loci",
+  "compatibleVersion": "64",
+  "bundleVersion": 1,
+  "suppliesData": true,
+  "commands": [
+    {
+      "name": "Loci",
+      "identifier": "open",
+      "script": "./index.js",
+      "handler": "onRun"
+    },
+    {
+      "script": "./index.js",
+      "handlers": {
+        "actions": {
+          "Startup": "onStartup",
+          "Shutdown": "onShutdown",
+          "SupplyData": "onSupplyData",
+          "SelectionChanged.finish": "onSelectionChanged",
+          "ClearDataRecord.finish": "onClearDataRecord"
+        }
+      }
+    }
+  ],
+  "menu": {
+    "isRoot": true,
+    "items": [
+      "open"
+    ]
+  }
+}

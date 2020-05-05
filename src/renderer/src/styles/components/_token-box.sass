@@ -1,0 +1,55 @@
+/*
+ * ========================================================
+ * components/textbox
+ * ========================================================
+ */
+
+.token-box
+  $border-width: 1px
+
+  display: flex
+  position: relative
+
+  &__scroller
+    border: $border-width solid var(--inspector-label-border)
+      radius: 4px
+    background: var(--inspector-label-background)
+    width: 100%
+    padding: 6px - $border-width - 1px // 1px is the token margin.
+      right: 5px + 6px * 2 - $border-width - 1px // 1px is the token margin.
+    font-size: 11px
+    letter-spacing: -.07px
+    display: flex
+    flex-wrap: wrap
+    align-items: flex-start
+    align-content: flex-start
+    overflow: auto
+    cursor: text
+
+  &__input
+    outline: 0
+    border: 0
+    width: min-content
+    margin: 1px
+    padding: 2px 0
+    flex-grow: 1
+    line-height: 14px
+
+    &:focus
+      box-shadow: none
+
+  &__chevron
+    height: 21px
+    padding: 0 6px
+    align-self: center
+    display: flex
+    align-items: center
+    position: absolute
+    right: 0
+
+    &-icon
+      stroke: var(--inspector-secondary-label-text)
+        linecap: round
+        linejoin: round
+      width: 5px
+      height: 3px

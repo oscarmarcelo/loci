@@ -1,0 +1,65 @@
+/*
+ * ========================================================
+ * components/checkable
+ * ========================================================
+ */
+
+.checkable
+  $block: &
+  $e-reference: #{&}__reference
+  $e-mask: #{&}__mask
+
+  &__control
+    display: inline-flex
+    align-items: center
+
+  @at-root #{$e-reference}
+    width: 1px
+    height: 1px
+    position: absolute
+    overflow: hidden
+    clip-path: inset(100%)
+
+  @at-root #{$e-mask}
+    border: 1px solid var(--inspector-label-border)
+      radius: 3px
+    background: var(--inspector-label-background)
+    width: 11px
+    height: 11px
+    display: flex
+    justify-content: center
+    align-items: center
+
+    #{$e-reference}:active + &
+      border-color: var(--inspector-highlighted-border)
+      background: var(--inspector-button-highlighted-background)
+
+    #{$e-reference}:checked + &
+      background: var(--inspector-accent)
+
+    #{$e-reference}:checked:active + &
+      background: var(--inspector-highlighted-accent)
+
+    #{$e-reference}:checked:not(:active) + &
+      border-color: transparent
+
+  &__icon
+    stroke: var(--inspector-accented-background-icon)
+      width: 1.5px
+      linecap: round
+      linejoin: round
+    width: 7px
+    height: 7px
+    position: absolute // HACK: avoid `.checkable` vertical offset when using `inline-flex`.
+
+    #{$e-reference}:not(:checked) + #{$e-mask} &
+      display: none
+
+  &__label
+    margin-left: 5px
+
+  &__description
+    margin:
+      top: 5px
+      left: 11px + 5
+    display: block

@@ -1,0 +1,61 @@
+/*
+ * ========================================================
+ * base/input
+ * ========================================================
+ */
+
+input
+  $border-width: 1px
+
+  outline: 0
+  border: $border-width solid var(--inspector-label-border)
+    radius: 4px
+  color: inherit
+  background: var(--inspector-label-background)
+  margin: 0
+  padding: 3px (6px - $border-width) 2px
+  font-size: 11px
+  line-height: 21px - $border-width * 2 - 3px - 2px
+  letter-spacing: -.07px
+  appearance: none
+
+  &:not([type="checkbox"])
+    cursor: text
+
+  &:focus
+    box-shadow: 0 0 0 2.5px #86ADF4
+    border-color: #779EE4
+    // TODO: Focus zoom-in animation.
+
+  &::placeholder
+    color: var(--input-placeholder)
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button
+    appearance: none
+
+  &[type="range"]
+    border: 0
+    background: linear-gradient(to right, var(--inspector-accent) 50%, var(--inspector-slider-right-track) 50%)
+      size: calc(200% - 11px) 100%
+      position-x: calc(100% - var(--value))
+    height: 3px
+    margin: 0
+    padding: 0
+    cursor: default
+
+    &:focus
+      box-shadow: none
+
+    &::-webkit-slider-thumb
+      box-shadow: 0 0 0 1px var(--inspector-slider-knob-border)
+      border-radius: 50%
+      background: var(--inspector-slider-knob)
+        clip: content-box
+      width: 11px
+      height: 11px
+      appearance: none
+
+    &:active
+      &::-webkit-slider-thumb
+        background: var(--inspector-highlighted-slider-knob)

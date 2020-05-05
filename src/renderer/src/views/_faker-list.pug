@@ -1,0 +1,184 @@
+-
+  const fakerList = [
+    {
+      title: 'Address',
+      value: 'address',
+      items: [
+        {name: 'Zip Code', value: 'zipCode'},
+        {name: 'City', value: 'city'},
+        {name: 'City Prefix', value: 'cityPrefix'},
+        {name: 'City Suffix', value: 'citySuffix'},
+        {name: 'Street Name', value: 'streetName'},
+        {name: 'Street Address', value: 'streetAddress'},
+        {name: 'Street Suffix', value: 'streetSuffix'},
+        {name: 'Street Prefix', value: 'streetPrefix'},
+        {name: 'Secondary Address', value: 'secondaryAddress'},
+        {name: 'County', value: 'county'},
+        {name: 'Country', value: 'country'},
+        {name: 'Country Code', value: 'countryCode'},
+        {name: 'State', value: 'state'},
+        {name: 'State Abbreviation', value: 'stateAbbr'},
+        {name: 'Latitude', value: 'latitude'},
+        {name: 'Longitude', value: 'longitude'}
+      ]
+    },
+    {
+      title: 'Commerce',
+      value: 'commerce',
+      items: [
+        {name: 'Color', value: 'color'},
+        {name: 'Department', value: 'department'},
+        {name: 'Product Name', value: 'productName'},
+        {name: 'Price', value: 'price'},
+        {name: 'Product Adjective', value: 'productAdjective'},
+        {name: 'Product Material', value: 'productMaterial'},
+        {name: 'Product', value: 'product'}
+      ]
+    },
+    {
+      title: 'Company',
+      value: 'company',
+      items: [
+        {name: 'Suffixes', value: 'suffixes'},
+        {name: 'Company Name', value: 'companyName'},
+        {name: 'Company Suffix', value: 'companySuffix'},
+        {name: 'Catch Phrase', value: 'catchPhrase'},
+        {name: 'BS', value: 'bs'},
+        {name: 'Catch Phrase Adjective', value: 'catchPhraseAdjective'},
+        {name: 'Catch Phrase Descriptor', value: 'catchPhraseDescriptor'},
+        {name: 'Catch Phrase Noun', value: 'catchPhraseNoun'},
+        {name: 'BS Adjective', value: 'bsAdjective'},
+        {name: 'BS Buzz', value: 'bsBuzz'},
+        {name: 'BS Noun', value: 'bsNoun'}
+      ]
+    },
+    {
+      title: 'Database',
+      value: 'database',
+      items: [
+        {name: 'Column', value: 'column'},
+        {name: 'Type', value: 'type'},
+        {name: 'Collation', value: 'collation'},
+        {name: 'Engine', value: 'engine'}
+      ]
+    },
+    {
+      title: 'Date',
+      value: 'date',
+      items: [
+        {name: 'Past', value: 'past'},
+        {name: 'Future', value: 'future'},
+        {name: 'Between', value: 'between'},
+        {name: 'Recent', value: 'recent'},
+        {name: 'Soon', value: 'soon'},
+        {name: 'Month', value: 'month'},
+        {name: 'Weekday', value: 'weekday'}
+      ]
+    },
+    {
+      title: 'Finance',
+      value: 'finance',
+      items: [
+        {name: 'Account Number', value: 'account'},
+        {name: 'Account Name', value: 'accountName'},
+        {name: 'Mask', value: 'mask'},
+        {name: 'Amount', value: 'amount'},
+        {name: 'Transaction Type', value: 'transactionType'},
+        {name: 'Currency Code', value: 'currencyCode'},
+        {name: 'Currency Name', value: 'currencyName'},
+        {name: 'Currency Symbol', value: 'currencySymbol'},
+        {name: 'Bitcoin Address', value: 'bitcoinAddress'},
+        {name: 'Ethereum Address', value: 'ethereumAddress'},
+        {name: 'IBAN', value: 'iban'},
+        {name: 'BIC', value: 'bic'}
+      ]
+    },
+    {
+      title: 'Hacker',
+      value: 'hacker',
+      items: [
+        {name: 'Abbreviation', value: 'abbreviation'},
+        {name: 'Adjective', value: 'adjective'},
+        {name: 'Noun', value: 'noun'},
+        {name: 'Verb', value: 'verb'},
+        {name: 'Gerund Verb', value: 'ingverb'},
+        {name: 'Phrase', value: 'phrase'}
+      ]
+    },
+    {
+      title: 'Internet',
+      value: 'internet',
+      items: [
+        {name: 'Email', value: 'email'},
+        {name: 'Email with Example Domain', value: 'exampleEmail'},
+        {name: 'Username', value: 'userName'},
+        {name: 'Protocol', value: 'protocol'},
+        {name: 'URL', value: 'url'},
+        {name: 'Domain Name', value: 'domainName'},
+        {name: 'Domain Suffix', value: 'domainSuffix'},
+        {name: 'Domain Word', value: 'domainWord'},
+        {name: 'IP', value: 'ip'},
+        {name: 'IPv6', value: 'ipv6'},
+        {name: 'User Agent', value: 'userAgent'},
+        {name: 'Hexadecimal Color', value: 'color'},
+        {name: 'MAC', value: 'mac'},
+        {name: 'Password', value: 'password'}
+      ]
+    },
+    {
+      title: 'Name',
+      value: 'name',
+      items: [
+        {name: 'First Name', value: 'firstName'},
+        {name: 'Last Name', value: 'lastName'},
+        {name: 'Full Name', value: 'findName'},
+        {name: 'Job Title', value: 'jobTitle'},
+        {name: 'Prefix', value: 'prefix'},
+        {name: 'Suffix', value: 'suffix'},
+        {name: 'Title', value: 'title'},
+        {name: 'Job Descriptor', value: 'jobDescriptor'},
+        {name: 'Job Area', value: 'jobArea'},
+        {name: 'Job Type', value: 'jobType'}
+      ]
+    },
+    {
+      title: 'Phone',
+      value: 'phone',
+      items: [
+        {name: 'Phone Number', value: 'phoneNumber'},
+        {name: 'Phone Formats', value: 'phoneFormats'}
+      ]
+    },
+    {
+      title: 'Random',
+      value: 'random',
+      items: [
+        {name: 'Number', value: 'number'},
+        {name: 'Decimal Number', value: 'float'},
+        {name: 'UUID', value: 'uuid'},
+        {name: 'Boolean', value: 'boolean'},
+        {name: 'Word', value: 'word'},
+        {name: 'Words', value: 'words'},
+        {name: 'Image', value: 'image'},
+        {name: 'Locale', value: 'locale'},
+        {name: 'Alpha Numeric Character', value: 'alphaNumeric'},
+        {name: 'Hexadecimal', value: 'hexaDecimal'}
+      ]
+    },
+    {
+      title: 'System',
+      value: 'system',
+      items: [
+        {name: 'File Name', value: 'fileName'},
+        {name: 'Common File Name', value: 'commonFileName'},
+        {name: 'Mime Type', value: 'mimeType'},
+        {name: 'Common File Type', value: 'commonFileType'},
+        {name: 'Common File Extension', value: 'commonFileExt'},
+        {name: 'File Type', value: 'fileType'},
+        {name: 'File Extension', value: 'fileExt'},
+        {name: 'Directory Path', value: 'directoryPath'},
+        {name: 'File Path', value: 'filePath'},
+        {name: 'Semantic Version', value: 'semver'}
+      ]
+    }
+  ];

@@ -1,0 +1,30 @@
+/*
+ * ========================================================
+ * components/button
+ * ========================================================
+ */
+
+.button
+  $border-width: 1px
+
+  box-shadow: 0 1px 1px -.5px var(--inspector-button-drop-shadow) // REVIEW: Sketch shadow seems to has a smaller radius and a slightly different offset/blur.
+  outline: 0
+  border: $border-width solid var(--inspector-label-border)
+    radius: 4px
+  color: inherit
+  background: var(--inspector-push-button-background)
+  min-width: 65px
+  padding: 3px (9px - $border-width) 2px
+  font-size: 11px
+  line-height: 21px - $border-width * 2 - 3px - 2px
+  letter-spacing: -.07px
+
+  &:active
+    border-color: var(--inspector-highlighted-border)
+    color: var(--inspector-accented-background-icon)
+    background: var(--inspector-accent)
+
+  @media (prefers-color-scheme: dark)
+    &,
+    &:active
+      border-color: transparent

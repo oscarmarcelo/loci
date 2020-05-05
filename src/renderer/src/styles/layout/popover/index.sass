@@ -1,0 +1,27 @@
+@import ../../abstracts/index
+
+
+
+.popover
+  &__caret
+    border: solid
+      width: 0 10px 10px
+      color: transparent transparent var(--popover-background)
+    width: 0
+    height: 0
+    margin-left: 50%
+    transform: translateX(-50%)
+
+  &__body
+    border-radius: 5px
+    background: var(--popover-background)
+    padding: 9px
+    // TODO: Remove this. This kind of layout is now decided on per-page basis.
+    // display: flex
+    // flex-direction: column
+
+    &--full-height
+      height: calc(100vh - 10px)
+
+    &--no-padding
+      padding: 0

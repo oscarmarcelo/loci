@@ -1,0 +1,21 @@
+/*
+ * ========================================================
+ * layout/main/main
+ * ========================================================
+ */
+
+.main
+  margin: 0 10px 10px
+  grid-area: main
+  display: flex
+  flex-direction: column
+
+  &__filler
+    flex-grow: 1
+
+  & > *:not(&__filler)
+    flex-shrink: 0
+
+  &__footer
+    display: flex
+    justify-content: space-between
