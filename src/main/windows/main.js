@@ -88,6 +88,23 @@ export function create() {
   });
 
 
+  window.on('close', () => {
+    // TODO: Consider listing all window ids somewhere on creation.
+    const windowIds = [
+      'loci.token-popover',
+      'loci.select-popover.data-suggestions'
+    ];
+
+    for (const id of windowIds) {
+      const window = BrowserWindow.fromId(id);
+
+      if (window) {
+        window.close();
+      }
+    }
+  });
+
+
   window.on('closed', () => {
     const delegate = threadDictionary['loci.main.observers'];
 
