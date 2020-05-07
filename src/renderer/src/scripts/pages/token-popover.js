@@ -5,6 +5,8 @@ const tokenBoxSelectOptions = new DocumentFragment();
 
 
 
+// TODO: Use DocumentFragment to add all fields at once instead of adding them one by one.
+//       Also, window seems to be resized for each field that is added.
 function renderTokenSettings(config) {
   settings.textContent = '';
 
@@ -14,15 +16,21 @@ function renderTokenSettings(config) {
   const dataItem = dataGroup.items.find(item => item.id === option.value);
   const fields = dataItem.fields;
 
-  if (typeof fields[0] === 'string' || fields[0].type !== 'heading-2') {
-    fields.unshift({
-      type: 'heading-2',
-      text: 'Settings'
-    });
-  }
+  if (fields.length > 0) {
+    if (typeof fields[0] === 'string' || fields[0].type !== 'heading-2') {
+      fields.unshift({
+        type: 'heading-2',
+        text: 'Settings'
+      });
+    }
 
-  for (const field of fields) {
-    window.fields(field, config);
+    if (fields[fields.length - 1] !== 'separator') {
+      fields.push('separator');
+    }
+
+    for (const field of fields) {
+      window.fields(field, config);
+    }
   }
 
   window.updatePopoverHeight();
