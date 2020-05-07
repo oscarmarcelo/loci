@@ -9,8 +9,8 @@
 
   outline: 0
   border-radius: 3px
-  background: var(--token-background)
-  color: var(--token-text)
+  background: var(--color-token-background)
+  color: var(--color-token-text)
   max-width: 100%
   margin: 1px
   padding: 3px 5px
@@ -23,14 +23,14 @@
   letter-spacing: -0.07px
 
   &--selected
-    background: var(--token-selected-background)
-    color: var(--token-selected-text)
+    background: var(--color-token-selected-background)
+    color: var(--color-token-selected-text)
 
   &--newline
-    color: var(--inspector-secondary-label-text) //#BFBFBF
+    color: var(--color-secondary-label-text) //#BFBFBF // TODO: Find a better variable and dark mode.
 
   &--data
-    background: var(--token-data-background)
+    background: var(--color-token-data-background)
 
     &#{$block}--male
       background: var(--color-male)
@@ -39,7 +39,7 @@
       background: var(--color-female)
 
     &#{$block}--selected
-      background: var(--token-data-selected-background)
+      background: var(--color-token-data-selected-background)
 
       &#{$block}--male
         background: var(--color-male-highlighted)

@@ -21,9 +21,9 @@
     clip-path: inset(100%)
 
   @at-root #{$e-mask}
-    border: 1px solid var(--inspector-label-border)
+    border: 1px solid var(--color-label-border)
       radius: 3px
-    background: var(--inspector-label-background)
+    background: var(--color-label-background)
     width: 11px
     height: 11px
     display: flex
@@ -31,20 +31,20 @@
     align-items: center
 
     #{$e-reference}:active + &
-      border-color: var(--inspector-highlighted-border)
-      background: var(--inspector-button-highlighted-background)
+      border-color: var(--color-highlighted-border)
+      background: var(--color-button-highlighted-background)
 
     #{$e-reference}:checked + &
-      background: var(--inspector-accent)
+      background: var(--color-accent)
 
     #{$e-reference}:checked:active + &
-      background: var(--inspector-highlighted-accent)
+      background: var(--color-highlighted-accent)
 
     #{$e-reference}:checked:not(:active) + &
       border-color: transparent
 
   &__icon
-    stroke: var(--inspector-accented-background-icon)
+    stroke: var(--color-accented-background-icon)
       width: 1.5px
       linecap: round
       linejoin: round

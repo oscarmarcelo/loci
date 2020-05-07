@@ -58,7 +58,7 @@ export function create() {
 
 
   window.once('ready-to-show', () => {
-    window.webContents.executeJavaScript(`setTheme(${JSON.stringify(theme())});`)
+    window.webContents.executeJavaScript(`setTheme("${theme()}");`)
       .catch(error => {
         console.error('setTheme', error);
       });
@@ -66,7 +66,7 @@ export function create() {
     const delegate = new MochaJSDelegate({
       'onAccentChange:': _ => {
         // FIXME: This notification triggers twice.
-        window.webContents.executeJavaScript(`setTheme(${JSON.stringify(theme())});`)
+        window.webContents.executeJavaScript(`setTheme("${theme()}");`)
           .catch(error => {
             console.error('setTheme (Accent Changed)', error);
           });

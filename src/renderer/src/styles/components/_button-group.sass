@@ -26,10 +26,10 @@
     $border-width: 1px
 
     outline: 0
-    border: $border-width solid var(--inspector-label-border)
+    border: $border-width solid var(--color-label-border)
       radius: 4px
     color: hsl(0, 0, 48%) // TODO: Find the right Sketch variable for this.
-    background: var(--inspector-alignment-view-background)
+    background: var(--color-alignment-view-background)
     padding: 0 (9px - $border-width)
     position: relative
     text-align: center
@@ -67,13 +67,13 @@
 
     #{$e-reference}:checked + &
       border-color: transparent
-      color: var(--inspector-accented-background-icon)
-      background: var(--inspector-alignment-active-strut)
+      color: var(--color-accented-background-icon)
+      background: var(--color-alignment-active-strut)
       z-index: 1
 
       &:active
         border-color: transparent
-        background: var(--inspector-alignment-highlighted-active-strut)
+        background: var(--color-alignment-highlighted-active-strut)
 
     @at-root #{$e-control}:not(:last-child)
       &:not(:active)

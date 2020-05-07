@@ -6,9 +6,17 @@ document.addEventListener('contextmenu', event => {
 
 
 function setTheme(theme) {
-  for (const namedColor in theme) {
-    if (Object.prototype.hasOwnProperty.call(theme, namedColor)) {
-      document.documentElement.style.setProperty(`--${namedColor}`, theme[namedColor]);
-    }
-  }
+  const themes = [
+    'theme-blue',
+    'theme-purple',
+    'theme-pink',
+    'theme-red',
+    'theme-orange',
+    'theme-yellow',
+    'theme-green',
+    'theme-graphite'
+  ];
+
+  document.body.classList.remove(...themes);
+  document.body.classList.add(`theme-${theme}`);
 }

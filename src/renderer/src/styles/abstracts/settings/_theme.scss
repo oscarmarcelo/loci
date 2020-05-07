@@ -1,0 +1,131 @@
+// ========================================================
+// Theme colors based on Sketch theme
+// --------------------------------------------------------
+// Mostly sourced from the properties of:
+//   - MSTheme.sharedTheme()
+//   - MSTheme.sharedTheme().colorPlist
+// ========================================================
+
+$theme: (
+  token-data-background: #007aff26 #007aff80, // layerListFilterTokenBackgroundColor
+  token-data-selected-background: #007aff #007aff, // layerListFilterTokenSelectedBackgroundColor
+  token-text: #000000d8 #ffffffd8, // layerListFilterTokenTitleColor
+  token-selected-text: #ffffff #ffffff, // layerListFilterTokenSelectedTitleColor
+  accent: #007aff #007aff, // inspectorAccentColor
+  alignment-active-strut: #007aff #007aff, //inspectorAlignmentActiveStrutColor
+  alignment-highlighted-active-strut: #005cd7 #2ea8ff, // inspectorAlignmentHighlightedActiveStrutColor
+  alignment-view-background: #fafafa #454647, // inspectorAlignmentViewBackgroundColor
+  background-gray: #f2f2f2 #2e2f30, // inspectorBackgroundColor
+  border: #0000002b #ffffff1a, // inspectorBorderColor
+  button-drop-shadow: #00000012 #00000000, // inspectorButtonDropShadowColor
+  button-highlighted-background: #d7d7d7 #737373, // inspectorButtonHighlightedBackgroundColor
+  highlighted-accent: #005cd7 #2ea8ff, // inspectorHighlightedAccentColor
+  highlighted-border: #0000004f #48484848, // inspectorHighlightedBorderColor
+  highlighted-slider-knob: #d7d7d7 #b8bcc1, // inspectorHighlightedSliderKnobColor
+  accented-background-icon: #ffffff #ffffff, // inspectorAccentedBackgroundIconColor
+  inline-label-text: #0000007f #9e9e9e, // inspectorInlineLabelTextColor
+  label-background: #ffffff #454545, // inspectorLabelBackgroundColor
+  label-border: #0000002b #ffffff1a, // inspectorLabelBorderColor
+  text: #000000d8 #ffffffd9, // inspectorLabelTextColor
+  push-button-background: #ffffff #5d5f61, // inspectorPushButtonBackgroundColor
+  section-header-text: #00000080 #ffffff80, // inspectorSectionHeaderTextColor
+  separator: #0000001a #ffffff1a, // inspectorSeparatorColor
+  slider-knob-border: #00000026 #00000026, // inspectorSliderKnobBorderColor
+  slider-knob: #ffffff #8a8e93, // inspectorSliderKnobColor
+  slider-right-track: #0000001a #454545, // inspectorSliderRightTrackColor
+  secondary-label-text: #0000007f #ffffff8c, // inspectorSecondaryLabelTextColor
+
+  // Custom
+  male: #62ba4626 #62ba4680, // layerListFilterTokenBackgroundColor
+  male-highlighted: #62ba46 #62ba46, // layerListFilterTokenSelectedBackgroundColor
+  female: #f74f9e26 #f74f9e80, // layerListFilterTokenBackgroundColor
+  female-highlighted: #f74f9e #f74f9e, // layerListFilterTokenSelectedBackgroundColor
+  placeholder: rgba(#000, .25) rgba(#fff, .25),
+  stepper-pressed-background: #d9d9d9 #6a6a6a,
+  stepper-icon: rgba(#000, .5) rgba(#fff, .5), // colorPlist: stepper-button-arrow, stepper-button-arrow-dark
+  token-background: #98989826 #8c8c8c80, // layerListFilterTokenBackgroundColor
+  token-selected-background: #989898 #8c8c8c, // layerListFilterTokenSelectedBackgroundColor
+  popover-background: #fff rgba(#282828, .93), // colorPlist: popover-window-background, popover-window-background-dark
+  input-no-outline: rgba(#fff, 0) rgba(#000, 0),
+  focus-ring-outline: rgba(#005cd7, .44) rgba(#2ea8ff, .5),
+  focus-ring-border: rgba(darken(#005cd7, 10%), .55) rgba(lighten(#2ea8ff, 10%), .5)
+);
+
+$tints: (
+  not-blue: (
+    male: #007aff26 #007aff80, // layerListFilterTokenBackgroundColor
+    male-highlighted: #007aff #007aff // layerListFilterTokenSelectedBackgroundColor
+  ),
+  purple: (
+    token-data-background: #953d9626 #a550a780, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #953d96 #a550a7, // layerListFilterTokenSelectedBackgroundColor
+    accent: #953d96 #a550a7, // inspectorAccentColor
+    alignment-active-strut: #953d96 #a550a7, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #752476 #d37ed5, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #752476 #d37ed5, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#752476, .44) rgba(#d37ed5, .5),
+    focus-ring-border: rgba(darken(#752476, 10%), .55) rgba(lighten(#d37ed5, 10%), .5)
+  ),
+  pink: (
+    token-data-background: #f74f9e26 #f74f9e80, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #f74f9e #f74f9e, // layerListFilterTokenSelectedBackgroundColor
+    accent: #f74f9e #f74f9e, // inspectorAccentColor
+    alignment-active-strut: #f74f9e #f74f9e, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #cf347d #ff7dcc, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #cf347d #ff7dcc, // inspectorHighlightedAccentColor
+    female: #e0383e26 #ff525780, // layerListFilterTokenBackgroundColor
+    female-highlighted: #e0383e #ff5257, // layerListFilterTokenSelectedBackgroundColor
+    focus-ring-outline: rgba(#cf347d, .44) rgba(#ff7dcc, .5),
+    focus-ring-border: rgba(darken(#cf347d, 10%), .55) rgba(lighten(#ff7dcc, 10%), .5)
+  ),
+  red: (
+    token-data-background: #e0383e26 #ff525780, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #e0383e #ff5257, // layerListFilterTokenSelectedBackgroundColor
+    accent: #e0383e #ff5257, // inspectorAccentColor
+    alignment-active-strut: #e0383e #ff5257, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #ba1f25 #ff8085, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #ba1f25 #ff8085, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#ba1f25, .44) rgba(#ff8085, .5),
+    focus-ring-border: rgba(darken(#ba1f25, 10%), .55) rgba(lighten(#ff8085, 10%), .5)
+  ),
+  orange: (
+    token-data-background: #f7821b26 #f7821b80, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #f7821b #f7821b, // layerListFilterTokenSelectedBackgroundColor
+    accent: #f7821b #f7821b, // inspectorAccentColor
+    alignment-active-strut: #f7821b #f7821b, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #cf6304 #ffb049, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #cf6304 #ffb049, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#cf6304, .44) rgba(#ffb049, .5),
+    focus-ring-border: rgba(darken(#cf6304, 10%), .55) rgba(lighten(#ffb049, 10%), .5)
+  ),
+  yellow: (
+    token-data-background: #fcb82726 #fcb82780, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #fcb827 #fcb827, // layerListFilterTokenSelectedBackgroundColor
+    accent: #fcb827 #fcb827, // inspectorAccentColor
+    alignment-active-strut: #fcb827 #fcb827, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #d4950f #ffe655, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #d4950f #ffe655, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#d4950f, .44) rgba(#ffe655, .5),
+    focus-ring-border: rgba(darken(#d4950f, 10%), .55) rgba(lighten(#ffe655, 10%), .5)
+  ),
+  green: (
+    token-data-background: #62ba4626 #62ba4680, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #62ba46 #62ba46, // layerListFilterTokenSelectedBackgroundColor
+    accent: #62ba46 #62ba46, // inspectorAccentColor
+    alignment-active-strut: #62ba46 #62ba46, // inspectorAlignmentActiveStrutColor
+    alignment-highlighted-active-strut: #46972c #90e874, // inspectorAlignmentHighlightedActiveStrutColor
+    highlighted-accent: #46972c #90e874, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#46972c, .44) rgba(#90e874, .5),
+    focus-ring-border: rgba(darken(#46972c, 10%), .55) rgba(lighten(#90e874, 10%), .5)
+  ),
+  graphite: (
+    token-data-background: #98989826 #8c8c8c80, // layerListFilterTokenBackgroundColor
+    token-data-selected-background: #989898 #8c8c8c, // layerListFilterTokenSelectedBackgroundColor
+    accent: #989898 #8c8c8c, // inspectorAccentColor
+    alignment-active-strut: var(--color-accent),
+    alignment-highlighted-active-strut: var(--color-highlighted-accent),
+    highlighted-accent: #787878 #bababa, // inspectorHighlightedAccentColor
+    focus-ring-outline: rgba(#787878, .44) rgba(#bababa, .5),
+    focus-ring-border: rgba(darken(#787878, 10%), .55) rgba(lighten(#bababa, 10%), .5)
+  )
+);

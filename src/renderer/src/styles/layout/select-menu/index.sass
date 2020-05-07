@@ -8,7 +8,7 @@
   flex-direction: column
 
   &__search
-    border-bottom: 1px solid var(--inspector-separator)
+    border-bottom: 1px solid var(--color-separator)
     padding: 6px 10px 4px
     display: flex
     align-items: center
@@ -18,7 +18,7 @@
       display: none
 
     &-icon
-      stroke: var(--inspector-secondary-label-text) // TODO: Can't use alpha.
+      stroke: var(--color-secondary-label-text) // TODO: Can't use alpha.
         linecap: round
       width: 11px
       height: 11px
@@ -46,7 +46,7 @@
     flex-direction: column
 
     &:not(&--hidden) ~ &
-      border-top: 1px solid var(--inspector-separator)
+      border-top: 1px solid var(--color-separator)
 
     &--hidden
       display: none
@@ -72,11 +72,11 @@
       margin-top: 4px
 
     &--current
-      background: var(--inspector-separator)
+      background: var(--color-separator) // TODO: Not the right variable, but probably the right color.
 
     &--selected
-      color: var(--token-selected-text)
-      background: var(--token-data-selected-background)
+      color: var(--color-token-selected-text) // TODO: Not the right variable, but probably the right color.
+      background: var(--color-token-data-selected-background) // TODO: Not the right variable, but probably the right color.
 
     &--hidden
       display: none

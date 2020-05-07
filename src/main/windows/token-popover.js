@@ -30,7 +30,7 @@ export function create(options) {
 
 
   window.once('ready-to-show', () => {
-    window.webContents.executeJavaScript(`setTheme(${JSON.stringify(theme())});`)
+    window.webContents.executeJavaScript(`setTheme("${theme()}");`)
       .catch(error => {
         console.error('setTheme', error);
       });
