@@ -18,6 +18,7 @@ export default [
     id: 'internet',
     name: 'Internet',
     items: [
+      require('./internet/protocol'),
       require('./internet/tld')
     ]
   }
