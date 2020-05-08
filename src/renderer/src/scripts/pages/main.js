@@ -113,3 +113,38 @@ limitsMaxInput.addEventListener('change', () => {
     limitsMinInput.valueAsNumber = limitsMaxInput.valueAsNumber;
   }
 });
+
+
+
+/*
+ * ========================================================
+ * Apply Data
+ * ========================================================
+ */
+
+const applyButton = document.querySelector('.js-apply-button');
+
+applyButton.addEventListener('click', () => {
+  const tokens = document.querySelectorAll('.token-box .token');
+  const dataConfig = [];
+
+  for (const token of tokens) {
+    if (token.classList.contains('token--data')) {
+      dataConfig.push({
+        type: 'data',
+        config: token.tokenConfig
+      });
+    } else if (token.classList.contains('token--newline')) {
+      dataConfig.push({
+        type: `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
+      });
+    } else {
+      dataConfig.push({
+        type: 'text',
+        text: token.textContent
+      });
+    }
+  }
+
+  window.postMessage('apply-data', dataConfig);
+});

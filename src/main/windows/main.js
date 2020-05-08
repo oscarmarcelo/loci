@@ -4,6 +4,7 @@ import MochaJSDelegate from 'mocha-js-delegate';
 import * as tokenPopover from './token-popover';
 import * as selectPopover from './select-popover';
 import theme from '../theme';
+import dataHandler from '../../renderer/src/scripts/data';
 
 
 
@@ -164,5 +165,27 @@ export function create() {
           console.error('navigateOptions', error);
         });
     }
+  });
+
+
+  window.webContents.on('apply-data', dataConfig => {
+    let result = '';
+
+    for (const tokenConfig of dataConfig) {
+      if (tokenConfig.type === 'data') {
+        const dataGroup = dataHandler.find(group => group.id === tokenConfig.config.data.group);
+        const dataItem = dataGroup.items.find(item => item.default.id === tokenConfig.config.data.item);
+
+        result += dataItem.handler(tokenConfig.config);
+      } else if (tokenConfig.type === 'newline') {
+        result += '\u2029'; // TODO: Ensure this print paragrah correctly
+      } else if (tokenConfig.type === 'shift-newline') {
+        result += '\n';
+      } else {
+        result += tokenConfig.text;
+      }
+    }
+
+    console.log(result);
   });
 }

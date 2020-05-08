@@ -1,3 +1,7 @@
+import faker from 'faker';
+
+import {language, gender, textTransform} from '../utils';
+
 export default {
   id: 'first-name',
   name: 'First Name',
@@ -14,15 +18,10 @@ export default {
 };
 
 export function handler(options) {
-  if (options.language) {
-    window.faker.locale = options.language;
-  }
+  const _language = language(options.languages);
+  const _gender = gender(options.gender);
 
-  let result = window.faker.name.firstName(options.gender);
+  faker.locale = _language;
 
-  if (options.textTransform) {
-    // TODO:
-  }
-
-  return result;
+  return textTransform(faker.name.firstName(_gender), options['text-transform'], _language);
 }
