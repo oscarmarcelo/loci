@@ -95,50 +95,53 @@ block body
       hr
 
 
-      .heading-2 Limit
+      form.js-data-settings-form
+        .heading-2 Limit
 
 
-      .combo-field.limits
-        .input-combo
-          .number-input
-            input.number-input__reference.limits__min(type="number" min=0 placeholder="Min")
+        .combo-field.limits
+          .input-combo
+            .number-input
+              input.number-input__reference.limits__min(type="number" name="limit-min" min=1 placeholder="Min")
 
-            button.number-input__spinner.number-input__spinner--up(tabindex=-1)
-              +icon('spinner-up').number-input__spinner-icon
+              button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+                +icon('spinner-up').number-input__spinner-icon
 
-            button.number-input__spinner.number-input__spinner--down(tabindex=-1)
-              +icon('spinner-down').number-input__spinner-icon
-
-
-          .number-input
-            input.number-input__reference.limits__max(type="number" min=0 placeholder="Max")
-
-            button.number-input__spinner.number-input__spinner--up(tabindex=-1)
-              +icon('spinner-up').number-input__spinner-icon
-
-            button.number-input__spinner.number-input__spinner--down(tabindex=-1)
-              +icon('spinner-down').number-input__spinner-icon
+              button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+                +icon('spinner-down').number-input__spinner-icon
 
 
-        .select
-          select.select__reference(size=1)
-            option Characters
-            option Words
+            .number-input
+              input.number-input__reference.limits__max(type="number" name="limit-max" min=1 placeholder="Max")
 
-          +icon('chevron-up-down').select__icon
+              button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+                +icon('spinner-up').number-input__spinner-icon
+
+              button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+                +icon('spinner-down').number-input__spinner-icon
 
 
-      .checkable.mt-10
-        label.checkable__control
-          input.checkable__reference(type="checkbox")
+          .select
+            select.select__reference(name="limit-unit")
+              option(value="characters") Characters
+              option(value="words") Words
 
-          .checkable__mask
-            +icon('check').checkable__icon
+            +icon('chevron-up-down').select__icon
 
-          .checkable__label Truncate with ellipsis
+
+        .checkable.mt-10
+          label.checkable__control
+            input.checkable__reference(type="checkbox" name="ellipsis")
+
+            .checkable__mask
+              +icon('check').checkable__icon
+
+            .checkable__label Truncate with ellipsis
 
 
       hr.fill-edges
+
+
       .main__footer
         //- TODO: Add Import feature.
         //- button.button Import&hellip;

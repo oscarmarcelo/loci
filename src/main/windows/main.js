@@ -208,7 +208,7 @@ export function create() {
 export function generateData(dataConfig) {
   let result = '';
 
-  for (const tokenConfig of dataConfig) {
+  for (const tokenConfig of dataConfig.tokens) {
     if (tokenConfig.type === 'data') {
       const dataGroup = dataHandler.find(group => group.id === tokenConfig.config.data.group);
       const dataItem = dataGroup.items.find(item => item.default.id === tokenConfig.config.data.item);
@@ -220,6 +220,30 @@ export function generateData(dataConfig) {
       result += '\u2028';
     } else {
       result += tokenConfig.text;
+    }
+  }
+
+  const limitMax = Number.parseInt(dataConfig.general['limit-max'], 10);
+
+  if (limitMax) {
+    let splits;
+
+    if (dataConfig.general['limit-unit'] === 'characters') {
+      splits = result.split('');
+
+      if (splits.length > limitMax) {
+        result = result.slice(0, limitMax);
+      }
+    } else if (dataConfig.general['limit-unit'] === 'words') {
+      splits = result.match(/\s*\S+/g);
+
+      if (splits.length > limitMax) {
+        result = splits.slice(0, limitMax).join('');
+      }
+    }
+
+    if (dataConfig.general.ellipsis && splits.length > limitMax) {
+      result += '\u2026';
     }
   }
 

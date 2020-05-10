@@ -79,6 +79,21 @@ function updateTokenConfig(id, config) {
 }
 
 
+
+/*
+ * ========================================================
+ * Data Setting Form
+ * ========================================================
+ */
+
+const dataForm = document.querySelector('.js-data-settings-form');
+
+dataForm.addEventListener('submit', event => {
+  event.preventDefault();
+});
+
+
+
 /*
  * ========================================================
  * Limit inputs
@@ -126,25 +141,36 @@ const applyButton = document.querySelector('.js-apply-button');
 
 applyButton.addEventListener('click', () => {
   const tokens = document.querySelectorAll('.token-box .token');
-  const dataConfig = [];
+  const formData = new FormData(dataForm);
+  const dataConfig = {
+    tokens: [],
+    general: {}
+  };
+
 
   for (const token of tokens) {
     if (token.classList.contains('token--data')) {
-      dataConfig.push({
+      dataConfig.tokens.push({
         type: 'data',
         config: token.tokenConfig
       });
     } else if (token.classList.contains('token--newline')) {
-      dataConfig.push({
+      dataConfig.tokens.push({
         type: `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
       });
     } else {
-      dataConfig.push({
+      dataConfig.tokens.push({
         type: 'text',
         text: token.textContent
       });
     }
   }
+
+
+  for (const field of formData) {
+    dataConfig.general[field[0]] = field[1];
+  }
+
 
   window.postMessage('apply-data', dataConfig);
 });
