@@ -191,6 +191,8 @@ function createWindow() {
   });
 }
 
+
+
 export function create() {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
   if (window) {
