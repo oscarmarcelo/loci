@@ -137,7 +137,24 @@ limitsMaxInput.addEventListener('change', () => {
  * ========================================================
  */
 
+const tokenBoxScroller2 = document.querySelector('.token-box__scroller');
 const applyButton = document.querySelector('.js-apply-button');
+
+// TODO: Improve this observer code style.
+function toggleApplyButton() {
+  const dataTokens = tokenBoxScroller2.querySelectorAll('.token--data');
+
+  applyButton.disabled = dataTokens.length < 1;
+}
+
+toggleApplyButton();
+
+const observer = new MutationObserver(toggleApplyButton);
+
+observer.observe(tokenBoxScroller2, {
+  childList: true
+});
+
 
 applyButton.addEventListener('click', () => {
   const tokens = document.querySelectorAll('.token-box .token');
@@ -146,7 +163,6 @@ applyButton.addEventListener('click', () => {
     tokens: [],
     general: {}
   };
-
 
   for (const token of tokens) {
     if (token.classList.contains('token--data')) {
@@ -166,11 +182,9 @@ applyButton.addEventListener('click', () => {
     }
   }
 
-
   for (const field of formData) {
     dataConfig.general[field[0]] = field[1];
   }
-
 
   window.postMessage('apply-data', dataConfig);
 });
