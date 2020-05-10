@@ -29,11 +29,11 @@
     "sketch-module-web-view": "^3.4.1"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.7.5",
+    "@skpm/builder": "^0.7.6",
     "@skpm/extract-loader": "^2.0.2",
-    "css-loader": "^3.5.2",
+    "css-loader": "^3.5.3",
     "html-loader": "^0.5.5",
-    "xo": "^0.29.0"
+    "xo": "^0.30.0"
   },
   "skpm": {
     "name": "Loci",
