@@ -3,6 +3,7 @@ import {getSelectedDocument, Settings} from 'sketch';
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
 
+import constants from '../../constants';
 import * as tokenPopover from './token-popover';
 import * as selectPopover from './select-popover';
 import theme from '../theme';
@@ -12,7 +13,7 @@ import dataHandler from '../../renderer/src/scripts/data';
 
 function createWindow() {
   const window = new BrowserWindow({
-    identifier: 'loci.main',
+    identifier: constants.MAIN_WINDOW_ID,
     width: 374,
     height: 219,
     hidesOnDeactivate: false,
@@ -85,7 +86,7 @@ function createWindow() {
     NSNotificationCenter.defaultCenter().addObserver_selector_name_object(delegate, NSSelectorFromString('onAccentChange:'), NSSystemColorsDidChangeNotification, nil);
     NSNotificationCenter.defaultCenter().addObserver_selector_name_object(delegate, NSSelectorFromString('onResize:'), NSWindowDidResizeNotification, nil);
 
-    threadDictionary['loci.main.observers'] = delegate;
+    threadDictionary[constants.MAIN_WINDOW_OBSERVERS] = delegate;
 
     window.show();
   });
@@ -94,8 +95,8 @@ function createWindow() {
   window.on('close', () => {
     // TODO: Consider listing all window ids somewhere on creation.
     const windowIds = [
-      'loci.token-popover',
-      'loci.select-popover.data-suggestions'
+      constants.TOKEN_POPOVER_WINDOW_ID,
+      constants.DATA_SUGGESTIONS_WINDOW_ID
     ];
 
     for (const id of windowIds) {
@@ -109,11 +110,11 @@ function createWindow() {
 
 
   window.on('closed', () => {
-    const delegate = threadDictionary['loci.main.observers'];
+    const delegate = threadDictionary[constants.MAIN_WINDOW_OBSERVERS];
 
     if (delegate) {
       NSNotificationCenter.defaultCenter().removeObserver(delegate);
-      threadDictionary.removeObjectForKey('loci.main.observers');
+      threadDictionary.removeObjectForKey(constants.MAIN_WINDOW_OBSERVERS);
     }
   });
 
@@ -128,10 +129,10 @@ function createWindow() {
 
 
   window.webContents.on('data-suggestion', message => {
-    let popover = BrowserWindow.fromId('loci.select-popover.data-suggestions');
+    let popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (!popover) {
-      popover = selectPopover.create('data-suggestions', {
+      popover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
         parent: window,
         anchorBounds: message.anchorBounds,
         search: false
@@ -150,7 +151,7 @@ function createWindow() {
 
 
   window.webContents.on('close-data-suggestions', () => {
-    const popover = BrowserWindow.fromId('loci.select-popover.data-suggestions');
+    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (popover) {
       popover.close();
@@ -159,7 +160,7 @@ function createWindow() {
 
 
   window.webContents.on('navigate-data-suggestions', key => {
-    const popover = BrowserWindow.fromId('loci.select-popover.data-suggestions');
+    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (popover) {
       popover.webContents.executeJavaScript(`navigateOptions("${key}")`)
@@ -184,14 +185,14 @@ function createWindow() {
       const userInfo = nativeItem.userInfo().mutableCopy();
 
       // TODO: Find a way to get the identifier without hardcoding it.
-      userInfo.setValue_forKey('com.oscarmarcelo.loci___index_SupplyData', 'datasupplier.key');
+      userInfo.setValue_forKey([constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
       nativeItem.setUserInfo(userInfo);
     });
   });
 }
 
 export function create() {
-  const window = BrowserWindow.fromId('loci.main');
+  const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
   if (window) {
     window.show();
     window.focus();
@@ -226,7 +227,7 @@ export function generateData(dataConfig) {
 
 
 export function close() {
-  const window = BrowserWindow.fromId('loci.main');
+  const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
   if (window) {
     window.close();
   }

@@ -1,13 +1,14 @@
 import BrowserWindow from 'sketch-module-web-view';
 
 import theme from '../theme';
+import constants from '../../constants';
 
 
 
 export function create(options) {
   const window = new BrowserWindow({
-    identifier: 'loci.token-popover',
-    parent: BrowserWindow.fromId('loci.main'),
+    identifier: constants.TOKEN_POPOVER_WINDOW_ID,
+    parent: BrowserWindow.fromId(constants.MAIN_WINDOW_ID),
     width: 228,
     height: 306,
     hidesOnDeactivate: false,
@@ -86,7 +87,7 @@ export function create(options) {
 
 
   window.webContents.on('update-token-config', config => {
-    const mainWindow = BrowserWindow.fromId('loci.main');
+    const mainWindow = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
     mainWindow.webContents.executeJavaScript(`updateTokenConfig("${options.id}", ${JSON.stringify(config)})`)
       .catch(error => {

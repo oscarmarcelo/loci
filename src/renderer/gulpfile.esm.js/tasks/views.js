@@ -21,7 +21,10 @@ export default () =>
   ])
     .pipe(plumber())
     .pipe(pug({
-      pretty: true
+      pretty: true,
+      locals: {
+        require
+      }
     }))
     .pipe(dest(config.build.views))
     .pipe(notify({

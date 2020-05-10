@@ -1,6 +1,7 @@
 import {fromNative, DataSupplier, Settings} from 'sketch';
 import {toArray} from 'util';
 
+import constants from '../constants';
 import * as mainWindow from './windows/main';
 
 
@@ -12,7 +13,7 @@ export default function () {
 
 
 export function onStartup() {
-  DataSupplier.registerDataSupplier('public.text', 'Loci', 'SupplyData');
+  DataSupplier.registerDataSupplier('public.text', constants.PLUGIN_NAME, constants.DATA_SUPPLIER_ACTION);
 }
 
 
@@ -36,7 +37,7 @@ export function onSupplyData(context) {
     const dataConfig = Settings.layerSettingForKey(item, 'data');
     // TODO: Find a way to get the identifier without hardcoding it.
     //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_')
-    const isConnected = String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === 'com.oscarmarcelo.loci___index_SupplyData';
+    const isConnected = String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
 
     if (dataConfig && isConnected) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);

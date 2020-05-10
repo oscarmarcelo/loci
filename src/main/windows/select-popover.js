@@ -1,12 +1,13 @@
 import BrowserWindow from 'sketch-module-web-view';
 
 import theme from '../theme';
+import constants from '../../constants';
 
 
 
 export function create(id, options) {
   const window = new BrowserWindow({
-    identifier: `loci.select-popover.${id}`,
+    identifier: id,
     parent: options.parent,
     width: 214,
     height: 203,
@@ -70,7 +71,7 @@ export function create(id, options) {
 
 
   window.webContents.on('select-menu-results', results => {
-    const mainWindow = BrowserWindow.fromId('loci.main');
+    const mainWindow = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
     if (results > 0) {
       window.show();
