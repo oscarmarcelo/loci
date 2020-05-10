@@ -1,3 +1,5 @@
+import {getSelectedDocument, Settings} from 'sketch';
+
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
 
@@ -8,7 +10,7 @@ import dataHandler from '../../renderer/src/scripts/data';
 
 
 
-export function create() {
+function createWindow() {
   const window = new BrowserWindow({
     identifier: 'loci.main',
     width: 374,
@@ -169,23 +171,63 @@ export function create() {
 
 
   window.webContents.on('apply-data', dataConfig => {
-    let result = '';
+    const document = getSelectedDocument();
+    const items = document ? document.selectedLayers.layers : [];
 
-    for (const tokenConfig of dataConfig) {
-      if (tokenConfig.type === 'data') {
-        const dataGroup = dataHandler.find(group => group.id === tokenConfig.config.data.group);
-        const dataItem = dataGroup.items.find(item => item.default.id === tokenConfig.config.data.item);
+    items.forEach(item => {
+      Settings.setLayerSettingForKey(item, 'data', dataConfig);
 
-        result += dataItem.handler(tokenConfig.config);
-      } else if (tokenConfig.type === 'newline') {
-        result += '\u2029'; // TODO: Ensure this print paragrah correctly
-      } else if (tokenConfig.type === 'shift-newline') {
-        result += '\n';
-      } else {
-        result += tokenConfig.text;
-      }
-    }
+      // TODO: Exit edit mode before applying text, or data be lost if exiting after.
+      item.text = generateData(dataConfig);
 
-    console.log(result);
+      const nativeItem = item.sketchObject;
+      const userInfo = nativeItem.userInfo().mutableCopy();
+
+      // TODO: Find a way to get the identifier without hardcoding it.
+      userInfo.setValue_forKey('com.oscarmarcelo.loci___index_SupplyData', 'datasupplier.key');
+      nativeItem.setUserInfo(userInfo);
+    });
   });
+}
+
+export function create() {
+  const window = BrowserWindow.fromId('loci.main');
+  if (window) {
+    window.show();
+    window.focus();
+  } else {
+    createWindow();
+  }
+}
+
+
+
+export function generateData(dataConfig) {
+  let result = '';
+
+  for (const tokenConfig of dataConfig) {
+    if (tokenConfig.type === 'data') {
+      const dataGroup = dataHandler.find(group => group.id === tokenConfig.config.data.group);
+      const dataItem = dataGroup.items.find(item => item.default.id === tokenConfig.config.data.item);
+
+      result += dataItem.handler(tokenConfig.config);
+    } else if (tokenConfig.type === 'newline') {
+      result += '\u2029';
+    } else if (tokenConfig.type === 'shift-newline') {
+      result += '\u2028';
+    } else {
+      result += tokenConfig.text;
+    }
+  }
+
+  return result;
+}
+
+
+
+export function close() {
+  const window = BrowserWindow.fromId('loci.main');
+  if (window) {
+    window.close();
+  }
 }
