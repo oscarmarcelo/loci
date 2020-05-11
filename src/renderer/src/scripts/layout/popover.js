@@ -8,5 +8,8 @@ function setPopoverCaretPosition(position) {
 function updatePopoverHeight() {
   const popover = document.querySelector('.popover');
 
-  window.postMessage('update-popover-height', popover.offsetHeight);
+  window.postMessage('update-popover-height', popover.offsetHeight)
+    .catch(error => {
+      console.error('update-popover-height', error);
+    });
 }

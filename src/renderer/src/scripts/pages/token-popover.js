@@ -113,7 +113,10 @@ form.addEventListener('change', event => {
     }
   }
 
-  window.postMessage('update-token-config', config);
+  window.postMessage('update-token-config', config)
+    .catch(error => {
+      console.error('update-token-config', error);
+    });
 });
 
 

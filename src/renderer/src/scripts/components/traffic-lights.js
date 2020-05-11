@@ -16,5 +16,8 @@ window.addEventListener('blur', () => {
 
 
 close.addEventListener('click', () => {
-  window.postMessage('close', null);
+  window.postMessage('close', null)
+    .catch(error => {
+      console.error('close', error);
+    });
 });

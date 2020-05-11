@@ -51,7 +51,10 @@ function filterOptions(query) {
     // }
   }
 
-  window.postMessage('select-menu-results', results);
+  window.postMessage('select-menu-results', results)
+    .catch(error => {
+      console.error('select-menu-results', error);
+    });
 }
 
 

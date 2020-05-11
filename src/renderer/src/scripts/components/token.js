@@ -20,7 +20,10 @@ function initDataToken(token) {
       id: token.id,
       tokenConfig: token.tokenConfig,
       anchorBounds: token.getBoundingClientRect()
-    });
+    })
+      .catch(error => {
+        console.error('open-token-popover', error);
+      });
   });
 }
 

@@ -38,17 +38,26 @@ tokenBoxSelect.selectedIndex = -1;
 //   window.postMessage('data-suggestion', {
 //     value: dataEditorInput.value,
 //     anchorBounds: dataEditorInput.getBoundingClientRect()
-//   });
+//   })
+//     .catch(error => {
+//       console.error('data-suggestion', error);
+//     });
 // });
 
 
 
 // dataEditorInput.addEventListener('keydown', event => {
 //   if (event.key === 'Enter') {
-//     window.postMessage('close-data-suggestions', null);
+//     window.postMessage('close-data-suggestions', null)
+//       .catch(error => {
+//         console.error('close-data-suggestions', error);
+//       });
 //   } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
 //     event.preventDefault();
-//     window.postMessage('navigate-data-suggestions', event.key);
+//     window.postMessage('navigate-data-suggestions', event.key)
+//       .catch(error => {
+//         console.error('navigate-data-suggestions', error);
+//       });
 //   }
 // });
 
@@ -186,5 +195,8 @@ applyButton.addEventListener('click', () => {
     dataConfig.general[field[0]] = field[1];
   }
 
-  window.postMessage('apply-data', dataConfig);
+  window.postMessage('apply-data', dataConfig)
+    .catch(error => {
+      console.error('apply-data', error);
+    });
 });
