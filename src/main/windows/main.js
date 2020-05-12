@@ -176,7 +176,7 @@ function createWindow() {
     const items = document ? document.selectedLayers.layers : [];
 
     items.forEach(item => {
-      Settings.setLayerSettingForKey(item, 'data', dataConfig);
+      Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
 
       // TODO: Exit edit mode before applying text, or data be lost if exiting after.
       item.text = generateData(dataConfig);

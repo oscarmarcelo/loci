@@ -34,7 +34,7 @@ export function onSupplyData(context) {
     //       For now, the native approach is to check for override config in the symbol master and apply it.
     //       If it was directly asked to use Loci from the context menu, open the window, even if config exists.
     //       If it was trigerred by a refresh, then just reapply data using config.
-    const dataConfig = Settings.layerSettingForKey(item, 'data');
+    const dataConfig = Settings.layerSettingForKey(item, 'dataConfig');
     // TODO: Find a way to get the identifier without hardcoding it.
     //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_')
     const isConnected = String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
