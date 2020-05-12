@@ -153,7 +153,13 @@ const applyButton = document.querySelector('.js-apply-button');
 function toggleApplyButton() {
   const dataTokens = tokenBoxScroller2.querySelectorAll('.token--data');
 
-  applyButton.disabled = dataTokens.length < 1;
+  applyButton.disabled = dataTokens.length === 0;
+
+  if (dataTokens.length === 0) {
+    applyButton.title = 'Data should have at least one dynamic token.';
+  } else {
+    applyButton.removeAttribute('title');
+  }
 }
 
 toggleApplyButton();
