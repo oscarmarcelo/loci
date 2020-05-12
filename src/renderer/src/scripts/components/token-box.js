@@ -45,6 +45,7 @@ function createToken(type, text, config) {
   }
 
   // TODO: Consider generating a GUID instead.
+  //       Ex.: NSUUID.UUID().UUIDString()
   token.id = new Array(16)
     .fill(0)
     .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
