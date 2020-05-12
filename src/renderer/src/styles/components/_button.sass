@@ -9,7 +9,7 @@
 
   box-shadow: 0 1px 1px -.5px var(--color-button-drop-shadow) // REVIEW: Sketch shadow seems to has a smaller radius and a slightly different offset/blur.
   outline: 0
-  border: $border-width solid var(--color-label-border)
+  border: $border-width solid transparent
     radius: 4px
   color: inherit
   background: var(--color-push-button-background)
@@ -19,16 +19,17 @@
   line-height: 21px - $border-width * 2 - 3px - 2px
   letter-spacing: -.07px
 
-  &:active
-    border-color: var(--color-highlighted-border)
+  &:not(:disabled):active
     color: var(--color-accented-background-icon)
     background: var(--color-accent)
 
-  @media (prefers-color-scheme: dark)
-    &,
-    &:active
-      border-color: transparent
+  // FIXME: Currently, Sass doesn't support negation in media queries very well.
+  //        Should be `@media not (prefers-color-scheme: dark)`.
+  @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference)
+    border-color: var(--color-label-border)
+
+    &:not(:disabled):active
+      border-color: var(--color-highlighted-border)
 
   &:disabled
     opacity: .5
-    pointer-events: none
