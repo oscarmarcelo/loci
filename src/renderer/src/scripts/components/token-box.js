@@ -5,7 +5,7 @@ const tokenBoxSelect2 = tokenBox.querySelector('.token-box__select'); // TODO [>
 
 
 
-function createToken(type, text, configuration) {
+function createToken(type, text, config) {
   const token = document.createElement('div');
 
   token.classList.add('token');
@@ -26,6 +26,16 @@ function createToken(type, text, configuration) {
     tokenText.classList.add('token__text');
     tokenText.textContent = text;
 
+    if (config.gender) {
+      token.classList.add(`token--${config.gender}`);
+    }
+
+    if (config['text-transform']) {
+      token.style.setProperty('text-transform', config['text-transform']);
+    }
+
+    token.tokenConfig = config;
+
     token.append(tokenText);
   } else if (['newline', 'shift-newline'].includes(type)) {
     token.classList.add('token--newline');
@@ -34,8 +44,7 @@ function createToken(type, text, configuration) {
     token.textContent = text;
   }
 
-  token.tokenConfig = configuration;
-
+  // TODO: Consider generating a GUID instead.
   token.id = new Array(16)
     .fill(0)
     .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
