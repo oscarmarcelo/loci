@@ -228,13 +228,13 @@ export function generateData(dataConfig) {
   if (limitMax) {
     let splits;
 
-    if (dataConfig.general['limit-unit'] === 'characters') {
+    if (dataConfig.general['limit-unit'] === 'character') {
       splits = result.split('');
 
       if (splits.length > limitMax) {
         result = result.slice(0, limitMax);
       }
-    } else if (dataConfig.general['limit-unit'] === 'words') {
+    } else if (dataConfig.general['limit-unit'] === 'word') {
       splits = result.match(/\s*\S+/g);
 
       if (splits.length > limitMax) {
