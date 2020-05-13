@@ -172,13 +172,12 @@ function createWindow() {
 
 
   window.webContents.on('apply-data', dataConfig => {
-    const document = getSelectedDocument();
-    const items = document ? document.selectedLayers.layers : [];
+    const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
     items.forEach(item => {
       Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
 
-      // TODO: Exit edit mode before applying text, or data be lost if exiting after.
+      // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
       item.text = generateData(dataConfig);
 
       const nativeItem = item.sketchObject;
@@ -197,6 +196,9 @@ export function create() {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
   if (window) {
     window.show();
+    // TODO: We also need to bring the window to visibility when it is hidden in an inactive window space.
+    //       Probably need to check with NSPanel.isOnActiveSpace() and NSPanel.CollectionBehavior.moveToActiveSpace().
+    //       Or this probably won't be needed if we make the window to always show on the same space as Sketch's.
     window.focus();
   } else {
     createWindow();
@@ -208,7 +210,7 @@ export function create() {
 export function generateData(dataConfig) {
   let result = '';
 
-  for (const tokenConfig of dataConfig.tokens) {
+  dataConfig.tokens?.forEach(tokenConfig => {
     if (tokenConfig.type === 'data') {
       const dataItem = getData(tokenConfig.config.data.group, tokenConfig.config.data.item);
 
@@ -220,7 +222,9 @@ export function generateData(dataConfig) {
     } else {
       result += tokenConfig.text;
     }
-  }
+  });
+
+  // TODO: Handle limit-min field.
 
   const limitMax = Number.parseInt(dataConfig.general['limit-max'], 10);
 
@@ -253,6 +257,7 @@ export function generateData(dataConfig) {
 
 export function close() {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
+
   if (window) {
     window.close();
   }

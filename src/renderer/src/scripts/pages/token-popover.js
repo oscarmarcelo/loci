@@ -101,14 +101,14 @@ form.addEventListener('change', event => {
   const formData = new FormData(form);
   const config = {};
 
-  for (const field of formData) {
-    if (field[0] === 'data') {
+  for (const [name, value] of formData.entries()) {
+    if (name === 'data') {
       config.data = {
         group: dataListSelect.selectedOptions[0].dataset.group,
-        item: field[1]
+        item: value
       };
     } else {
-      config[field[0]] = field[1];
+      config[name] = value;
     }
   }
 
