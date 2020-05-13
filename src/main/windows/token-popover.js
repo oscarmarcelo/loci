@@ -89,6 +89,8 @@ export function create(options) {
   window.webContents.on('update-token-config', config => {
     const mainWindow = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
+    // FIXME: BrowserWindow somehow silently breaks internally on this step,
+    //        making new window instances not having their frame positions persisted.
     mainWindow.webContents.executeJavaScript(`updateTokenConfig("${options.id}", ${JSON.stringify(config)})`)
       .catch(error => {
         console.error('updateTokenConfig', error);

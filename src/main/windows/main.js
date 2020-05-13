@@ -16,8 +16,8 @@ function createWindow() {
     identifier: constants.MAIN_WINDOW_ID,
     width: 374,
     height: 219,
-    remembersWindowFrame: true,
     // hidesOnDeactivate: false, // TODO: Find a way to keep window always on top of Sketch, but not on top of other apps.
+    // remembersWindowFrame: true, // FIXME: HACK: Using workaround to manually store frame until this feature becomes reliable.
     minWidth: 374,
     minHeight: 219 - 37, // Somehow, 37px are added to minHeight
     minimizable: false,
@@ -33,6 +33,18 @@ function createWindow() {
       // devTools: false
     }
   });
+
+
+  // HACK: Workaround until `remembersWindowFrame` reliability is fixed.
+  const lastFrame = Settings.settingForKey(`${constants.MAIN_WINDOW_ID}.frame`);
+
+  if (lastFrame) {
+    // TODO: We still need to handle differences of screen boundaries between sessions:
+    //       - When there's a different amount of displays, screen resolutions, or screen arrangements (macOS seems to already handle this, but we need to check for edge cases);
+    //       - When Sketch is placed in a different screen than `lastFrame`, the plugin should probabily open in that screen instead.
+    window.setBounds(lastFrame);
+  }
+
 
   const nativeWindow = window.getNativeWindowHandle();
 
@@ -106,6 +118,9 @@ function createWindow() {
         window.close();
       }
     }
+
+    // HACK: Workaround until `remembersWindowFrame` reliability is fixed.
+    Settings.setSettingForKey(`${constants.MAIN_WINDOW_ID}.frame`, window.getBounds());
   });
 
 
