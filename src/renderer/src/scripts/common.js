@@ -20,3 +20,11 @@ function setTheme(theme) {
   document.body.classList.remove(...themes);
   document.body.classList.add(`theme-${theme}`);
 }
+
+
+
+document.querySelectorAll('.js-no-submit').forEach(form => {
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+  });
+});

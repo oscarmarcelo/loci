@@ -119,9 +119,3 @@ form.addEventListener('change', event => {
       console.error('update-token-config', error);
     });
 });
-
-
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-});
