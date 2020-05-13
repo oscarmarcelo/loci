@@ -1,4 +1,4 @@
-export default {
+const config = {
   id: 'iban',
   name: 'IBAN',
   fields: [
@@ -11,7 +11,9 @@ export default {
   ]
 };
 
-export function handler(options) {
+
+
+function handler(options) {
   // if (options.language) {
   //   window.faker.locale = options.language;
   // }
@@ -24,3 +26,10 @@ export function handler(options) {
 
   // return result;
 }
+
+
+
+export default {
+  config,
+  handler
+};

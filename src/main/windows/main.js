@@ -7,7 +7,7 @@ import constants from '../../constants';
 import * as tokenPopover from './token-popover';
 import * as selectPopover from './select-popover';
 import theme from '../theme';
-import dataHandler from '../../renderer/src/scripts/data';
+import {get as getData} from '../../renderer/src/scripts/data';
 
 
 
@@ -210,8 +210,7 @@ export function generateData(dataConfig) {
 
   for (const tokenConfig of dataConfig.tokens) {
     if (tokenConfig.type === 'data') {
-      const dataGroup = dataHandler.find(group => group.id === tokenConfig.config.data.group);
-      const dataItem = dataGroup.items.find(item => item.default.id === tokenConfig.config.data.item);
+      const dataItem = getData(tokenConfig.config.data.group, tokenConfig.config.data.item);
 
       result += dataItem.handler(tokenConfig.config);
     } else if (tokenConfig.type === 'newline') {

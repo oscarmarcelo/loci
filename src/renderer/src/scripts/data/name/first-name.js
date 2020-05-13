@@ -2,7 +2,9 @@ import faker from 'faker';
 
 import {language, gender, textTransform} from '../utils';
 
-export default {
+
+
+const config = {
   id: 'first-name',
   name: 'First Name',
   fields: [
@@ -17,7 +19,9 @@ export default {
   ]
 };
 
-export function handler(options) {
+
+
+function handler(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
 
@@ -25,3 +29,10 @@ export function handler(options) {
 
   return textTransform(faker.name.firstName(_gender), options['text-transform'], _language);
 }
+
+
+
+export default {
+  config,
+  handler
+};

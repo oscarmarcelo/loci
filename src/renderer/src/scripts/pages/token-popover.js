@@ -12,9 +12,8 @@ function renderTokenSettings(config) {
 
   const option = dataListSelect.selectedOptions[0];
 
-  const dataGroup = window.data.find(group => group.id === option.dataset.group);
-  const dataItem = dataGroup.items.find(item => item.id === option.value);
-  const fields = dataItem.fields;
+  const dataItem = window.loci.data.get(option.dataset.group, option.value);
+  const fields = dataItem.config.fields;
 
   if (fields.length > 0) {
     if (typeof fields[0] === 'string' || fields[0].type !== 'heading-2') {
@@ -29,7 +28,7 @@ function renderTokenSettings(config) {
     }
 
     for (const field of fields) {
-      window.fields(field, config);
+      window.loci.fields(field, config);
     }
   }
 
@@ -67,11 +66,11 @@ function setTokenConfig(config) {
  * ========================================================
  */
 
-for (const group of window.data) {
+for (const group of window.loci.data.list) {
   const optgroup = document.createElement('optgroup');
   optgroup.setAttribute('label', group.name);
 
-  group.items.forEach(item => {
+  group.items.forEach(({config: item}) => {
     const option = document.createElement('option');
 
     option.textContent = item.name;

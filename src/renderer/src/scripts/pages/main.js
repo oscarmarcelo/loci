@@ -7,11 +7,11 @@
 const tokenBoxSelect = document.querySelector('.token-box__select');
 const tokenBoxSelectOptions = new DocumentFragment();
 
-for (const group of window.data) {
+for (const group of window.loci.data.list) {
   const optgroup = document.createElement('optgroup');
   optgroup.setAttribute('label', group.name);
 
-  group.items.forEach(item => {
+  group.items.forEach(({config: item}) => {
     const option = document.createElement('option');
 
     option.textContent = item.name;
@@ -69,8 +69,7 @@ function updateTokenConfig(id, config) {
   if (token) {
     token.tokenConfig = config;
 
-    const dataGroup = window.data.find(group => group.id === config.data.group);
-    const dataItem = dataGroup.items.find(item => item.id === config.data.item);
+    const {config: dataItem} = window.loci.data.get(config.data.group, config.data.item);
 
     token.querySelector('.token__text').textContent = dataItem.name;
 

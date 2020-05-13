@@ -1,10 +1,12 @@
-export default {
+const config = {
   id: 'protocol',
   name: 'HTTP Protocol',
   fields: []
 };
 
-export function handler(options) {
+
+
+function handler(options) {
   // if (options.language) {
   //   window.faker.locale = options.language;
   // }
@@ -17,3 +19,10 @@ export function handler(options) {
 
   // return result;
 }
+
+
+
+export default {
+  config,
+  handler
+};

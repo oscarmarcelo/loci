@@ -46,7 +46,7 @@ export const build = done => {
       .then(({write}) =>
         write({
           file: `${config.build.scripts}/${bundle}.js`,
-          name: bundle,
+          name: `loci.${bundle}`, // TODO: Don't hardcode plugin namespace.
           format: 'umd'
         })
       );
