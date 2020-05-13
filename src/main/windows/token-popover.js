@@ -19,7 +19,7 @@ export function create(options) {
     fullscreenable: false,
     show: false,
     frame: false,
-    acceptFirstMouse: true,
+    acceptsFirstMouse: true,
     transparent: true
   });
 
