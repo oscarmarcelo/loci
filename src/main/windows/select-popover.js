@@ -11,7 +11,7 @@ export function create(id, options) {
     parent: options.parent,
     width: 214,
     height: 203,
-    hidesOnDeactivate: false,
+    // hidesOnDeactivate: false,
     resizable: false,
     minimizable: false,
     maximizable: false,

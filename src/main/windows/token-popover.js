@@ -11,7 +11,7 @@ export function create(options) {
     parent: BrowserWindow.fromId(constants.MAIN_WINDOW_ID),
     width: 228,
     height: 306,
-    hidesOnDeactivate: false,
+    // hidesOnDeactivate: false,
     resizable: false,
     minimizable: false,
     maximizable: false,

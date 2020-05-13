@@ -16,8 +16,8 @@ function createWindow() {
     identifier: constants.MAIN_WINDOW_ID,
     width: 374,
     height: 219,
-    hidesOnDeactivate: false,
     remembersWindowFrame: true,
+    // hidesOnDeactivate: false, // TODO: Find a way to keep window always on top of Sketch, but not on top of other apps.
     minWidth: 374,
     minHeight: 219 - 37, // Somehow, 37px are added to minHeight
     minimizable: false,
