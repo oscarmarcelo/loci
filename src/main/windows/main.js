@@ -250,6 +250,7 @@ export function generateData(dataConfig) {
   let result = '';
 
   dataConfig.tokens?.forEach(tokenConfig => {
+    // TODO: Handle Chance of Appearance.
     if (tokenConfig.type === 'data') {
       const dataItem = getData(tokenConfig.config.data.group, tokenConfig.config.data.item);
 
