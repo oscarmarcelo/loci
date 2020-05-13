@@ -46,3 +46,11 @@ export function onSupplyData(context) {
     }
   });
 }
+
+
+
+export function onSelectionChanged(context) {
+  const items = toArray(context.actionContext.newSelection).map(fromNative);
+
+  mainWindow.setSelection(items);
+}

@@ -17,7 +17,8 @@
         "actions": {
           "Startup": "onStartup",
           "Shutdown": "onShutdown",
-          "SupplyData": "onSupplyData"
+          "SupplyData": "onSupplyData",
+          "SelectionChanged.finish": "onSelectionChanged"
         }
       }
     }

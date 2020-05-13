@@ -100,6 +100,12 @@ function createWindow() {
 
     threadDictionary[constants.MAIN_WINDOW_OBSERVERS] = delegate;
 
+    const items = getSelectedDocument()?.selectedLayers?.layers || [];
+
+    if (items) {
+      setSelection(items);
+    }
+
     window.show();
   });
 
@@ -217,6 +223,24 @@ export function create() {
     window.focus();
   } else {
     createWindow();
+  }
+}
+
+
+
+export function setSelection(items) {
+  const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
+
+  if (window) {
+    const item = items.find(item => Boolean(Settings.layerSettingForKey(item, 'dataConfig')));
+
+    const dataConfig = item ? Settings.layerSettingForKey(item, 'dataConfig') : {};
+
+    // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
+    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify(dataConfig)})`)
+      .catch(error => {
+        console.error('setDataConfig', error);
+      });
   }
 }
 

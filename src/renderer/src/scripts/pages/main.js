@@ -4,8 +4,10 @@
  * ========================================================
  */
 
+const tokenBoxScroller2 = document.querySelector('.token-box__scroller'); // TODO: Improve variable management.
 const tokenBoxSelect = document.querySelector('.token-box__select');
 const tokenBoxSelectOptions = new DocumentFragment();
+const dataForm = document.querySelector('.js-data-settings-form');
 
 for (const group of window.loci.data.list) {
   const optgroup = document.createElement('optgroup');
@@ -63,6 +65,43 @@ tokenBoxSelect.selectedIndex = -1;
 
 
 
+function setDataConfig(dataConfig) {
+  const tokens = tokenBoxScroller2.querySelectorAll('.token');
+
+  // TODO: Use DocumentFragment.
+  tokens.forEach(token => {
+    token.remove();
+  });
+
+  dataConfig.tokens?.forEach(tokenConfig => {
+    let name;
+    let config;
+
+    if (tokenConfig.type === 'data') {
+      name = window.loci.data.get(tokenConfig.config.data.group, tokenConfig.config.data.item).config.name;
+      config = tokenConfig.config;
+    } else if (tokenConfig.type === 'text') {
+      name = tokenConfig.text;
+    }
+
+    // TODO: Use DocumentFragment.
+    createToken(tokenConfig.type, name, config);
+  });
+
+  dataForm.reset();
+
+  Object.entries(dataConfig.general || {}).forEach(([name, value]) => {
+    const field = dataForm.elements.namedItem(name);
+
+    if (field.type === 'checkbox') {
+      field.checked = Boolean(value);
+    } else {
+      field.value = value;
+    }
+  });
+}
+
+
 function updateTokenConfig(id, config) {
   const token = document.querySelector(`#${id}`);
 
@@ -93,8 +132,6 @@ function updateTokenConfig(id, config) {
  * Data Setting Form
  * ========================================================
  */
-
-const dataForm = document.querySelector('.js-data-settings-form');
 
 dataForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -145,7 +182,6 @@ limitsMaxInput.addEventListener('change', () => {
  * ========================================================
  */
 
-const tokenBoxScroller2 = document.querySelector('.token-box__scroller');
 const applyButton = document.querySelector('.js-apply-button');
 
 // TODO: Improve this observer code style.
