@@ -2,7 +2,9 @@ const config = {
   id: 'iban',
   name: 'IBAN',
   fields: [
-    'languages',
+    {
+      type: 'languages'
+    },
     {
       type: 'checkbox',
       id: 'formatted',

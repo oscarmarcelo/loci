@@ -8,14 +8,22 @@ const config = {
   id: 'first-name',
   name: 'First Name',
   fields: [
-    'languages',
-    'gender',
-    'separator',
+    {
+      type: 'languages'
+    },
+    {
+      type: 'gender'
+    },
+    {
+      type: 'separator'
+    },
     {
       type: 'heading-2',
       text: 'Text Options'
     },
-    'text-transform'
+    {
+      type: 'text-transform'
+    }
   ]
 };
 

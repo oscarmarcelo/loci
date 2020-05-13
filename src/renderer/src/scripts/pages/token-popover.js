@@ -7,7 +7,7 @@ const tokenBoxSelectOptions = new DocumentFragment();
 
 // TODO: Use DocumentFragment to add all fields at once instead of adding them one by one.
 //       Also, window seems to be resized for each field that is added.
-function renderTokenSettings(config) {
+function renderTokenSettings(tokenConfig) {
   settings.textContent = '';
 
   const option = dataListSelect.selectedOptions[0];
@@ -16,19 +16,21 @@ function renderTokenSettings(config) {
   const fields = dataItem.config.fields;
 
   if (fields.length > 0) {
-    if (typeof fields[0] === 'string' || fields[0].type !== 'heading-2') {
+    if (fields[0].type !== 'heading-2') {
       fields.unshift({
         type: 'heading-2',
         text: 'Settings'
       });
     }
 
-    if (fields[fields.length - 1] !== 'separator') {
-      fields.push('separator');
+    if (fields[fields.length - 1].type !== 'separator') {
+      fields.push({
+        type: 'separator'
+      });
     }
 
     for (const field of fields) {
-      window.loci.fields(field, config);
+      window.loci.fields(field, tokenConfig);
     }
   }
 
@@ -37,15 +39,15 @@ function renderTokenSettings(config) {
 
 
 
-function setTokenConfig(config) {
+function setTokenConfig(tokenConfig) {
   // First update the Data field.
-  dataListSelect.value = config.data.item;
+  dataListSelect.value = tokenConfig.data.item;
 
   // Then update the Chance of Appearance combo fields.
-  if (config.appearance) {
+  if (tokenConfig.appearance) {
     const appearance = document.querySelector('[name="appearance"]');
 
-    appearance.value = config.appearance;
+    appearance.value = tokenConfig.appearance;
 
     // Make range input detect the value change.
     appearance.dispatchEvent(new Event('change', {
@@ -55,7 +57,7 @@ function setTokenConfig(config) {
   }
 
   // And then procceed with the data-specific settings.
-  renderTokenSettings(config);
+  renderTokenSettings(tokenConfig);
 }
 
 

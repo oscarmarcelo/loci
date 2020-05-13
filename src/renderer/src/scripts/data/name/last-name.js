@@ -8,13 +8,19 @@ const config = {
   id: 'last-name',
   name: 'Last Name',
   fields: [
-    'languages',
-    'separator',
+    {
+      type: 'languages'
+    },
+    {
+      type: 'separator'
+    },
     {
       type: 'heading-2',
       text: 'Text Options'
     },
-    'text-transform'
+    {
+      type: 'text-transform'
+    }
   ]
 };
 
