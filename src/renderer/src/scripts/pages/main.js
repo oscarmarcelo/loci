@@ -112,10 +112,8 @@ function updateTokenConfig(id, tokenConfig) {
 
     token.querySelector('.token__text').textContent = dataItem.name;
 
-    if (tokenConfig.gender) {
-      token.classList.toggle('token--male', tokenConfig.gender === 'male');
-      token.classList.toggle('token--female', tokenConfig.gender === 'female');
-    }
+    token.classList.toggle('token--male', tokenConfig?.gender === 'male');
+    token.classList.toggle('token--female', tokenConfig?.gender === 'female');
 
     if (tokenConfig['text-transform']) {
       token.style.setProperty('text-transform', tokenConfig['text-transform']);
