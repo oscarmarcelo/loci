@@ -24,6 +24,11 @@ const config = {
       precision: true
     },
     {
+      type: 'checkbox',
+      id: 'keep-decimal-zeros',
+      text: 'Keep decimal zeros'
+    },
+    {
       type: 'separator'
     },
     {
@@ -84,11 +89,6 @@ const config = {
           buttonText: '0,12'
         }
       ]
-    },
-    {
-      type: 'checkbox',
-      id: 'keep-decimal-zeros',
-      text: 'Keep decimal zeros'
     }
     // TODO: Decimal Separator (locale sentient)
     // TODO: Group Separator (locale sentient)
