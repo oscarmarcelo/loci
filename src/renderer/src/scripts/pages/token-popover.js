@@ -119,3 +119,15 @@ form.addEventListener('change', event => {
       console.error('update-token-config', error);
     });
 });
+
+
+
+// HACK: Input elements only trigger changes when they are blurred out or when there are arrow keys navigation, for example.
+//       This ensures that input elements also have their values handled even if the window closes without having a change event.
+//       As a side effect, `update-token-config` will be posted twice when there's also a `change` event.
+form.addEventListener('input', () => {
+  form.dispatchEvent(new Event('change', {
+    bubbles: false,
+    cancelable: true
+  }));
+});
