@@ -26,7 +26,7 @@ const config = {
 
 
 
-function handler(options) {
+function generator(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
   // TODO: Only add gender field to languages that support it.
@@ -40,5 +40,5 @@ function handler(options) {
 
 export default {
   config,
-  handler
+  generator
 };

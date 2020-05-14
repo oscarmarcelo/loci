@@ -29,7 +29,7 @@ const config = {
 
 
 
-function handler(options) {
+function generator(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
 
@@ -42,5 +42,5 @@ function handler(options) {
 
 export default {
   config,
-  handler
+  generator
 };

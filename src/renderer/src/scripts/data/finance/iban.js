@@ -15,7 +15,7 @@ const config = {
 
 
 
-function handler(options) {
+function generator(options) {
   // if (options.language) {
   //   window.faker.locale = options.language;
   // }
@@ -33,5 +33,5 @@ function handler(options) {
 
 export default {
   config,
-  handler
+  generator
 };
