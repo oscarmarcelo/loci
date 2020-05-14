@@ -1,66 +1,60 @@
-const numberInputComponents = document.querySelectorAll('.number-input');
-
-
-
-// Step up/down a number input value.
-function step(input, direction) {
-  const step = Number.parseFloat(input.step) || 1;
-  const min = Number.parseFloat(input.min);
-  const max = Number.parseFloat(input.max);
-
-  let value = input.valueAsNumber;
-
-
-  // Set a base value if there isn't, having limits in mind.
-  if (Number.isNaN(value)) {
-    value = 0;
-
-    if (Number.isFinite(min)) {
-      value = Math.max(value, min);
-    }
-
-    if (Number.isFinite(max)) {
-      value = Math.min(value, max);
-    }
-  }
-
-
-  // Step up/down value, having limits in mind.
-  if (direction === 'up') {
-    if (Number.isFinite(max) && value + step > max) {
-      value = max;
-    } else {
-      value += step;
-    }
-  } else {
-    // eslint-disable-next-line no-lonely-if
-    if (Number.isFinite(min) && value - step < min) {
-      value = min;
-    } else {
-      value -= step;
-    }
-  }
-
-  input.valueAsNumber = value;
-
-
-  // Trigger a change event, so number inputs coupled with range inputs can update their range counterparts.
-  input.dispatchEvent(new Event('change', {
-    bubbles: false,
-    cancelable: true
-  }));
-}
-
-
-
-// Apply events to all `.number-input` components.
-for (const component of numberInputComponents) {
+function initNumberInput(component) {
   const input = component.querySelector('.number-input__reference');
   const spinners = {
     up: component.querySelector('.number-input__spinner--up'),
     down: component.querySelector('.number-input__spinner--down')
   };
-  const form = component.closest('form');
+
+
+
+  // Step up/down a number input value.
+  const step = (input, direction) => {
+    const step = Number.parseFloat(input.step) || 1;
+    const min = Number.parseFloat(input.min);
+    const max = Number.parseFloat(input.max);
+
+    let value = input.valueAsNumber;
+
+
+    // Set a base value if there isn't, having limits in mind.
+    if (Number.isNaN(value)) {
+      value = 0;
+
+      if (Number.isFinite(min)) {
+        value = Math.max(value, min);
+      }
+
+      if (Number.isFinite(max)) {
+        value = Math.min(value, max);
+      }
+    }
+
+
+    // Step up/down value, having limits in mind.
+    if (direction === 'up') {
+      if (Number.isFinite(max) && value + step > max) {
+        value = max;
+      } else {
+        value += step;
+      }
+    } else {
+      // eslint-disable-next-line no-lonely-if
+      if (Number.isFinite(min) && value - step < min) {
+        value = min;
+      } else {
+        value -= step;
+      }
+    }
+
+    input.valueAsNumber = value;
+
+
+    // Trigger a change event, so number inputs coupled with range inputs can update their range counterparts.
+    input.dispatchEvent(new Event('change', {
+      bubbles: false,
+      cancelable: true
+    }));
+  };
 
 
 
@@ -108,8 +102,8 @@ for (const component of numberInputComponents) {
     }
 
     // REVIEW: Check if there's a more native way to trigger form change event.
-    if (form && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
-      form.dispatchEvent(new Event('change', {
+    if (input.form && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
+      input.form.dispatchEvent(new Event('change', {
         bubbles: false,
         cancelable: true
       }));
@@ -155,12 +149,45 @@ for (const component of numberInputComponents) {
       unpressShiftKey();
 
       // REVIEW: Check if there's a more native way to trigger form change event.
-      if (form) {
-        form.dispatchEvent(new Event('change', {
+      if (spinner.form) {
+        spinner.form.dispatchEvent(new Event('change', {
           bubbles: false,
           cancelable: true
         }));
       }
     });
   }
+}
+
+
+
+function pairMinMaxInputs(minInput, maxInput) {
+  // Ensure that max limit is not smaller than the min limit.
+  minInput.addEventListener('change', () => {
+    if (
+      Number.isFinite(minInput.valueAsNumber) &&
+      Number.isFinite(maxInput.valueAsNumber) &&
+      minInput.valueAsNumber > maxInput.valueAsNumber
+    ) {
+      maxInput.valueAsNumber = minInput.valueAsNumber;
+    }
+  });
+
+  // Ensure that min limit is not greater than the max limit.
+  maxInput.addEventListener('change', () => {
+    if (
+      Number.isFinite(minInput.valueAsNumber) &&
+      Number.isFinite(maxInput.valueAsNumber) &&
+      minInput.valueAsNumber > maxInput.valueAsNumber
+    ) {
+      minInput.valueAsNumber = maxInput.valueAsNumber;
+    }
+  });
+}
+
+
+
+// Apply events to all `.number-input` components.
+for (const component of document.querySelectorAll('.number-input')) {
+  initNumberInput(component);
 }

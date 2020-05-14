@@ -133,34 +133,7 @@ function updateTokenConfig(id, tokenConfig) {
  * ========================================================
  */
 
-const limitsMinInput = document.querySelector('.limits__min');
-const limitsMaxInput = document.querySelector('.limits__max');
-
-
-
-// Ensure that max limit is not smaller than the min limit.
-limitsMinInput.addEventListener('change', () => {
-  if (
-    Number.isFinite(limitsMinInput.valueAsNumber) &&
-    Number.isFinite(limitsMaxInput.valueAsNumber) &&
-    limitsMinInput.valueAsNumber > limitsMaxInput.valueAsNumber
-  ) {
-    limitsMaxInput.valueAsNumber = limitsMinInput.valueAsNumber;
-  }
-});
-
-
-
-// Ensure that min limit is not greater than the max limit.
-limitsMaxInput.addEventListener('change', () => {
-  if (
-    Number.isFinite(limitsMinInput.valueAsNumber) &&
-    Number.isFinite(limitsMaxInput.valueAsNumber) &&
-    limitsMinInput.valueAsNumber > limitsMaxInput.valueAsNumber
-  ) {
-    limitsMinInput.valueAsNumber = limitsMaxInput.valueAsNumber;
-  }
-});
+pairMinMaxInputs(document.querySelector('.limits__min'), document.querySelector('.limits__max'));
 
 
 
