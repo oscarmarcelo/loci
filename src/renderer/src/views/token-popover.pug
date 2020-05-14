@@ -9,12 +9,13 @@ block styles
 
 
 block body
+  include _fields/_heading-1
   include _fields/_heading-2
   include _fields/_separator
   include _fields/_languages
-  include _fields/_gender
-  include _fields/_text-transform
+  include _fields/_button-group
   include _fields/_checkbox
+  include _fields/_min-max
 
   .popover.popover--bottom
     .popover__caret
@@ -25,11 +26,11 @@ block body
           select.select__reference.js-data-list(name="data")
           +icon('chevron-up-down').select__icon
 
-        hr
+        hr.fill-edges
 
         .token-custom-settings
 
-        .heading-2 Chance of Appearance
+        .heading-1 Chance of Appearance
 
         .combo-field.field-appearance
           input(type="range" min=0 max=100 value=100 data-range="appearance")

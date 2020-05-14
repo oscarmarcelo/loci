@@ -1,0 +1,40 @@
+template#min-max
+  .combo-field
+    .input-combo
+      .label-below
+        .number-input.label-below__field
+          input.number-input__reference(type="number" name="limit-min" placeholder="0")
+
+          button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+            +icon('spinner-up').number-input__spinner-icon
+
+          button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+            +icon('spinner-down').number-input__spinner-icon
+
+        .label-below__label Min
+
+
+      .label-below
+        .number-input.label-below__field
+          input.number-input__reference(type="number" name="limit-max" placeholder="100")
+
+          button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+            +icon('spinner-up').number-input__spinner-icon
+
+          button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+            +icon('spinner-down').number-input__spinner-icon
+
+        .label-below__label Max
+
+
+    .label-below
+      .number-input.label-below__field
+        input.number-input__reference(type="number" name="precision" min=0 step=1 placeholder="0")
+
+        button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+          +icon('spinner-up').number-input__spinner-icon
+
+        button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+          +icon('spinner-down').number-input__spinner-icon
+
+      .label-below__label Precision

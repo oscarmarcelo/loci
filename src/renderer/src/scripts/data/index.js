@@ -21,6 +21,13 @@ export const list = [
       require('./internet/protocol'),
       require('./internet/tld')
     ]
+  },
+  {
+    id: 'random',
+    name: 'Random',
+    items: [
+      require('./random/number')
+    ]
   }
 ];
 

@@ -6,27 +6,28 @@
 
 .input-combo
   display: inline-flex
+  min-width: 125px
 
-  > input,
-  .number-input
+  > *
     width: 100%
-
-    &:not(:last-child),
-    &:not(:last-child) .number-input__reference,
-    &:not(:last-child) .number-input__spinner,
-      border:
-        top-right-radius: 0
-        bottom-right-radius: 0
 
     &:not(:first-child)
       margin-left: -1px
 
-    &:not(:first-child),
-    &:not(:first-child) .number-input__reference
+  @each $pseudo, $side in (last: right, first: left)
+    @at-root %no-#{$side}-radius
       border:
-        top-left-radius: 0
-        bottom-left-radius: 0
+        top-#{$side}-radius: 0
+        bottom-#{$side}-radius: 0
+
+    > input:not(:#{$pseudo}-child)
+      @extend %no-#{$side}-radius
+
+    > div:not(:#{$pseudo}-child)
+      .number-input__reference,
+      .number-input__spinner
+        @extend %no-#{$side}-radius
 
   > input:focus,
-  > .number-input:focus-within
+  > div:focus-within
     z-index: 1

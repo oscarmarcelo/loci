@@ -16,21 +16,26 @@ function renderTokenSettings(tokenConfig) {
   const fields = dataItem.config.fields;
 
   if (fields.length > 0) {
-    if (fields[0].type !== 'heading-2') {
+    if (['heading-1', 'heading-2'].includes(fields[0].type) === false) {
       fields.unshift({
-        type: 'heading-2',
+        type: 'heading-1',
         text: 'Settings'
       });
     }
 
     if (fields[fields.length - 1].type !== 'separator') {
       fields.push({
-        type: 'separator'
+        type: 'separator',
+        fillEdges: true
       });
     }
 
     for (const field of fields) {
       window.loci.fields(field, tokenConfig);
+    }
+
+    if (typeof dataItem.handler === 'function') {
+      dataItem.handler();
     }
   }
 
