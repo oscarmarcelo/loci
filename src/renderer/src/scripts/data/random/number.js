@@ -113,7 +113,10 @@ function handler() {
 
   decimalSeparatorInputs.forEach(input => {
     input.addEventListener('change', () => {
-      if (['dot', 'comma'].includes(input.value)) {
+      const checkedGroupSeparator = [...groupSeparatorInputs]
+        .find(groupSeparatorInput => groupSeparatorInput.checked === true);
+
+      if (checkedGroupSeparator.value === input.value) {
         [...groupSeparatorInputs]
           .find(groupSeparatorInput => groupSeparatorInput.value === (input.value === 'dot' ? 'comma' : 'dot'))
           .checked = true;
