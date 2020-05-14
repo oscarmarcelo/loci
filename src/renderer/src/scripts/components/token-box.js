@@ -5,7 +5,7 @@ const tokenBoxSelect2 = tokenBox.querySelector('.token-box__select'); // TODO [>
 
 
 
-function createToken(type, text, config) {
+function createToken(type, text, tokenConfig) {
   const token = document.createElement('div');
 
   token.classList.add('token');
@@ -26,15 +26,15 @@ function createToken(type, text, config) {
     tokenText.classList.add('token__text');
     tokenText.textContent = text;
 
-    if (config.gender) {
-      token.classList.add(`token--${config.gender}`);
+    if (tokenConfig.gender) {
+      token.classList.add(`token--${tokenConfig.gender}`);
     }
 
-    if (config['text-transform']) {
-      token.style.setProperty('text-transform', config['text-transform']);
+    if (tokenConfig['text-transform']) {
+      token.style.setProperty('text-transform', tokenConfig['text-transform']);
     }
 
-    token.tokenConfig = config;
+    token.tokenConfig = tokenConfig;
 
     token.append(tokenText);
   } else if (['newline', 'shift-newline'].includes(type)) {

@@ -102,23 +102,23 @@ function setDataConfig(dataConfig) {
 }
 
 
-function updateTokenConfig(id, config) {
+function updateTokenConfig(id, tokenConfig) {
   const token = document.querySelector(`#${id}`);
 
   if (token) {
-    token.tokenConfig = config;
+    token.tokenConfig = tokenConfig;
 
-    const {config: dataItem} = window.loci.data.get(config.data.group, config.data.item);
+    const {config: dataItem} = window.loci.data.get(tokenConfig.data.group, tokenConfig.data.item);
 
     token.querySelector('.token__text').textContent = dataItem.name;
 
-    if (config.gender) {
-      token.classList.toggle('token--male', config.gender === 'male');
-      token.classList.toggle('token--female', config.gender === 'female');
+    if (tokenConfig.gender) {
+      token.classList.toggle('token--male', tokenConfig.gender === 'male');
+      token.classList.toggle('token--female', tokenConfig.gender === 'female');
     }
 
-    if (config['text-transform']) {
-      token.style.setProperty('text-transform', config['text-transform']);
+    if (tokenConfig['text-transform']) {
+      token.style.setProperty('text-transform', tokenConfig['text-transform']);
     } else {
       token.style.removeProperty('text-transform');
     }
