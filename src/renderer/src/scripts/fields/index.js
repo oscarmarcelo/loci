@@ -29,11 +29,11 @@ export default (field, tokenConfig) => {
     case 'button-group':
     case 'gender':
     case 'text-transform':
-      buttonGroup(field, tokenConfig?.[field.type]);
+      buttonGroup(field, tokenConfig?.[field.id] || tokenConfig?.[field.type]);
       break;
 
     case 'checkbox':
-      checkbox(field, field.id);
+      checkbox(field, tokenConfig?.[field.id] || tokenConfig?.[field.type]);
       break;
 
     case 'min-max':
