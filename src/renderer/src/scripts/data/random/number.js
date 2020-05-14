@@ -1,5 +1,3 @@
-import faker from 'faker';
-
 import {language} from '../utils';
 
 
@@ -132,14 +130,35 @@ function generator(options) {
 
   // faker.locale = _language;
 
-  // TODO: keep-decimal-zeros
-  // TODO: Handle like Intl.NumberFormat
+  const min = Number(options['limit-min']) || 0;
+  const max = Number(options['limit-max']) || 100;
+  const precision = options.precision && Number(options.precision) >= 0 ? Number(options.precision) : 0;
+  const keepDecimalZeros = options['keep-decimal-zeros'] ? precision : 0;
+  const separators = {
+    none: '',
+    space: ' ',
+    dot: '.',
+    comma: ','
+  };
 
-  return faker.random.number({
-    min: Number(options['limit-min']) || 0,
-    max: Number(options['limit-max'] || 100),
-    precision: Number(options.precision) || undefined
-  });
+  return new Intl.NumberFormat('en', {
+    minimumFractionDigits: keepDecimalZeros,
+    maximumFractionDigits: precision
+  })
+    .formatToParts((Math.random() * (max - min)) + min)
+    .map(({type, value}) => {
+      switch (type) {
+        case 'group':
+          return separators[options['group-separator']];
+
+        case 'decimal':
+          return separators[options['decimal-separator']];
+
+        default:
+          return value;
+      }
+    })
+    .reduce((string, part) => string + part);
 }
 
 
