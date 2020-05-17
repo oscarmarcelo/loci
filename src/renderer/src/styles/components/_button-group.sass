@@ -33,11 +33,9 @@
     padding: 0 (9px - $border-width)
     position: relative
     text-align: center
-    font-size: 11px // TODO: Decide which properties to use
-    font-size: 13px // TODO: Decide which properties to use
+    font-size: 11px
     line-height: 21px - $border-width * 2
-    letter-spacing: -.07px // TODO: Decide which properties to use
-    letter-spacing: -0.8px // TODO: Decide which properties to use
+    letter-spacing: -.07px
     clip-path: inset(0 var(--inset-right, 0px) 0 var(--inset-left, 0px))
 
     @media (prefers-color-scheme: dark)
@@ -97,3 +95,8 @@
     text-align: center
     font-size: 9px
     letter-spacing: 0.18px
+
+  &--large-button-text
+    #{$e-mask}
+      font-size: 13px
+      letter-spacing: -0.8px

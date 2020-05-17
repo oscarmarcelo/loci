@@ -4,6 +4,7 @@ export default (field, value) => {
   const buttonGroupTemplate = document.querySelector('#button-group');
   const buttonTemplate = document.querySelector('#button-group__button');
   const buttonGroupClone = buttonGroupTemplate.content.cloneNode(buttonGroupTemplate);
+  const component = buttonGroupClone.querySelector('.button-group');
   const buttonList = buttonGroupClone.querySelector('.button-group__list');
 
   if (field.type === 'gender') {
@@ -33,6 +34,7 @@ export default (field, value) => {
   } else if (field.type === 'text-transform') {
     field = {
       id: 'text-transform',
+      largeButtonText: true,
       items: [
         {
           value: 'none',
@@ -60,6 +62,10 @@ export default (field, value) => {
         }
       ]
     };
+  }
+
+  if (field.largeButtonText) {
+    component.classList.add('button-group--large-button-text');
   }
 
   field.items.forEach(item => {
