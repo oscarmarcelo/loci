@@ -49,9 +49,8 @@ function initNumberInput(component) {
     input.valueAsNumber = value;
 
 
-    // Trigger a change event, so number inputs coupled with range inputs can update their range counterparts.
-    input.dispatchEvent(new Event('change', {
-      bubbles: false,
+    // This event is used to sync with other fields without triggering `input` or `change`.
+    input.dispatchEvent(new Event('pseudo-change', {
       cancelable: true
     }));
   };
@@ -67,12 +66,38 @@ function initNumberInput(component) {
 
 
 
-  // Set input step to 1.
+  // Revert the input step.
   const unpressShiftKey = () => {
-    if (input.step !== '1') {
-      input.step = '1';
+    if (input.step !== input.originalStep) {
+      input.step = input.originalStep;
     }
   };
+
+
+
+  // Stop spinner when pointer is out of bounds.
+  const unpressSpinner = event => {
+    window.addEventListener('mouseup', () => {
+      event.target.dispatchEvent(new Event('mouseup', {
+        bubbles: true,
+        cancelable: true
+      }));
+    }, {
+      once: true
+    });
+  }
+
+
+
+  // Store the original step value so we can go back to it when necessary.
+  input.originalStep = input.step;
+
+
+
+  // Try to store the value for reference in future validations.
+  if (input.checkValidity()) {
+    input.lastValidValue = input.value;
+  }
 
 
 
@@ -86,25 +111,40 @@ function initNumberInput(component) {
     }
 
     // Override Safari behavior of always trying to get to a value multipliable by the step amount.
+    // Also disable native stepping, since it triggers `change`.
     if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault();
 
       step(input, event.key === 'ArrowUp' ? 'up' : 'down');
     }
+
+    // Validate value and select it. `change` event will be triggered natively.
+    if (event.key === 'Enter') {
+      if (input.checkValidity()) {
+        input.select();
+      }
+    }
+
+    // REVIEW: Somehow, escape isn't working navitely.
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      input.blur();
+    }
   });
 
 
 
-  // Revert input step back to 1 when Shift Key is released.
   input.addEventListener('keyup', event => {
+    // Revert input step when Shift Key is released.
     if (event.key === 'Shift') {
       unpressShiftKey();
     }
 
     // REVIEW: Check if there's a more native way to trigger form change event.
-    if (input.form && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
-      input.form.dispatchEvent(new Event('change', {
-        bubbles: false,
+    //         Probably being prevented by stepping navigation on `keydown`.
+    if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+      input.dispatchEvent(new Event('change', {
+        bubbles: true,
         cancelable: true
       }));
     }
@@ -112,8 +152,63 @@ function initNumberInput(component) {
 
 
 
-  // Revert input step back to 1 when leaving input.
+  // Revert input step when leaving input.
   input.addEventListener('blur', unpressShiftKey);
+
+
+
+  // Try to fix invalid values.
+  // If successful, store the valid value for reference in future validations.
+  // If unsuccessful, warn the user.
+  input.addEventListener('invalid', event => {
+    // TODO: Signal with system beep.
+    //       Probably need to do thing in the main process, because webviews don't allow this.
+
+    // Reset step to avoid conflict with `validity.stepMismatch`.
+    unpressShiftKey();
+
+    const validity = input.validity;
+
+    if (validity.badInput) {
+      input.value = input.lastValidValue ?? input.defaultValue;
+    } else if (validity.rangeOverflow) {
+      input.value = input.max;
+    } else if (validity.rangeUnderflow) {
+      input.value = input.min;
+    } else if (validity.stepMismatch) {
+      input.valueAsNumber -= ((input.valueAsNumber - Number(input.min)) % (Number(input.step) || 1));
+    } else if (validity.valueMissing) {
+      input.value = input.lastValidValue ?? input.defaultValue;
+    }
+
+    // Check validity again, now with the value possibly fixed.
+    if (input.validity.valid) {
+      input.lastValidValue = input.value;
+    } else {
+      input.reportValidity();
+    }
+
+    // Restore shifted step if applicable.
+    if (event.shiftKey) {
+      pressShiftKey();
+    }
+  });
+
+  input.addEventListener('change', () => {
+    if (input.checkValidity()) {
+      input.lastValidValue = input.value;
+    }
+  });
+
+
+
+  // Also check for invalid input values that didn't trigger the change event:
+  // - When the user inserts a non-number value on a previously empty input.
+  // - When the input was already invalid.
+  input.addEventListener('blur', () => {
+    // Just checking validity is enough, because the input will trigger `change` or `invalid` accordingly.
+    input.checkValidity();
+  });
 
 
 
@@ -121,27 +216,37 @@ function initNumberInput(component) {
   let spinnerTimeout;
   let spinnerInterval;
 
-
   for (const [direction, spinner] of Object.entries(spinners)) {
     spinner.addEventListener('mousedown', event => {
-      if (event.shiftKey && input.step !== '10') {
-        input.step = '10';
-      }
+      // Only if made with the main mouse button.
+      if (event.button === 0) {
+        if (event.shiftKey && input.step !== '10') {
+          input.step = '10';
+        }
 
-      step(input, direction);
-
-      window.addEventListener('keydown', pressShiftKey);
-      window.addEventListener('keyup', unpressShiftKey);
-
-      spinnerTimeout = setTimeout(() => {
         step(input, direction);
 
-        spinnerInterval = setInterval(step, 50, input, direction);
-      }, 500);
+        // HACK: Workaround to force spinner `mouseup` when the pointer leaves the spinner bounds.
+        // TODO: Probably also need to trigger when another window steals focus.
+        spinner.addEventListener('mouseleave', unpressSpinner, {
+          once: true
+        });
+
+        window.addEventListener('keydown', pressShiftKey);
+        window.addEventListener('keyup', unpressShiftKey);
+
+        spinnerTimeout = setTimeout(() => {
+          step(input, direction);
+
+          spinnerInterval = setInterval(step, 50, input, direction);
+        }, 500);
+      }
     });
 
 
     spinner.addEventListener('mouseup', () => {
+      spinner.removeEventListener('mouseleave', unpressSpinner);
+
       clearTimeout(spinnerTimeout);
       clearInterval(spinnerInterval);
       window.removeEventListener('keydown', pressShiftKey);
@@ -149,12 +254,11 @@ function initNumberInput(component) {
       unpressShiftKey();
 
       // REVIEW: Check if there's a more native way to trigger form change event.
-      if (spinner.form) {
-        spinner.form.dispatchEvent(new Event('change', {
-          bubbles: false,
-          cancelable: true
-        }));
-      }
+      //         Probably being prevented by stepping navigation on `keydown`.
+      input.dispatchEvent(new Event('change', {
+        bubbles: true,
+        cancelable: true
+      }));
     });
   }
 }
@@ -162,26 +266,28 @@ function initNumberInput(component) {
 
 
 function pairMinMaxInputs(minInput, maxInput) {
-  // Ensure that max limit is not smaller than the min limit.
-  minInput.addEventListener('change', () => {
-    if (
-      Number.isFinite(minInput.valueAsNumber) &&
-      Number.isFinite(maxInput.valueAsNumber) &&
-      minInput.valueAsNumber > maxInput.valueAsNumber
-    ) {
-      maxInput.valueAsNumber = minInput.valueAsNumber;
-    }
-  });
+  ['change', 'pseudo-change'].forEach(event => {
+    // Ensure that max limit is not smaller than the min limit.
+    minInput.addEventListener(event, () => {
+      if (
+        Number.isFinite(minInput.valueAsNumber) &&
+        Number.isFinite(maxInput.valueAsNumber) &&
+        minInput.valueAsNumber > maxInput.valueAsNumber
+      ) {
+        maxInput.valueAsNumber = minInput.valueAsNumber;
+      }
+    });
 
-  // Ensure that min limit is not greater than the max limit.
-  maxInput.addEventListener('change', () => {
-    if (
-      Number.isFinite(minInput.valueAsNumber) &&
-      Number.isFinite(maxInput.valueAsNumber) &&
-      minInput.valueAsNumber > maxInput.valueAsNumber
-    ) {
-      minInput.valueAsNumber = maxInput.valueAsNumber;
-    }
+    // Ensure that min limit is not greater than the max limit.
+    maxInput.addEventListener(event, () => {
+      if (
+        Number.isFinite(minInput.valueAsNumber) &&
+        Number.isFinite(maxInput.valueAsNumber) &&
+        minInput.valueAsNumber > maxInput.valueAsNumber
+      ) {
+        minInput.valueAsNumber = maxInput.valueAsNumber;
+      }
+    });
   });
 }
 

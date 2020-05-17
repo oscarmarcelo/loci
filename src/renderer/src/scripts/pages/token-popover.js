@@ -128,11 +128,16 @@ form.addEventListener('change', event => {
 
 
 // HACK: Input elements only trigger changes when they are blurred out or when there are arrow keys navigation, for example.
-//       This ensures that input elements also have their values handled even if the window closes without having a change event.
-//       As a side effect, `update-token-config` will be posted twice when there's also a `change` event.
-form.addEventListener('input', () => {
-  form.dispatchEvent(new Event('change', {
-    bubbles: false,
-    cancelable: true
-  }));
+//       Since the user can close token-popover with window blur, the `change` will not trigger in time.
+//       This hack makes input elements trigger a `change` as soon as the user inserted anything,
+//       ensuring that their values are handled even if the window closes without having a change event.
+//       As a side effect, and as much as we are trying to avoid it, some `input` events might "leak",
+//       making `update-token-config` sometimes post twice (`input` and then `change` triggered).
+form.addEventListener('input', event => {
+  // Don't need to execute on checkables because `change` always triggers right after `input`.
+  if (event.srcElement.tagName === 'INPUT' && ['checkbox', 'radio'].includes(event.srcElement.type) === false) {
+    form.dispatchEvent(new Event('change', {
+      cancelable: true
+    }));
+  }
 });

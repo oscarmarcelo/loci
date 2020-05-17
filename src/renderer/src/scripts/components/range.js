@@ -12,44 +12,56 @@ function updateRange(range) {
 
 // Update number input on range input event.
 for (const range of rangeInputs) {
-  // Ensure that background is in the right position at start.
+  // Ensure that background is in the right position from the beginning.
   updateRange(range);
 
+  // Update range and number inputs visually...
   range.addEventListener('input', event => {
-    const input = [...numberInputs].filter(input => input.dataset.range === range.dataset.range)[0];
-
-    input.value = range.value;
-    updateRange(range);
+    // Don't let parent form capture this range change.
+    // It should get the change from the number input instead.
+    event.stopPropagation();
 
     // Trigger an input event in the number input, but only if this event was triggered by a user action.
     // This check avoids an event loop when the trigger comes from the number input.
     if (event.isTrusted) {
-      input.dispatchEvent(new Event('input', {
-        bubbles: false,
-        cancelable: true
-      }));
+      [...numberInputs]
+        .find(input => input.dataset.range === range.dataset.range)
+        .value = range.value;
+    }
+
+    updateRange(range);
+  });
+
+  // ... and then tell number input when changes were made.
+  range.addEventListener('change', event => {
+    // Don't let parent form capture this range change.
+    // It should get the change from the number input instead.
+    event.stopPropagation();
+
+    // Trigger a change event in the number input, but only if this event was triggered by a user action.
+    // This check avoids an event loop when the trigger comes from the number input.
+    if (event.isTrusted) {
+      [...numberInputs]
+        .find(input => input.dataset.range === range.dataset.range)
+        .dispatchEvent(new Event('change', {
+          bubbles: true,
+          cancelable: true
+        }));
     }
   });
 }
 
 
 
-// Update range input on number change event.
+// Update range counterpart when asked.
+// `pseudo-change` is used to keep fields in sync when we don't want the input to trigger `input` or `change` yet.
 for (const input of numberInputs) {
-  input.addEventListener('change', () => {
-    const range = [...rangeInputs].filter(range => range.dataset.range === input.dataset.range)[0];
+  ['change', 'pseudo-change'].forEach(event => {
+    input.addEventListener(event, () => {
+      const range = [...rangeInputs].find(range => range.dataset.range === input.dataset.range);
 
-    // If value is empty, revert value by using range's value.
-    if (input.value === '') {
-      input.value = range.value;
-    } else {
       range.value = input.value;
-    }
-
-    // Trigger an input event in the range input, so it can update its background.
-    range.dispatchEvent(new Event('input', {
-      bubbles: false,
-      cancelable: true
-    }));
+      updateRange(range);
+    });
   });
 }
