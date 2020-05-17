@@ -134,7 +134,7 @@ form.addEventListener('change', event => {
 //       making `update-token-config` sometimes post twice (`input` and then `change` triggered).
 form.addEventListener('input', event => {
   // Don't need to execute on checkables because `change` always triggers right after `input`.
-  if (event.srcElement.tagName === 'INPUT' && ['checkbox', 'radio'].includes(event.srcElement.type) === false) {
+  if (event.target.tagName === 'INPUT' && ['checkbox', 'radio'].includes(event.target.type) === false) {
     form.dispatchEvent(new Event('change', {
       cancelable: true
     }));
