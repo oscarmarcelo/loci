@@ -35,6 +35,9 @@ export function onSupplyData(context) {
     //       If it was directly asked to use Loci from the context menu, open the window, even if config exists.
     //       If it was trigerred by a refresh, then just reapply data using config.
     const dataConfig = Settings.layerSettingForKey(item, 'dataConfig');
+
+    // This is used to force the opening of the plugin window when there's data configuration but the layer isn't connected to the data supplier.
+    // otherwise, it would just apply the data because it detected the data configuration, and that's something that the user doesn't want/expect to happen.
     // TODO: Find a way to get the identifier without hardcoding it.
     //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_')
     const isConnected = String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
