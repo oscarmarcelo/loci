@@ -91,7 +91,6 @@ export default (field, value) => {
   appendToSettings(buttonGroupClone);
 
   checkedControl.dispatchEvent(new Event('change', {
-    bubbles: false,
     cancelable: true
   }));
 };

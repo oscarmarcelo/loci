@@ -56,7 +56,6 @@ function setTokenConfig(tokenConfig) {
 
     // Make range input detect the value change.
     appearance.dispatchEvent(new Event('change', {
-      bubbles: false,
       cancelable: true
     }));
   }
