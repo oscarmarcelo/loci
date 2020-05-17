@@ -1,10 +1,17 @@
+import faker from 'faker';
+
+// import {language} from '../utils';
+
+
+
 const config = {
   id: 'iban',
   name: 'IBAN',
   fields: [
-    {
-      type: 'languages'
-    },
+    // TODO: Limit IBANs to some countries.
+    // {
+    //   type: 'languages'
+    // },
     {
       type: 'checkbox',
       id: 'formatted',
@@ -16,17 +23,9 @@ const config = {
 
 
 function generator(options) {
-  // if (options.language) {
-  //   window.faker.locale = options.language;
-  // }
+  // const _language = language(options.languages);
 
-  // let result = window.faker.name.firstName(options.gender);
-
-  // if (options.textTransform) {
-  //   // TODO:
-  // }
-
-  // return result;
+  return faker.finance.iban(options.formatted);
 }
 
 
