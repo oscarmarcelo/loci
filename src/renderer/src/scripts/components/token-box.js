@@ -68,6 +68,9 @@ tokenBoxScroller.addEventListener('click', event => {
 
 tokenBoxInput.addEventListener('keydown', event => {
   if (event.key === 'Enter') {
+    // Prevent creating `<div>`s and `<br>`s.
+    event.preventDefault();
+
     let tokenType = 'text';
     let tokenText;
 
