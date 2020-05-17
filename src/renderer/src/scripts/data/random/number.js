@@ -1,4 +1,4 @@
-import {language} from '../utils';
+// import {language} from '../utils';
 
 
 
@@ -37,28 +37,32 @@ const config = {
       type: 'button-group',
       id: 'group-separator',
       items: [
+        // REVIEW: It seems that there are other separators, and in some locales, even in fractions.
+        //         If so, we might need to switch from a button-group to a select because of space availability.
+        //         We should also check if/how Intl.NumberFormat handles this.
+        //         See: https://en.wikipedia.org/wiki/Decimal_separator#Digit_grouping
         {
           value: 'none',
           text: 'None',
-          description: '', // TODO:
+          description: 'Don\'t use group separators.',
           buttonText: '1000'
         },
         {
           value: 'space',
           text: 'Space',
-          description: '', // TODO:
+          description: 'Use a space as group separator.',
           buttonText: '1 000'
         },
         {
           value: 'dot',
           text: 'Dot',
-          description: '', // TODO:
+          description: 'Use a dot as group separator.',
           buttonText: '1.000'
         },
         {
           value: 'comma',
           text: 'Comma',
-          description: '', // TODO:
+          description: 'Use a comma as group separator.',
           buttonText: '1,000'
         }
       ]
@@ -74,16 +78,19 @@ const config = {
       type: 'button-group',
       id: 'decimal-separator',
       items: [
+        // REVIEW: It seems that there are other separators.
+        //         We should also check if/how Intl.NumberFormat handles this.
+        //         See: https://en.wikipedia.org/wiki/Decimal_separator
         {
           value: 'dot',
           text: 'Dot',
-          description: '', // TODO:
+          description: 'Use a dot as decimal separator.',
           buttonText: '0.12'
         },
         {
           value: 'comma',
           text: 'Comma',
-          description: '', // TODO:
+          description: 'Use a comma as decimal separator.',
           buttonText: '0,12'
         }
       ]
