@@ -94,6 +94,13 @@ tokenBoxInput.addEventListener('keydown', event => {
 tokenBoxSelect2.addEventListener('change', () => {
   const option = tokenBoxSelect2.selectedOptions[0];
 
+  // If there are text in `tokenBoxInput`, create a token text with it before creating the data token.
+  if (tokenBoxInput.textContent !== '') {
+    tokenBoxInput.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter'
+    }));
+  }
+
   createToken('data', option.textContent, {
     data: {
       group: option.dataset.group,
