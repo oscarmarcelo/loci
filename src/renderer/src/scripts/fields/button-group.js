@@ -42,12 +42,13 @@ export default (field, value) => {
           description: 'No letter casing.',
           buttonText: '⊘'
         },
-        {
-          value: 'capitalize',
-          text: 'Capitalize',
-          description: 'Capitalize words.',
-          buttonText: 'Aa'
-        },
+        // TODO: Disabled until generator util `language` can capitalize content.
+        // {
+        //   value: 'capitalize',
+        //   text: 'Capitalize',
+        //   description: 'Capitalize words.',
+        //   buttonText: 'Aa'
+        // },
         {
           value: 'uppercase',
           text: 'Uppercase',
