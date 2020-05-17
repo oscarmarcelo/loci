@@ -102,9 +102,14 @@ function handler() {
   groupSeparatorInputs.forEach(input => {
     input.addEventListener('change', () => {
       if (['dot', 'comma'].includes(input.value)) {
-        [...decimalSeparatorInputs]
-          .find(decimalSeparatorInput => decimalSeparatorInput.value === (input.value === 'dot' ? 'comma' : 'dot'))
-          .checked = true;
+        const checkbox = [...decimalSeparatorInputs]
+          .find(decimalSeparatorInput => decimalSeparatorInput.value === (input.value === 'dot' ? 'comma' : 'dot'));
+
+        checkbox.checked = true;
+
+        checkbox.dispatchEvent(new Event('change', {
+          cancelable: true
+        }));
       }
     });
   });
@@ -115,9 +120,14 @@ function handler() {
         .find(groupSeparatorInput => groupSeparatorInput.checked === true);
 
       if (checkedGroupSeparator.value === input.value) {
-        [...groupSeparatorInputs]
-          .find(groupSeparatorInput => groupSeparatorInput.value === (input.value === 'dot' ? 'comma' : 'dot'))
-          .checked = true;
+        const checkbox = [...groupSeparatorInputs]
+          .find(groupSeparatorInput => groupSeparatorInput.value === (input.value === 'dot' ? 'comma' : 'dot'));
+
+        checkbox.checked = true;
+
+        checkbox.dispatchEvent(new Event('change', {
+          cancelable: true
+        }));
       }
     });
   });
