@@ -40,25 +40,25 @@ const config = {
         {
           value: 'none',
           text: 'None',
-          description: '',
+          description: '', // TODO:
           buttonText: '1000'
         },
         {
           value: 'space',
           text: 'Space',
-          description: '',
+          description: '', // TODO:
           buttonText: '1 000'
         },
         {
           value: 'dot',
           text: 'Dot',
-          description: '',
+          description: '', // TODO:
           buttonText: '1.000'
         },
         {
           value: 'comma',
           text: 'Comma',
-          description: '',
+          description: '', // TODO:
           buttonText: '1,000'
         }
       ]
@@ -77,13 +77,13 @@ const config = {
         {
           value: 'dot',
           text: 'Dot',
-          description: '',
+          description: '', // TODO:
           buttonText: '0.12'
         },
         {
           value: 'comma',
           text: 'Comma',
-          description: '',
+          description: '', // TODO:
           buttonText: '0,12'
         }
       ]
