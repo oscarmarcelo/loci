@@ -1,3 +1,7 @@
+import faker from 'faker';
+
+
+
 const config = {
   id: 'protocol',
   name: 'HTTP Protocol',
@@ -6,18 +10,8 @@ const config = {
 
 
 
-function generator(options) {
-  // if (options.language) {
-  //   window.faker.locale = options.language;
-  // }
-
-  // let result = window.faker.name.firstName(options.gender);
-
-  // if (options.textTransform) {
-  //   // TODO:
-  // }
-
-  // return result;
+function generator() {
+  return faker.internet.protocol();
 }
 
 
