@@ -19,7 +19,7 @@ function getSelectedOverrides(symbol) {
 
     // If the symbol has only one override, consider it always selected.
     if (symbol.overrides.length === 1) {
-      overrides = overrides.push(overrides[0]);
+      overrides = symbol.overrides;
     } else {
       overrides = symbol.overrides.filter(({selected}) => selected);
 
@@ -298,7 +298,7 @@ export function setSelection(items) {
       return result;
     });
 
-    let dataConfig = {};
+    let dataConfig;
 
     if (selection.length > 0) {
       // TODO: Handle multiple selections.
@@ -310,7 +310,7 @@ export function setSelection(items) {
     }
 
     // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
-    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify(dataConfig)})`)
+    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify(dataConfig || {})})`)
       .catch(error => {
         console.error('setDataConfig', error);
       });
