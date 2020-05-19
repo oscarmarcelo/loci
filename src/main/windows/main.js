@@ -196,17 +196,42 @@ function createWindow() {
     const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
     items.forEach(item => {
-      Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+      if (item.type === 'Text') {
+        // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
+        item.text = generateData(dataConfig);
 
-      // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
-      item.text = generateData(dataConfig);
+        Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
 
-      const nativeItem = item.sketchObject;
-      const userInfo = nativeItem.userInfo().mutableCopy();
+        const nativeItem = item.sketchObject;
+        const userInfo = nativeItem.userInfo().mutableCopy();
 
-      // TODO: Find a way to get the identifier without hardcoding it.
-      userInfo.setValue_forKey([constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
-      nativeItem.setUserInfo(userInfo);
+        // TODO: Find a way to get the identifier without hardcoding it.
+        userInfo.setValue_forKey([constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
+        nativeItem.setUserInfo(userInfo);
+      } else if (item.type === 'SymbolInstance') {
+        // `selectedLayers()` gives us only the selected symbols, not the selected overrides. We need to get them ouserselves.
+        let overrides = item.overrides.filter(override => override.selected);
+
+        // If there are no selected overrides, it means we should apply data to all of them.
+        if (overrides.length === 0) {
+          overrides = item.overrides;
+        }
+
+        // Get only the text overrides.
+        overrides = overrides.filter(override => override.property === 'stringValue');
+
+        const symbolDataConfig = Settings.layerSettingForKey(item, 'symbolDataConfig') || {};
+
+        overrides.forEach(override => {
+          override.value = generateData(dataConfig);
+
+          // REVIEW [>=1.0.0]: API says we can store a setting in a Override.
+          //                   We should store in the Override instead, but last time we tried, it thrown errors.
+          symbolDataConfig[override.id] = dataConfig;
+        });
+
+        Settings.setLayerSettingForKey(item, 'symbolDataConfig', symbolDataConfig);
+      }
     });
   });
 }
@@ -231,10 +256,63 @@ export function create() {
 export function setSelection(items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
-  if (window) {
-    const item = items.find(item => Boolean(Settings.layerSettingForKey(item, 'dataConfig')));
+  const getSelectedOverrides = symbol => {
+    let result = [];
 
-    const dataConfig = item ? Settings.layerSettingForKey(item, 'dataConfig') : {};
+    if (symbol?.overrides) {
+      let overrides = [];
+
+      // If the symbol has only one override, consider it always selected.
+      if (symbol.overrides.length === 1) {
+        overrides = overrides.push(overrides[0]);
+      } else {
+        overrides = symbol.overrides.filter(({selected}) => selected);
+
+        // if no overrides are selected, then consider all of them.
+        if (overrides.length === 0) {
+          overrides = symbol.overrides;
+        }
+      }
+
+      // Then get only the text overrides.
+      result = overrides.filter(({property}) => property === 'stringValue');
+    }
+
+    return result;
+  };
+
+  const getOverrideDataConfig = (symbol, override) =>
+    Settings.layerSettingForKey(symbol, 'symbolDataConfig')?.[override.id] ||
+    Settings.layerSettingForKey(override.affectedLayer, 'dataConfig');
+
+
+  if (window) {
+    const selection = items.filter(item => {
+      let result = false;
+
+      if (item.type === 'Text') {
+        result = Boolean(Settings.layerSettingForKey(item, 'dataConfig'));
+      } else if (item.type === 'SymbolInstance' && item?.overrides.length > 0) {
+        const overrides = getSelectedOverrides(item);
+
+        if (overrides.length > 0) {
+          result = overrides.find(override => Boolean(getOverrideDataConfig(item, override)));
+        }
+      }
+
+      return result;
+    });
+
+    let dataConfig = {};
+
+    if (selection.length > 0) {
+      // TODO: Handle multiple selections.
+      if (selection[0].type === 'Text') {
+        dataConfig = Settings.layerSettingForKey(selection[0], 'dataConfig');
+      } else if (selection[0].type === 'SymbolInstance') {
+        dataConfig = getOverrideDataConfig(selection[0], getSelectedOverrides(selection[0])[0]);
+      }
+    }
 
     // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
     window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify(dataConfig)})`)

@@ -34,13 +34,23 @@ export function onSupplyData(context) {
     //       For now, the native approach is to check for override config in the symbol master and apply it.
     //       If it was directly asked to use Loci from the context menu, open the window, even if config exists.
     //       If it was trigerred by a refresh, then just reapply data using config.
-    const dataConfig = Settings.layerSettingForKey(item, 'dataConfig');
+    let dataConfig;
+
+    if (item.type === 'DataOverride') {
+      //const symbolDataConfig = Settings.layerSettingForKey(item.symbolInstance)
+      dataConfig = Settings.layerSettingForKey(item.override.affectedLayer, 'dataConfig');
+    } else {
+      dataConfig = Settings.layerSettingForKey(item, 'dataConfig');
+    }
 
     // This is used to force the opening of the plugin window when there's data configuration but the layer isn't connected to the data supplier.
     // otherwise, it would just apply the data because it detected the data configuration, and that's something that the user doesn't want/expect to happen.
+
+    const layer = item.type === 'DataOverride' ? item.override.affectedLayer : item;
     // TODO: Find a way to get the identifier without hardcoding it.
-    //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_')
-    const isConnected = String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
+    //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_').
+    const dataSupplierId = [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
+    const isConnected = String(layer.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId;
 
     if (dataConfig && isConnected) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);
