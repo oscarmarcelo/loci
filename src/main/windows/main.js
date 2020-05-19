@@ -1,4 +1,4 @@
-import {getSelectedDocument, Settings} from 'sketch';
+import {getSelectedDocument, DataSupplier, Settings} from 'sketch';
 
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
@@ -45,7 +45,7 @@ function getOverrideDataConfig(symbol, override) {
 
 
 
-function createWindow() {
+function createWindow(dataKey, items) {
   const window = new BrowserWindow({
     identifier: constants.MAIN_WINDOW_ID,
     width: 374,
@@ -134,10 +134,10 @@ function createWindow() {
 
     threadDictionary[constants.MAIN_WINDOW_OBSERVERS] = delegate;
 
-    const items = getSelectedDocument()?.selectedLayers?.layers || [];
+    items = items || getSelectedDocument()?.selectedLayers?.layers || [];
 
     if (items) {
-      setSelection(items);
+      setSelection(dataKey, items);
     }
 
     window.show();
@@ -226,91 +226,141 @@ function createWindow() {
   });
 
 
-  window.webContents.on('apply-data', dataConfig => {
-    const items = getSelectedDocument()?.selectedLayers?.layers || [];
+  window.webContents.on('apply-data', (dataKey, dataItems, dataConfig) => {
+    if (dataKey) {
+      dataItems.forEach(dataItem => {
+        let item;
 
-    items.forEach(item => {
-      if (item.type === 'Text') {
-        // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
-        item.text = generateData(dataConfig);
+        if (dataItem.type === 'text') {
+          item = getSelectedDocument().getLayerWithID(dataItem.id);
 
-        Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+          Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+        } else {
+          const symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
+          const symbolDataConfig = Settings.layerSettingForKey(symbol, 'symbolDataConfig') || {};
 
-        const nativeItem = item.sketchObject;
-        const userInfo = nativeItem.userInfo().mutableCopy();
+          item = symbol.overrides.find(({id}) => id === dataItem.id);
 
-        // TODO: Find a way to get the identifier without hardcoding it.
-        userInfo.setValue_forKey([constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
-        nativeItem.setUserInfo(userInfo);
-      } else if (item.type === 'SymbolInstance') {
-        const overrides = getSelectedOverrides(item);
+          symbolDataConfig[dataItem.id] = dataConfig;
 
-        const symbolDataConfig = Settings.layerSettingForKey(item, 'symbolDataConfig') || {};
+          Settings.setLayerSettingForKey(symbol, 'symbolDataConfig', symbolDataConfig);
+        }
+      });
 
-        overrides.forEach(override => {
-          override.value = generateData(dataConfig);
+      DataSupplier.supplyData(dataKey, Array.from(Array(dataItems.length)).map(_ => generateData(dataConfig)));
+    } else {
+      const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
-          // REVIEW [>=1.0.0]: API says we can store a setting in a Override.
-          //                   We should store in the Override instead, but last time we tried, it thrown errors.
-          symbolDataConfig[override.id] = dataConfig;
-        });
+      items.forEach(item => {
+        if (item.type === 'Text') {
+          // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
+          item.text = generateData(dataConfig);
 
-        Settings.setLayerSettingForKey(item, 'symbolDataConfig', symbolDataConfig);
-      }
-    });
+          Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+
+          const nativeItem = item.sketchObject;
+          const userInfo = nativeItem.userInfo().mutableCopy();
+
+          // TODO: Find a way to get the identifier without hardcoding it.
+          userInfo.setValue_forKey([constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
+          nativeItem.setUserInfo(userInfo);
+        } else if (item.type === 'SymbolInstance') {
+          const overrides = getSelectedOverrides(item);
+
+          const symbolDataConfig = Settings.layerSettingForKey(item, 'symbolDataConfig') || {};
+
+          overrides.forEach(override => {
+            override.value = generateData(dataConfig);
+
+            // REVIEW [>=1.0.0]: API says we can store a setting in a Override.
+            //                   We should store in the Override instead, but last time we tried, it thrown errors.
+            symbolDataConfig[override.id] = dataConfig;
+          });
+
+          Settings.setLayerSettingForKey(item, 'symbolDataConfig', symbolDataConfig);
+        }
+      });
+    }
   });
 }
 
 
 
-export function create() {
+export function create(dataKey, items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
+
   if (window) {
+    setSelection(dataKey, items);
     window.show();
     // TODO: We also need to bring the window to visibility when it is hidden in an inactive window space.
     //       Probably need to check with NSPanel.isOnActiveSpace() and NSPanel.CollectionBehavior.moveToActiveSpace().
     //       Or this probably won't be needed if we make the window to always show on the same space as Sketch's.
     window.focus();
   } else {
-    createWindow();
+    createWindow(dataKey, items);
   }
 }
 
 
 
-export function setSelection(items) {
+export function setSelection(dataKey, items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
   if (window) {
-    const selection = items.filter(item => {
-      let result = false;
+    // If `key` is not defined, it means that the items doesn't come from the `DataSupply` action.
+    // If so, filter all items to get only the Text and Text Override items.
+    if (typeof key === 'undefined') {
+      items = items.filter(item => {
+        let result = false;
 
-      if (item.type === 'Text') {
-        result = Boolean(Settings.layerSettingForKey(item, 'dataConfig'));
-      } else if (item.type === 'SymbolInstance' && item?.overrides.length > 0) {
-        const overrides = getSelectedOverrides(item);
-
-        if (overrides.length > 0) {
-          result = overrides.find(override => Boolean(getOverrideDataConfig(item, override)));
+        if (item.type === 'Text') {
+          result = true;
+        } else if (item.type === 'SymbolInstance' && item?.overrides.length > 0) {
+          result = getSelectedOverrides(item).length > 0;
+        } else if (item.type === 'DataOverride') {
+          result = true;
         }
-      }
 
-      return result;
+        return result;
+      });
+    }
+
+    const dataItems = [];
+
+    // Gather item identifications and dataConfigs.
+    items.forEach(item => {
+      if (item.type === 'Text') {
+        dataItems.push({
+          type: 'text',
+          id: String(item.id),
+          dataConfig: Settings.layerSettingForKey(items[0], 'dataConfig')
+        });
+      } else if (item.type === 'SymbolInstance') {
+        getSelectedOverrides(item).forEach(override => {
+          dataItems.push({
+            type: 'override',
+            id: String(override.id),
+            parent: String(item.id),
+            dataConfig: getOverrideDataConfig(item, override)
+          });
+        });
+      } else if (item.type === 'DataOverride') {
+        dataItems.push({
+          type: 'override',
+          id: String(item.override.id),
+          parent: String(item.symbolInstance.id),
+          dataConfig: getOverrideDataConfig(item.symbolInstance, item.override)
+        })
+      }
     });
 
-    let dataConfig;
-
-    if (selection.length > 0) {
-      // TODO: Handle multiple selections.
-      if (selection[0].type === 'Text') {
-        dataConfig = Settings.layerSettingForKey(selection[0], 'dataConfig');
-      } else if (selection[0].type === 'SymbolInstance') {
-        dataConfig = getOverrideDataConfig(selection[0], getSelectedOverrides(selection[0])[0]);
-      }
+    // Prepare Data Key to be sent.
+    if (typeof dataKey !== 'undefined') {
+      dataKey = `"${String(dataKey)}"`;
     }
 
     // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
-    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify(dataConfig || {})})`)
+    window.webContents.executeJavaScript(`setDataConfig(${dataKey}, ${JSON.stringify(dataItems)})`)
       .catch(error => {
         console.error('setDataConfig', error);
       });

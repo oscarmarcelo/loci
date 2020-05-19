@@ -65,13 +65,26 @@ tokenBoxSelect.selectedIndex = -1;
 
 
 
-function setDataConfig(dataConfig) {
+function setDataConfig(dataKey, dataItems) {
+  if (typeof window.loci === 'undefined') {
+    window.loci = window.loci || {};
+  }
+
+  window.loci.dataKey = dataKey;
+  window.loci.dataItems = dataItems;
+
   const tokens = tokenBoxScroller2.querySelectorAll('.token');
 
   // TODO: Use DocumentFragment.
   tokens.forEach(token => {
     token.remove();
   });
+
+  dataForm.reset();
+
+  // TODO: Handle multiple selections.
+  //       Analyze dataConfigs and decide what to show.
+  const dataConfig = dataItems.find(item => item.dataConfig)?.dataConfig || {};
 
   dataConfig.tokens?.forEach(tokenConfig => {
     let name;
@@ -87,8 +100,6 @@ function setDataConfig(dataConfig) {
     // TODO: Use DocumentFragment.
     createToken(tokenConfig.type, name, config);
   });
-
-  dataForm.reset();
 
   Object.entries(dataConfig.general || {}).forEach(([name, value]) => {
     const field = dataForm.elements.namedItem(name);
@@ -218,7 +229,7 @@ applyButton.addEventListener('click', () => {
     }
   }
 
-  window.postMessage('apply-data', dataConfig)
+  window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig)
     .catch(error => {
       console.error('apply-data', error);
     });
