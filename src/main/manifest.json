@@ -19,6 +19,7 @@
           "Startup": "onStartup",
           "Shutdown": "onShutdown",
           "SupplyData": "onSupplyData",
+          "RefreshData": "onRefreshData",
           "SelectionChanged.finish": "onSelectionChanged",
           "ClearDataRecord.finish": "onClearDataRecord",
           "RemoveAllOverrides.finish": "onRemoveAllOverrides"

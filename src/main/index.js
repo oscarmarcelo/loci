@@ -52,12 +52,22 @@ export function onSupplyData(context) {
     const dataSupplierId = [constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_');
     const isConnected = String(layer.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId;
 
-    if (dataConfig && isConnected) {
+    // REVIEW: Find a way to make `onDataSupply()` distinguish a `RefreshData` from a `DataSupply` action natively.
+    if (dataConfig && isConnected && Settings.sessionVariable('refreshData') === true) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);
     } else {
       mainWindow.create();
     }
+
+    Settings.setSessionVariable('refreshData', undefined);
   });
+}
+
+
+
+export function onRefreshData() {
+  // REVIEW: Find a way to make `onDataSupply()` distinguish a `RefreshData` from a `DataSupply` action natively.
+  Settings.setSessionVariable('refreshData', true);
 }
 
 
