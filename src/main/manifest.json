@@ -18,7 +18,9 @@
           "Startup": "onStartup",
           "Shutdown": "onShutdown",
           "SupplyData": "onSupplyData",
-          "SelectionChanged.finish": "onSelectionChanged"
+          "SelectionChanged.finish": "onSelectionChanged",
+          "ClearDataRecord.finish": "onClearDataRecord",
+          "RemoveAllOverrides.finish": "onRemoveAllOverrides"
         }
       }
     }

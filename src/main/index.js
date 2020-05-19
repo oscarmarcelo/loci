@@ -1,4 +1,4 @@
-import {fromNative, DataSupplier, Settings} from 'sketch';
+import {getSelectedDocument, fromNative, DataSupplier, Settings} from 'sketch';
 import {toArray} from 'util';
 
 import constants from '../constants';
@@ -56,4 +56,25 @@ export function onSelectionChanged(context) {
   const items = toArray(context.actionContext.newSelection).map(fromNative);
 
   mainWindow.setSelection(items);
+}
+
+
+
+export function onClearDataRecord() {
+  const items = getSelectedDocument()?.selectedLayers?.layers || [];
+
+  items.forEach(item => {
+    Settings.setLayerSettingForKey(item, 'dataConfig', undefined);
+  });
+}
+
+
+
+export function onRemoveAllOverrides(context) {
+  // TODO: Find a way to use this instead: context.actionContext.action.affectedOverrideRepresentations().
+  const items = getSelectedDocument()?.selectedLayers?.layers || [];
+
+  items.forEach(item => {
+    Settings.setLayerSettingForKey(item, 'symbolDataConfig', undefined);
+  });
 }
