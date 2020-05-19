@@ -3,7 +3,7 @@ import {getSelectedDocument, Settings} from 'sketch';
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
 
-import constants from '../../constants';
+import constants from '../../common/constants';
 import * as tokenPopover from './token-popover';
 import * as selectPopover from './select-popover';
 import theme from '../theme';

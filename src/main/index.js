@@ -1,7 +1,7 @@
 import {getSelectedDocument, fromNative, DataSupplier, Settings} from 'sketch';
 import {toArray} from 'util';
 
-import constants from '../constants';
+import constants from '../common/constants';
 import * as mainWindow from './windows/main';
 
 

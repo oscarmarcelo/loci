@@ -1,7 +1,7 @@
 import BrowserWindow from 'sketch-module-web-view';
 
 import theme from '../theme';
-import constants from '../../constants';
+import constants from '../../common/constants';
 
 
 
