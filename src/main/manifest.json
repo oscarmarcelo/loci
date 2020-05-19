@@ -12,6 +12,7 @@
       "handler": "onRun"
     },
     {
+      "identifier": "scripts",
       "script": "./index.js",
       "handlers": {
         "actions": {

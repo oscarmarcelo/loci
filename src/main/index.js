@@ -49,7 +49,7 @@ export function onSupplyData(context) {
     const layer = item.type === 'DataOverride' ? item.override.affectedLayer : item;
     // TODO: Find a way to get the identifier without hardcoding it.
     //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_').
-    const dataSupplierId = [constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_');
+    const dataSupplierId = [constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_');
     const isConnected = String(layer.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId;
 
     if (dataConfig && isConnected) {

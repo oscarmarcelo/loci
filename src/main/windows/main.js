@@ -206,7 +206,7 @@ function createWindow() {
         const userInfo = nativeItem.userInfo().mutableCopy();
 
         // TODO: Find a way to get the identifier without hardcoding it.
-        userInfo.setValue_forKey([constants.PLUGIN_ID, '__index', constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
+        userInfo.setValue_forKey([constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
         nativeItem.setUserInfo(userInfo);
       } else if (item.type === 'SymbolInstance') {
         // `selectedLayers()` gives us only the selected symbols, not the selected overrides. We need to get them ouserselves.
