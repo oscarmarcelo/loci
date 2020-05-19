@@ -3,6 +3,7 @@ import {toArray} from 'util';
 
 import constants from '../common/constants';
 import * as mainWindow from './windows/main';
+import {getOverrideDataConfig} from './utils/overrides';
 
 
 
@@ -34,7 +35,11 @@ export function onSupplyData(context) {
     let dataConfig;
 
     if (item.type === 'DataOverride') {
-      dataConfig = Settings.layerSettingForKey(item.override.affectedLayer, 'dataConfig');
+      // REVIEW: Analyze this decision once we get enough feedback to see if this clashes with native behaviour.
+      //         Since only the Data Menu is shows "Refreshes Data from Master", we are using an alternative version
+      //         via Inspector were it refreshes with symbolInstance dataConfig, because the wording is just "Refresh" in there.
+      // TODO [>=1.0.0]: When Refreshing from Data Menu ("Refreshes Data from Master") it should refresh using Symbol Master dataConfigs.
+      dataConfig = getOverrideDataConfig(item.symbolInstance, item.override);
     } else {
       dataConfig = Settings.layerSettingForKey(item, 'dataConfig');
     }
