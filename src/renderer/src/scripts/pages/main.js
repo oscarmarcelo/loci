@@ -233,4 +233,8 @@ applyButton.addEventListener('click', () => {
     .catch(error => {
       console.error('apply-data', error);
     });
+
+  // Reset `dataKey` after `apply-data`, since it can only be used once.
+  // The plugin will look for selected items for the next `apply-data` messages in this session.
+  window.loci.dataKey = undefined;
 });

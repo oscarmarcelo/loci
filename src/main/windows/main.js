@@ -194,7 +194,7 @@ function createWindow(dataKey, items) {
 
 
   window.webContents.on('apply-data', (dataKey, dataItems, dataConfig) => {
-    if (dataKey) {
+    if (dataItems?.length > 0) {
       dataItems.forEach(dataItem => {
         let item;
 
@@ -206,7 +206,12 @@ function createWindow(dataKey, items) {
           const symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
           const symbolDataConfig = Settings.layerSettingForKey(symbol, 'symbolDataConfig') || {};
 
-          item = symbol.overrides.find(({id}) => id === dataItem.id);
+          // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
+          // Here the `dataKey` isn't available anymore, but `dataItems` still is.
+          if (!dataKey) {
+            item = symbol.overrides.find(({id}) => id === dataItem.id);
+            item.value = generateData(dataConfig);
+          }
 
           symbolDataConfig[dataItem.id] = dataConfig;
 
@@ -214,7 +219,9 @@ function createWindow(dataKey, items) {
         }
       });
 
-      DataSupplier.supplyData(dataKey, Array.from(Array(dataItems.length)).map(_ => generateData(dataConfig)));
+      if (dataKey) {
+        DataSupplier.supplyData(dataKey, Array.from(Array(dataItems.length)).map(_ => generateData(dataConfig)));
+      }
     } else {
       const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
