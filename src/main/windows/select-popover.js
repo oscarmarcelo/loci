@@ -1,6 +1,6 @@
 import BrowserWindow from 'sketch-module-web-view';
 
-import theme from '../theme';
+import theme from '../utils/theme';
 import constants from '../../common/constants';
 
 
