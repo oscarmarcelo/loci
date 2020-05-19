@@ -11,6 +11,40 @@ import {get as getData} from '../../renderer/src/scripts/data';
 
 
 
+function getSelectedOverrides(symbol) {
+  let result = [];
+
+  if (symbol?.overrides) {
+    let overrides = [];
+
+    // If the symbol has only one override, consider it always selected.
+    if (symbol.overrides.length === 1) {
+      overrides = overrides.push(overrides[0]);
+    } else {
+      overrides = symbol.overrides.filter(({selected}) => selected);
+
+      // if no overrides are selected, then consider all of them.
+      if (overrides.length === 0) {
+        overrides = symbol.overrides;
+      }
+    }
+
+    // Then get only the text overrides.
+    result = overrides.filter(({property}) => property === 'stringValue');
+  }
+
+  return result;
+};
+
+
+
+function getOverrideDataConfig(symbol, override) {
+  return Settings.layerSettingForKey(symbol, 'symbolDataConfig')?.[override.id] ||
+  Settings.layerSettingForKey(override.affectedLayer, 'dataConfig');
+}
+
+
+
 function createWindow() {
   const window = new BrowserWindow({
     identifier: constants.MAIN_WINDOW_ID,
@@ -209,16 +243,7 @@ function createWindow() {
         userInfo.setValue_forKey([constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
         nativeItem.setUserInfo(userInfo);
       } else if (item.type === 'SymbolInstance') {
-        // `selectedLayers()` gives us only the selected symbols, not the selected overrides. We need to get them ouserselves.
-        let overrides = item.overrides.filter(override => override.selected);
-
-        // If there are no selected overrides, it means we should apply data to all of them.
-        if (overrides.length === 0) {
-          overrides = item.overrides;
-        }
-
-        // Get only the text overrides.
-        overrides = overrides.filter(override => override.property === 'stringValue');
+        const overrides = getSelectedOverrides(item);
 
         const symbolDataConfig = Settings.layerSettingForKey(item, 'symbolDataConfig') || {};
 
@@ -255,36 +280,6 @@ export function create() {
 
 export function setSelection(items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
-
-  const getSelectedOverrides = symbol => {
-    let result = [];
-
-    if (symbol?.overrides) {
-      let overrides = [];
-
-      // If the symbol has only one override, consider it always selected.
-      if (symbol.overrides.length === 1) {
-        overrides = overrides.push(overrides[0]);
-      } else {
-        overrides = symbol.overrides.filter(({selected}) => selected);
-
-        // if no overrides are selected, then consider all of them.
-        if (overrides.length === 0) {
-          overrides = symbol.overrides;
-        }
-      }
-
-      // Then get only the text overrides.
-      result = overrides.filter(({property}) => property === 'stringValue');
-    }
-
-    return result;
-  };
-
-  const getOverrideDataConfig = (symbol, override) =>
-    Settings.layerSettingForKey(symbol, 'symbolDataConfig')?.[override.id] ||
-    Settings.layerSettingForKey(override.affectedLayer, 'dataConfig');
-
 
   if (window) {
     const selection = items.filter(item => {
