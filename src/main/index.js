@@ -31,6 +31,10 @@ export function onShutdown() {
 export function onSupplyData(context) {
   const items = toArray(context.data.items).map(fromNative).filter(({type}) => ['Text', 'DataOverride'].includes(type));
 
+  // TODO: Find out why when selecting a Text layer and a Text Override,
+  //       `context.data` only returns one type, not both,
+  //       but when `RefreshData` is called, it returns all of them.
+
   items.forEach((item, index) => {
     let dataConfig;
 
