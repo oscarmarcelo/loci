@@ -229,6 +229,11 @@ applyButton.addEventListener('click', () => {
     }
   }
 
+  // Remove property if unused.
+  if (Object.keys(dataConfig.general).length === 0) {
+    delete dataConfig.general;
+  }
+
   window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig)
     .catch(error => {
       console.error('apply-data', error);

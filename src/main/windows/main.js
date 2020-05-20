@@ -344,7 +344,7 @@ export function generateData(dataConfig) {
 
   // TODO: Handle limit-min field.
 
-  const limitMax = Number.parseInt(dataConfig.general['limit-max'], 10);
+  const limitMax = Number.parseInt(dataConfig.general?.['limit-max'], 10);
 
   if (limitMax) {
     let splits;
