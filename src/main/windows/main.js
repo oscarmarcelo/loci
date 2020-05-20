@@ -1,4 +1,4 @@
-import {getSelectedDocument, DataSupplier, Settings, UI} from 'sketch';
+import {getDocuments, getSelectedDocument, DataSupplier, Settings, UI} from 'sketch';
 
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
@@ -193,7 +193,16 @@ function createWindow(dataKey, items) {
   });
 
 
-  window.webContents.on('apply-data', (dataKey, dataItems, dataConfig) => {
+  window.webContents.on('apply-data', (dataKey, dataItems, dataConfig, documentId) => {
+    if (getSelectedDocument().id !== documentId) {
+      const document = getDocuments().find(({id}) => id === documentId);
+      let documentName = document ? `document "${document.sketchObject.displayName()}"` : 'a document that isn\'t open anymore';
+
+      UI.message(`⚠️ Can't apply data that was expected to be applied to ${documentName}.`);
+
+      return;
+    }
+
     if (dataItems?.length > 0) {
       dataItems.forEach(dataItem => {
         let symbol;
@@ -321,8 +330,11 @@ export function setSelection(dataKey, items) {
       dataKey = `"${String(dataKey)}"`;
     }
 
+    // TODO: Find a way to detect when the document focus changed and trigger a new selection instead.
+    const documentId = getSelectedDocument().id;
+
     // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
-    window.webContents.executeJavaScript(`setDataConfig(${dataKey}, ${JSON.stringify(dataItems)})`)
+    window.webContents.executeJavaScript(`setDataConfig(${dataKey}, ${JSON.stringify(dataItems)}, "${documentId}")`)
       .catch(error => {
         console.error('setDataConfig', error);
       });

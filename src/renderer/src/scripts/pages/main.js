@@ -65,13 +65,14 @@ tokenBoxSelect.selectedIndex = -1;
 
 
 
-function setDataConfig(dataKey, dataItems) {
+function setDataConfig(dataKey, dataItems, documentId) {
   if (typeof window.loci === 'undefined') {
     window.loci = window.loci || {};
   }
 
   window.loci.dataKey = dataKey;
   window.loci.dataItems = dataItems;
+  window.loci.document = documentId;
 
   const tokens = tokenBoxScroller2.querySelectorAll('.token');
 
@@ -234,7 +235,7 @@ applyButton.addEventListener('click', () => {
     delete dataConfig.general;
   }
 
-  window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig)
+  window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig, window.loci.document)
     .catch(error => {
       console.error('apply-data', error);
     });
