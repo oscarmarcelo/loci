@@ -10,7 +10,7 @@ import {getOverrideDataConfig} from './utils/overrides';
 export default function () {
   const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
-  mainWindow.create(null, items);
+  mainWindow.create(undefined, items);
 }
 
 
