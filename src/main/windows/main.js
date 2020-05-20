@@ -201,6 +201,12 @@ function createWindow(dataKey, items) {
         if (dataItem.type === 'text') {
           item = getSelectedDocument().getLayerWithID(dataItem.id);
 
+          // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
+          // Here the `dataKey` isn't available anymore, but `dataItems` still is.
+          if (!dataKey) {
+            item.text = generateData(dataConfig);
+          }
+
           Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
         } else {
           const symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
@@ -223,37 +229,9 @@ function createWindow(dataKey, items) {
         DataSupplier.supplyData(dataKey, Array.from(Array(dataItems.length)).map(_ => generateData(dataConfig)));
       }
     } else {
-      const items = getSelectedDocument()?.selectedLayers?.layers || [];
-
-      items.forEach(item => {
-        if (item.type === 'Text') {
-          // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
-          item.text = generateData(dataConfig);
-
-          Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
-
-          const nativeItem = item.sketchObject;
-          const userInfo = nativeItem.userInfo().mutableCopy();
-
-          // TODO: Find a way to get the identifier without hardcoding it.
-          userInfo.setValue_forKey([constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_'), 'datasupplier.key');
-          nativeItem.setUserInfo(userInfo);
-        } else if (item.type === 'SymbolInstance') {
-          const overrides = getSelectedOverrides(item);
-
-          const symbolDataConfig = Settings.layerSettingForKey(item, 'symbolDataConfig') || {};
-
-          overrides.forEach(override => {
-            override.value = generateData(dataConfig);
-
-            // REVIEW [>=1.0.0]: API says we can store a setting in a Override.
-            //                   We should store in the Override instead, but last time we tried, it thrown errors.
-            symbolDataConfig[override.id] = dataConfig;
-          });
-
-          Settings.setLayerSettingForKey(item, 'symbolDataConfig', symbolDataConfig);
-        }
-      });
+      // TODO [>=1.0.0]: Remove this. It's still here just to watch for edge cases.
+      require('sketch').UI.message('⚠️ Select something first.');
+      console.log(dataKey, dataItems, dataConfig);
     }
   });
 }
