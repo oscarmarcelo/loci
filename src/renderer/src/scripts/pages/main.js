@@ -98,7 +98,7 @@ function setDataConfig(dataKey, dataItems) {
     }
 
     // TODO: Use DocumentFragment.
-    createToken(tokenConfig.type, name, config);
+    createToken(tokenConfig.id, tokenConfig.type, name, config);
   });
 
   Object.entries(dataConfig.general || {}).forEach(([name, value]) => {
@@ -185,21 +185,21 @@ applyButton.addEventListener('click', () => {
   };
 
   for (const token of tokens) {
+    const tokenObject = {
+      id: token.id
+    };
+
     if (token.classList.contains('token--data')) {
-      dataConfig.tokens.push({
-        type: 'data',
-        config: token.tokenConfig
-      });
+      tokenObject.type = 'data';
+      tokenObject.config = token.tokenConfig;
     } else if (token.classList.contains('token--newline')) {
-      dataConfig.tokens.push({
-        type: `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
-      });
+      tokenObject.type = `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
     } else {
-      dataConfig.tokens.push({
-        type: 'text',
-        text: token.textContent
-      });
+      tokenObject.type = 'text';
+      tokenObject.text = token.textContent;
     }
+
+    dataConfig.tokens.push(tokenObject);
   }
 
   for (const [name, value] of formData.entries()) {

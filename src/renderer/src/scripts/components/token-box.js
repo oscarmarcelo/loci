@@ -5,7 +5,7 @@ const tokenBoxSelect2 = tokenBox.querySelector('.token-box__select'); // TODO [>
 
 
 
-function createToken(type, text, tokenConfig) {
+function createToken(id, type, text, tokenConfig) {
   const token = document.createElement('div');
 
   token.classList.add('token');
@@ -46,7 +46,7 @@ function createToken(type, text, tokenConfig) {
 
   // TODO: Consider generating a GUID instead.
   //       Ex.: NSUUID.UUID().UUIDString()
-  token.id = new Array(16)
+  token.id = id || new Array(16)
     .fill(0)
     .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
     .join('') +
@@ -80,7 +80,7 @@ tokenBoxInput.addEventListener('keydown', event => {
       tokenText = tokenBoxInput.textContent;
     }
 
-    createToken(tokenType, tokenText);
+    createToken(undefined, tokenType, tokenText);
 
     tokenBoxInput.textContent = '';
     tokenBoxInput.scrollIntoView();
@@ -104,7 +104,7 @@ tokenBoxSelect2.addEventListener('change', () => {
     }));
   }
 
-  createToken('data', option.textContent, {
+  createToken(undefined, 'data', option.textContent, {
     data: {
       group: option.dataset.group,
       item: option.value
