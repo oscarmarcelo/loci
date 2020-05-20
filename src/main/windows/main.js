@@ -201,16 +201,20 @@ function createWindow(dataKey, items) {
         if (dataItem.type === 'text') {
           item = getSelectedDocument().getLayerWithID(dataItem.id);
 
+          Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+
           // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
           // Here the `dataKey` isn't available anymore, but `dataItems` still is.
           if (!dataKey) {
             item.text = generateData(dataConfig);
           }
-
-          Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
         } else {
           const symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
           const symbolDataConfig = Settings.layerSettingForKey(symbol, 'symbolDataConfig') || {};
+
+          symbolDataConfig[dataItem.id] = dataConfig;
+
+          Settings.setLayerSettingForKey(symbol, 'symbolDataConfig', symbolDataConfig);
 
           // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
           // Here the `dataKey` isn't available anymore, but `dataItems` still is.
@@ -218,10 +222,6 @@ function createWindow(dataKey, items) {
             item = symbol.overrides.find(({id}) => id === dataItem.id);
             item.value = generateData(dataConfig);
           }
-
-          symbolDataConfig[dataItem.id] = dataConfig;
-
-          Settings.setLayerSettingForKey(symbol, 'symbolDataConfig', symbolDataConfig);
         }
       });
 
