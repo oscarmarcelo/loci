@@ -1,4 +1,4 @@
-import {getSelectedDocument, DataSupplier, Settings} from 'sketch';
+import {getSelectedDocument, DataSupplier, Settings, UI} from 'sketch';
 
 import BrowserWindow from 'sketch-module-web-view';
 import MochaJSDelegate from 'mocha-js-delegate';
@@ -218,6 +218,11 @@ function createWindow(dataKey, items) {
         if (!dataKey) {
           let itemProperty = 'text';
 
+          // TODO: Exit edit mode before applying text, or applied data be lost when exiting afterwards.
+          if (dataItem.type === 'text' && item.sketchObject.isEditingText() == 1) {
+            UI.message(`⚠️ ${constants.PLUGIN_NAME} can't update content of text layers in edit mode.`);
+          }
+
           if (dataItem.type === 'override') {
             item = symbol.overrides.find(({id}) => id === dataItem.id);
             itemProperty = 'value';
@@ -232,7 +237,7 @@ function createWindow(dataKey, items) {
       }
     } else {
       // TODO [>=1.0.0]: Remove this. It's still here just to watch for edge cases.
-      require('sketch').UI.message('⚠️ Select something first.');
+      UI.message('⚠️ Select something first.');
       console.log(dataKey, dataItems, dataConfig);
     }
   });
