@@ -196,32 +196,34 @@ function createWindow(dataKey, items) {
   window.webContents.on('apply-data', (dataKey, dataItems, dataConfig) => {
     if (dataItems?.length > 0) {
       dataItems.forEach(dataItem => {
+        let symbol;
         let item;
 
         if (dataItem.type === 'text') {
           item = getSelectedDocument().getLayerWithID(dataItem.id);
 
           Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
-
-          // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
-          // Here the `dataKey` isn't available anymore, but `dataItems` still is.
-          if (!dataKey) {
-            item.text = generateData(dataConfig);
-          }
         } else {
-          const symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
+          symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
+
           const symbolDataConfig = Settings.layerSettingForKey(symbol, 'symbolDataConfig') || {};
 
           symbolDataConfig[dataItem.id] = dataConfig;
 
           Settings.setLayerSettingForKey(symbol, 'symbolDataConfig', symbolDataConfig);
+        }
 
-          // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
-          // Here the `dataKey` isn't available anymore, but `dataItems` still is.
-          if (!dataKey) {
+        // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
+        // `dataKey` can only be used once, and here it isn't available anymore.
+        if (!dataKey) {
+          let itemProperty = 'text';
+
+          if (dataItem.type === 'override') {
             item = symbol.overrides.find(({id}) => id === dataItem.id);
-            item.value = generateData(dataConfig);
+            itemProperty = 'value';
           }
+
+          item[itemProperty] = generateData(dataConfig);
         }
       });
 
