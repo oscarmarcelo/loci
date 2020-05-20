@@ -280,6 +280,9 @@ export function create(dataKey, items) {
 export function setSelection(dataKey, items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
+  // Only apply if the plugin is open.
+  // This check is necessary because it is being called by `SelectionChanged` action,
+  // and it doesn't take into account of plugin window existance.
   if (window) {
     // If `key` is not defined, it means that the items doesn't come from the `DataSupply` action.
     // If so, filter all items to get only the Text and Text Override items.
