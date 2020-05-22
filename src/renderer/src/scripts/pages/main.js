@@ -7,7 +7,7 @@
 const tokenBoxScroller2 = document.querySelector('.token-box__scroller'); // TODO: Improve variable management.
 const tokenBoxSelect = document.querySelector('.token-box__select');
 const tokenBoxSelectOptions = new DocumentFragment();
-const dataForm = document.querySelector('.js-data-settings-form');
+const dataGeneralSettingsForm = document.querySelector('.js-data-general-settings-form');
 
 for (const group of window.loci.data.list) {
   const optgroup = document.createElement('optgroup');
@@ -81,7 +81,7 @@ function setDataConfig(dataKey, dataItems, documentId) {
     token.remove();
   });
 
-  dataForm.reset();
+  dataGeneralSettingsForm.reset();
 
   // TODO: Handle multiple selections.
   //       Analyze dataConfigs and decide what to show.
@@ -103,7 +103,7 @@ function setDataConfig(dataKey, dataItems, documentId) {
   });
 
   Object.entries(dataConfig.general || {}).forEach(([name, value]) => {
-    const field = dataForm.elements.namedItem(name);
+    const field = dataGeneralSettingsForm.elements.namedItem(name);
 
     if (field.type === 'checkbox') {
       field.checked = Boolean(value);
@@ -179,7 +179,7 @@ observer.observe(tokenBoxScroller2, {
 
 applyButton.addEventListener('click', () => {
   const tokens = document.querySelectorAll('.token-box .token');
-  const formData = new FormData(dataForm);
+  const formData = new FormData(dataGeneralSettingsForm);
   const dataConfig = {
     tokens: [],
     general: {}
