@@ -153,7 +153,7 @@ function createWindow(dataKey, items) {
   window.webContents.on('data-suggestion', (suggestion, anchorBounds) => {
     let popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (!popover) {
+    if (!popover && suggestion?.length > 0) {
       console.log('creating popover');
       popover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
         parent: window,
@@ -186,8 +186,8 @@ function createWindow(dataKey, items) {
           console.error('filterMenu', error);
         });
     } else {
-      console.log('closing popover!');
-      popover.close();
+      console.log('hiding popover!');
+      popover?.hide();
     }
   });
 
@@ -195,8 +195,12 @@ function createWindow(dataKey, items) {
   function dataSuggestionFilterResult(numberOfResults) {
     const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (popover && numberOfResults === 0) {
-      popover.close();
+    if (popover && numberOfResults > 0) {
+      console.log('showing')
+      popover.showInactive();
+    } else {
+      console.log('hiding')
+      popover.hide();
     }
   }
 
@@ -215,6 +219,7 @@ function createWindow(dataKey, items) {
     const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (popover) {
+      console.log('closing')
       popover.close();
     }
   }

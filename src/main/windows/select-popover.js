@@ -45,6 +45,7 @@ export function create(id, options) {
 
     let popoverX = anchorLeftX - (popoverBounds.width / 2);
 
+    console.log('setting position')
     window.setPosition(Math.round(offsetX + popoverX), Math.round(offsetY + anchorBottomY + offsetTip));
 
     if (options.actions) {
@@ -61,9 +62,6 @@ export function create(id, options) {
 
     if (options.search === false) {
       window.webContents.executeJavaScript('hideSearch()')
-        .then(() => {
-          window.showInactive();
-        })
         .catch(error => {
           console.error('hideSearch', error);
         });
