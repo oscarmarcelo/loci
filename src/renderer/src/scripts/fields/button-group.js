@@ -40,7 +40,7 @@ export default (field, value) => {
           value: 'none',
           text: 'No Transform',
           description: 'No letter casing.',
-          buttonText: '⊘'
+          icon: 'none'
         },
         // TODO: Disabled until generator util `language` can capitalize content.
         // {
