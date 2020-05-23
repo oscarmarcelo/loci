@@ -235,6 +235,7 @@ function initNumberInput(component) {
         window.addEventListener('keydown', pressShiftKey);
         window.addEventListener('keyup', unpressShiftKey);
 
+        // TODO: Use macOS defined typing delays instead of hardcoding it.
         spinnerTimeout = setTimeout(() => {
           step(input, direction);
 

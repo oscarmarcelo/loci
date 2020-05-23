@@ -4,64 +4,80 @@
  * ========================================================
  */
 
-const tokenBoxScroller2 = document.querySelector('.token-box__scroller'); // TODO: Improve variable management.
-const tokenBoxSelect = document.querySelector('.token-box__select');
-const tokenBoxSelectOptions = new DocumentFragment();
+const tokenBox = document.querySelector('.token-box');
+const tokenBoxScroller = tokenBox.querySelector('.token-box__scroller');
+const tokenBoxInput = tokenBox.querySelector('.token-box__input');
+const tokenBoxChevron = document.querySelector('.token-box__chevron');
 const dataGeneralSettingsForm = document.querySelector('.js-data-general-settings-form');
 
-for (const group of window.loci.data.list) {
-  const optgroup = document.createElement('optgroup');
-  optgroup.setAttribute('label', group.name);
 
-  group.items.forEach(({config: item}) => {
-    const option = document.createElement('option');
 
-    option.textContent = item.name;
-    option.value = item.id;
-    option.dataset.group = group.id;
+function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
+  // If there is text in `tokenBoxInput`, create a text token with it before creating the requested token.
+  if (insertPendingTextFirst !== false && tokenBoxInput.textContent !== '') {
+    tokenBoxInput.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter'
+    }));
+  } else {
+    tokenBoxInput.textContent = '';
+  }
 
-    optgroup.append(option);
-  });
+  const token = document.createElement('div');
 
-  tokenBoxSelectOptions.append(optgroup);
+  token.classList.add('token');
+
+  if (type === 'data') {
+    token.classList.add('token--data');
+
+    const tokenIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const tokenUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+
+    tokenIcon.classList.add('token__icon');
+    tokenUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#text-lines');
+
+    tokenIcon.append(tokenUse);
+    token.append(tokenIcon);
+
+    const tokenText = document.createElement('span');
+    tokenText.classList.add('token__text');
+    tokenText.textContent = text;
+
+    if (tokenConfig.gender) {
+      token.classList.add(`token--${tokenConfig.gender}`);
+    }
+
+    if (tokenConfig['text-transform']) {
+      token.style.setProperty('text-transform', tokenConfig['text-transform']);
+    }
+
+    token.tokenConfig = tokenConfig;
+
+    token.append(tokenText);
+  } else if (['newline', 'shift-newline'].includes(type)) {
+    token.classList.add('token--newline');
+    token.textContent = `${type === 'shift-newline' ? '⇧' : ''}⏎`;
+  } else {
+    token.textContent = text;
+  }
+
+  // TODO: Consider generating a GUID instead.
+  //       Ex.: NSUUID.UUID().UUIDString()
+  token.id = id || new Array(16)
+    .fill(0)
+    .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
+    .join('') +
+    Date.now().toString(24);
+
+  tokenBoxInput.parentNode.insertBefore(token, tokenBoxInput);
+  window.initToken(token);
 }
 
-tokenBoxSelect.append(tokenBoxSelectOptions);
-tokenBoxSelect.selectedIndex = -1;
 
 
-// TODO [>=1.0.0]: Using temporary native select. Use data-popover instead.
-
-// const dataEditorInput = document.querySelector('.data-editor-input');
-
-
-
-// dataEditorInput.addEventListener('input', () => {
-//   window.postMessage('data-suggestion', {
-//     value: dataEditorInput.value,
-//     anchorBounds: dataEditorInput.getBoundingClientRect()
-//   })
-//     .catch(error => {
-//       console.error('data-suggestion', error);
-//     });
-// });
-
-
-
-// dataEditorInput.addEventListener('keydown', event => {
-//   if (event.key === 'Enter') {
-//     window.postMessage('close-data-suggestions', null)
-//       .catch(error => {
-//         console.error('close-data-suggestions', error);
-//       });
-//   } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-//     event.preventDefault();
-//     window.postMessage('navigate-data-suggestions', event.key)
-//       .catch(error => {
-//         console.error('navigate-data-suggestions', error);
-//       });
-//   }
-// });
+function suggestionNavigationResult(item) {
+  console.log(item)
+  window.loci.dataSuggestion = item;
+}
 
 
 
@@ -74,7 +90,7 @@ function setDataConfig(dataKey, dataItems, documentId) {
   window.loci.dataItems = dataItems;
   window.loci.document = documentId;
 
-  const tokens = tokenBoxScroller2.querySelectorAll('.token');
+  const tokens = tokenBoxScroller.querySelectorAll('.token');
 
   // TODO: Use DocumentFragment.
   tokens.forEach(token => {
@@ -114,6 +130,7 @@ function setDataConfig(dataKey, dataItems, documentId) {
 }
 
 
+
 function updateTokenConfig(id, tokenConfig) {
   const token = document.querySelector(`#${id}`);
 
@@ -137,6 +154,97 @@ function updateTokenConfig(id, tokenConfig) {
 
 
 
+tokenBoxScroller.addEventListener('click', event => {
+  // Ignore if the user clicked on a children.
+  if (event.target === tokenBoxScroller) {
+    tokenBoxInput.focus();
+  }
+});
+
+
+
+tokenBoxChevron.addEventListener('click', () => {
+  window.postMessage('open-data-list-popover', tokenBoxChevron.getBoundingClientRect())
+    .catch(error => {
+      console.error('open-data-list-popover', error);
+    });
+});
+
+
+
+tokenBoxInput.addEventListener('input', () => {
+  window.postMessage('data-suggestion', tokenBoxInput.textContent, tokenBoxInput.getBoundingClientRect())
+    .catch(error => {
+      console.error('data-suggestion', error);
+    });
+});
+
+
+
+tokenBoxInput.addEventListener('keydown', event => {
+  if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+    event.preventDefault();
+
+    window.postMessage('navigate-data-suggestions', event.key)
+      .catch(error => {
+        console.error('navigate-data-suggestions', error);
+      });
+  } else if (event.key === 'Enter') {
+    // Prevent creating `<div>`s and `<br>`s.
+    event.preventDefault();
+
+    let tokenType;
+    let tokenText;
+    let tokenConfig;
+
+    if (window.loci.dataSuggestion) {
+      tokenType = 'data';
+      tokenText = window.loci.data.get(window.loci.dataSuggestion.group, window.loci.dataSuggestion.item).config.name;
+      tokenConfig = {
+        data: window.loci.dataSuggestion
+      };
+
+      window.loci.dataSuggestion = undefined;
+    } else if (tokenBoxInput.textContent.length === 0) {
+      tokenType = `${event.shiftKey ? 'shift-' : ''}newline`;
+    } else {
+      tokenType = 'text';
+      tokenText = tokenBoxInput.textContent;
+    }
+
+    createToken(undefined, tokenType, tokenText, tokenConfig, false);
+
+    tokenBoxInput.scrollIntoView();
+
+    window.postMessage('close-data-suggestions', null)
+      .catch(error => {
+        console.error('close-data-suggestions (Enter)', error);
+      });
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+
+    window.postMessage('close-data-suggestions', null)
+      .catch(error => {
+        console.error('close-data-suggestions (Escape)', error);
+      });
+  } else if (event.key === 'Backspace' && tokenBoxInput.textContent.length === 0 && tokenBoxInput.previousElementSibling) {
+    tokenBoxInput.previousElementSibling.remove();
+  }
+
+  window.loci.dataSuggestion = undefined;
+});
+
+
+
+tokenBoxInput.addEventListener('blur', () => {
+  window.postMessage('close-data-suggestions', null)
+    .catch(error => {
+      console.error('close-data-suggestions', error);
+    });
+});
+
+
+
 /*
  * ========================================================
  * Limit inputs
@@ -157,7 +265,7 @@ const applyButton = document.querySelector('.js-apply-button');
 
 // TODO: Improve this observer code style.
 function toggleApplyButton() {
-  const dataTokens = tokenBoxScroller2.querySelectorAll('.token--data');
+  const dataTokens = tokenBoxScroller.querySelectorAll('.token--data');
 
   applyButton.disabled = dataTokens.length === 0;
 
@@ -170,9 +278,9 @@ function toggleApplyButton() {
 
 toggleApplyButton();
 
-const observer = new MutationObserver(toggleApplyButton);
+const toggleApplyButtonObserver = new MutationObserver(toggleApplyButton);
 
-observer.observe(tokenBoxScroller2, {
+toggleApplyButtonObserver.observe(tokenBoxScroller, {
   childList: true
 });
 

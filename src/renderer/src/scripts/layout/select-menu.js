@@ -1,117 +1,231 @@
+const search = document.querySelector('.select-menu__search');
 const input = document.querySelector('.select-menu__search-input');
-const groups = document.querySelectorAll('.select-menu__group');
-const items = document.querySelectorAll('.select-menu__item');
-const current = document.querySelector('.select-menu__item--current');
+const list = document.querySelector('.select-menu__list');
 
+let groups;
+let items;
+let current;
 
-
-function hideSearch() {
-  const search = document.querySelector('.select-menu__search');
-  search.classList.add('select-menu__search--hidden');
+if (typeof window.loci === 'undefined') {
+  window.loci = window.loci || {};
 }
 
 
 
-function filterOptions(query) {
-  // TODO: Improve this!!!
-  const words = query.toLowerCase().split(' ').filter(word => word.length > 0 && word !== ' ');
+function setActions(actions) {
+  window.loci.actions = actions;
+}
 
-  let results = 0;
 
-  if (groups.length > 0) {
-    for (const group of groups) {
-      const items = group.querySelectorAll('.select-menu__item');
-      let groupHasResults = false;
 
-      for (const item of items) {
-        const itemName = item.textContent.toLowerCase();
-        let itemHasResults = true;
+function hideSearch() {
+  search.classList.add('select-menu__search--hidden');
 
-        for (const word of words) {
-          if (!itemName.includes(word)) {
-            itemHasResults = false;
-          }
+  // This variable is used to check if the window should hide when there aren't filter results.
+  window.loci.searchHidden = true;
+}
+
+
+
+function setPlaceholder(text) {
+  input.placeholder = text;
+}
+
+
+
+// const selectMenuListObserver = new MutationObserver(mutations => {
+//   mutations.forEach(mutation => {
+//     if (mutation.attributeName === 'class') {
+//       if (mutation.target.classList.contains('select-menu__item--current')) {
+//         current = mutation.target;
+//       }
+//     }
+//   });
+// });
+
+// items.forEach(item => {
+//   item.observe({
+//     attributes: true
+//   });
+// });
+
+
+
+function setMenu(menu) {
+  const menuList = new DocumentFragment();
+
+  // TODO: Support menu lists without groups.
+  menu.forEach(groupObject => {
+    const group = document.createElement('div');
+    const heading = document.createElement('div');
+
+    group.classList.add('select-menu__group');
+    group.dataset.group = groupObject.id;
+
+    heading.classList.add('select-menu__heading', 'heading-1');
+    heading.textContent = groupObject.name;
+
+    group.append(heading);
+
+    groupObject.items.forEach(itemObject => {
+      const item = document.createElement('button');
+
+      item.classList.add('select-menu__item');
+      item.dataset.value = itemObject.id;
+      item.textContent = itemObject.name;
+
+      item.addEventListener('mousedown', () => {
+        [...items].find(item => item.classList.contains('select-menu__item--current'))
+          ?.classList.remove('select-menu__item--selected', 'select-menu__item--current');
+
+        item.classList.add('select-menu__item--selected', 'select-menu__item--current');
+      });
+
+      item.addEventListener('click', () => {
+        if (window.loci.actions?.includes('submitResult')) {
+          window.postMessage('select-menu__submit-result', {
+            group: groupObject.id,
+            item: itemObject.id
+          })
+            .catch(error => {
+              console.error('select-menu__submit-result', error);
+            });
         }
+      });
 
-        item.classList.toggle('select-menu__item--hidden', !itemHasResults);
-        results += itemHasResults ? 1 : 0;
+      group.append(item);
+    });
 
-        if (itemHasResults) {
-          groupHasResults = true;
-        }
-      }
+    menuList.append(group);
+  });
 
-      group.classList.toggle('select-menu__group--hidden', !groupHasResults);
-    }
-  } else {
-    // const items = document.querySelectorAll('.select-menu__item');
-    // for (const item of items) {
-    //   const result = input.value.length > 0 && item.textContent.toLowerCase().includes(input.value.toLowerCase());
-    //   item.style.display = result ? 'none' : '';
-    // }
+  // TODO: Find another way to do this, because it defeats the usage of DocumentFragment.
+  while (list.lastChild) {
+    list.removeChild(list.lastChild);
   }
 
-  window.postMessage('select-menu-results', results)
-    .catch(error => {
-      console.error('select-menu-results', error);
+  list.append(menuList);
+
+  groups = document.querySelectorAll('.select-menu__group');
+  items = document.querySelectorAll('.select-menu__item');
+  // TODO: set current item, if available.
+
+  if (current) {
+    current.scrollIntoView({
+      block: 'center'
     });
+  }
+}
+
+
+
+function filterMenu(query) {
+  // TODO: Improve this!!!
+  const words = query.trim().toLowerCase().split(' ').filter(word => word.length > 0 && word !== ' ');
+
+  let numberOfResults = 0;
+
+  // `words` length needs to be checked because `Array.some()` always returns `true` on empty arrays.
+  if (words.length > 0) {
+    if (groups.length > 0) {
+      groups.forEach(group => {
+        const items = group.querySelectorAll('.select-menu__item');
+        let groupHasResults = false;
+
+        items.forEach(item => {
+          const itemHasResults = words.every(word => item.textContent.toLowerCase().includes(word));
+
+          item.classList.toggle('select-menu__item--hidden', !itemHasResults);
+          numberOfResults += itemHasResults ? 1 : 0;
+
+          if (itemHasResults) {
+            groupHasResults = true;
+          }
+        });
+
+        group.classList.toggle('select-menu__group--hidden', !groupHasResults);
+      });
+    } else {
+      items.forEach(item => {
+        const itemHasResults = words.every(word => item.textContent.toLowerCase().includes(word));
+
+        item.classList.toggle('select-menu__item--hidden', !itemHasResults);
+        numberOfResults += itemHasResults ? 1 : 0;
+      });
+    }
+  } else {
+    groups.forEach(group => {
+      group.classList.remove('select-menu__group--hidden');
+    });
+
+    items.forEach(item => {
+      item.classList.remove('select-menu__item--hidden');
+    });
+  }
+
+  if (window.loci.actions?.includes('filterResult')) {
+    window.postMessage('select-menu__filter-result', numberOfResults)
+      .catch(error => {
+        console.error('select-menu__filter-result', error);
+      });
+  }
+}
+
+
+
+function navigateMenu(key) {
+  // TODO: Store this globally to avoid regenerating it everytime.
+  //       Should be updated on `filterMenu()` or via MutationObserver.
+  const visibleItems = [...items].filter(item => item.classList.contains('select-menu__item--hidden') === false);
+  // If there isn't a current, `indexOf` will return `-1`, which will be clamped to `0` in `siblingIndex`,
+  // resulting in the selection of the first item in `sibling`.
+  const currentIndex = visibleItems.indexOf(current);
+  const siblingIndex = Math.min(Math.max(currentIndex + (key === 'ArrowUp' ? -1 : 1), 0), visibleItems.length - 1);
+  const sibling = visibleItems[siblingIndex];
+
+  if (sibling) {
+    if (current) {
+      current.classList.remove('select-menu__item--selected', 'select-menu__item--current');
+    }
+
+    sibling.focus();
+    sibling.scrollIntoView({
+      block: 'center'
+    });
+    sibling.classList.add('select-menu__item--selected', 'select-menu__item--current');
+
+    current = sibling;
+  }
+
+  if (window.loci.actions?.includes('navigationResult')) {
+    window.postMessage('select-menu__navigation-result', {
+      group: current.parentElement.dataset.group,
+      item: current.dataset.value
+    })
+      .catch(error => {
+        console.error('select-menu__navigation-result', error);
+      });
+  }
 }
 
 
 
 input.addEventListener('input', () => {
-  filterOptions(input.value);
+  filterMenu(input.value);
 });
-
-
-
-for (const item of items) {
-  item.addEventListener('mousedown', () => {
-    const current = [...items].find(item => item.classList.contains('select-menu__item--current'));
-
-    current.classList.remove('select-menu__item--selected', 'select-menu__item--current');
-    item.classList.add('select-menu__item--selected', 'select-menu__item--current');
-  });
-}
 
 
 
 window.addEventListener('blur', () => {
-  document.querySelector('.select-menu__item--selected').classList.remove('select-menu__item--selected');
+  [...items].find(item => item.classList.contains('select-menu__item--selected'))
+    ?.classList.remove('select-menu__item--selected');
 });
 
 
 
-if (current) {
-  current.scrollIntoView({
-    block: 'center'
-  });
-}
-
-
-
-// document.addEventListener('keydown', event => {
-//   if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-//     event.preventDefault();
-//     if (current) {
-//       let sibling;
-
-//       if (event.key === 'ArrowUp') {
-//         sibling = current.previousElementSibling;
-//       } else if (event.key === 'ArrowDown') {
-//         sibling = current.nextElementSibling;
-//       }
-
-//       if (sibling) {
-//         current.classList.remove('select-menu__item--current');
-//         sibling.focus();
-//         sibling.scrollIntoView();
-//         sibling.classList.add('select-menu__item--current');
-//       }
-//     } else {
-//       const firstItem = items[0];
-//       firstItem.focus();
-//       firstItem.classList.add('select-menu__item--current');
-//     }
-//   }
-// });
+window.addEventListener('keydown', event => {
+  if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+    event.preventDefault();
+    navigateMenu(event.key);
+  }
+});

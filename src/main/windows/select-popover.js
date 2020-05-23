@@ -1,7 +1,6 @@
 import BrowserWindow from 'sketch-module-web-view';
 
 import theme from '../utils/theme';
-import constants from '../../common/constants';
 
 
 
@@ -48,14 +47,33 @@ export function create(id, options) {
 
     window.setPosition(Math.round(offsetX + popoverX), Math.round(offsetY + anchorBottomY + offsetTip));
 
-    if (options?.search === false) {
+    if (options.actions) {
+      window.webContents.executeJavaScript(`setActions(${JSON.stringify(Object.keys(options.actions))})`)
+        .catch(error => {
+          console.error('setActions', error);
+        });
+    }
+
+    window.webContents.executeJavaScript(`setMenu(${JSON.stringify(options.menu)})`)
+      .catch(error => {
+        console.error('setMenu', error);
+      });
+
+    if (options.search === false) {
       window.webContents.executeJavaScript('hideSearch()')
         .then(() => {
-          window.show();
-          options.parent.focus();
+          window.showInactive();
         })
         .catch(error => {
           console.error('hideSearch', error);
+        });
+    } else if (options.placeholder) {
+      window.webContents.executeJavaScript(`setPlaceholder("${options.placeholder}")`)
+        .then(() => {
+          window.show();
+        })
+        .catch(error => {
+          console.error('setPlaceholder', error);
         });
     } else {
       window.show();
@@ -63,23 +81,36 @@ export function create(id, options) {
   });
 
 
-  if (typeof options.search === 'undefined' || options.search !== false) {
+  if (options.search !== false) {
     window.once('blur', () => {
+      console.log('closing')
       window.close();
     });
   }
 
 
-  window.webContents.on('select-menu-results', results => {
-    const mainWindow = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
+  if (options.actions?.filterResult) {
+    window.webContents.on('select-menu__filter-result', numberOfResults => {
 
-    if (results > 0) {
-      window.show();
-      mainWindow.focus();
-    } else {
-      window.hide();
-    }
-  });
+      options.actions.filterResult(numberOfResults);
+    });
+  }
+
+
+  if (options.actions?.navigationResult) {
+    window.webContents.on('select-menu__navigation-result', item => {
+
+      options.actions.navigationResult(item);
+    });
+  }
+
+
+  if (options.actions?.submitResult) {
+    window.webContents.on('select-menu__submit-result', item => {
+
+      options.actions.submitResult(item);
+    });
+  }
 
 
   return window;

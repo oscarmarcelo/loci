@@ -8,7 +8,7 @@ import * as tokenPopover from './token-popover';
 import * as selectPopover from './select-popover';
 import theme from '../utils/theme';
 import {getSelectedOverrides, getOverrideDataConfig} from '../utils/overrides';
-import {get as getData} from '../../renderer/src/scripts/data';
+import {list as dataList, get as getData} from '../../renderer/src/scripts/data';
 
 
 
@@ -18,7 +18,7 @@ function createWindow(dataKey, items) {
     width: 374,
     height: 219,
     // hidesOnDeactivate: false, // TODO: Find a way to keep window always on top of Sketch, but not on top of other apps.
-    // remembersWindowFrame: true, // FIXME: HACK: Using workaround to manually store frame until this feature becomes reliable.
+    // remembersWindowFrame: true, // FIXME: HACK: Workaround until we find the reason why windows aren't being garbage collected on close.
     minWidth: 374,
     minHeight: 219 - 37, // Somehow, 37px are added to minHeight
     minimizable: false,
@@ -36,7 +36,7 @@ function createWindow(dataKey, items) {
   });
 
 
-  // HACK: Workaround until `remembersWindowFrame` reliability is fixed.
+  // HACK: Workaround until we find the reason why windows aren't being garbage collected on close.
   const lastFrame = Settings.settingForKey(`${constants.MAIN_WINDOW_ID}.frame`);
 
   if (lastFrame) {
@@ -126,7 +126,7 @@ function createWindow(dataKey, items) {
       }
     }
 
-    // HACK: Workaround until `remembersWindowFrame` reliability is fixed.
+    // HACK: Workaround until we find the reason why windows aren't being garbage collected on close.
     Settings.setSettingForKey(`${constants.MAIN_WINDOW_ID}.frame`, window.getBounds());
   });
 
@@ -150,47 +150,143 @@ function createWindow(dataKey, items) {
   });
 
 
-  window.webContents.on('data-suggestion', message => {
+  window.webContents.on('data-suggestion', (suggestion, anchorBounds) => {
     let popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (!popover) {
+      console.log('creating popover');
       popover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
         parent: window,
-        anchorBounds: message.anchorBounds,
-        search: false
+        anchorBounds: anchorBounds,
+        search: false,
+        menu: dataList.map(group => {
+          return {
+            id: group.id,
+            name: group.name,
+            items: group.items.map(({default: item}) => { // TODO: Find a way to make Webpack not export as named default.
+              return {
+                id: item.config.id,
+                name: item.config.name
+              }
+            })
+          }
+        }),
+        actions: {
+          filterResult: dataSuggestionFilterResult,
+          navigationResult: dataSuggestionNavigationResult,
+          submitResult: dataSuggestionSubmitResult
+        }
       });
     }
 
-    if (message.value.length > 0) {
-      popover.webContents.executeJavaScript(`filterOptions("${message.value}")`)
+    if (suggestion?.length > 0) {
+      console.log(`filter options: "${suggestion}", ${suggestion.length}`)
+      popover.webContents.executeJavaScript(`filterMenu("${suggestion}")`)
         .catch(error => {
-          console.error('filterOptions', error);
+          console.error('filterMenu', error);
         });
     } else {
-      popover.hide();
+      console.log('closing popover!');
+      popover.close();
     }
   });
 
 
-  window.webContents.on('close-data-suggestions', () => {
+  function dataSuggestionFilterResult(numberOfResults) {
+    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+
+    if (popover && numberOfResults === 0) {
+      popover.close();
+    }
+  }
+
+
+  function dataSuggestionNavigationResult(item) {
+    window.webContents.executeJavaScript(`suggestionNavigationResult(${JSON.stringify(item)})`)
+    .catch(error => {
+      console.log('suggestionNavigationResult', error);
+    })
+  }
+
+
+  function dataSuggestionSubmitResult(item) {
+    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(item.group, item.item).config.name}", ${JSON.stringify({data: item})}, false)`);
+
     const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (popover) {
       popover.close();
     }
-  });
+  }
 
 
   window.webContents.on('navigate-data-suggestions', key => {
     const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
     if (popover) {
-      popover.webContents.executeJavaScript(`navigateOptions("${key}")`)
+      popover.webContents.executeJavaScript(`navigateMenu("${key}")`)
         .catch(error => {
-          console.error('navigateOptions', error);
+          console.error('navigateMenu', error);
         });
     }
   });
+
+
+
+  window.webContents.on('close-data-suggestions', () => {
+    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+
+    if (popover && Boolean(popover.isFocused()) === false) {
+      console.log('closing popover');
+      popover.close();
+    }
+  });
+
+
+  window.webContents.on('open-data-list-popover', anchorBounds => {
+    const popover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
+
+    if (!popover) {
+      console.log('creating popover');
+      selectPopover.create(constants.DATA_LIST_WINDOW_ID, {
+        parent: window,
+        anchorBounds: anchorBounds,
+        placeholder: 'Search Data',
+        menu: dataList.map(group => {
+          return {
+            id: group.id,
+            name: group.name,
+            items: group.items.map(({default: item}) => { // TODO: Find a way to make Webpack not export as named default.
+              return {
+                id: item.config.id,
+                name: item.config.name
+              }
+            })
+          }
+        }),
+        actions: {
+          submitResult: dataListSubmitResult
+        }
+      });
+    }
+  });
+
+
+  function dataListSubmitResult(item) {
+    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(item.group, item.item).config.name}", ${JSON.stringify({data: item})})`)
+      .then(() => {
+        const popover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
+
+        if (popover) {
+          console.log('closing popover');
+          popover.close();
+          window.focus();
+        }
+      })
+      .catch(error => {
+        console.error('createToken', error);
+      });
+  }
 
 
   window.webContents.on('apply-data', (dataKey, dataItems, dataConfig, documentId) => {

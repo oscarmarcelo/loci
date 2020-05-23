@@ -36,7 +36,7 @@ export const list = [
 export function get(group, item) {
   let result = list.find(dataGroup => dataGroup.id === group);
 
-  // TODO: Find a way to make Rollup not export all exportables inside a "default" property.
+  // TODO: Find a way to make Webpack not export all exportables inside a "default" property.
   if (item) {
     result = result.items.find(dataItem => (dataItem.default?.config.id || dataItem.config.id) === item);
   }

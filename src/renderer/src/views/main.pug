@@ -78,12 +78,11 @@ block body
     .main
       .token-box.main__filler
         .token-box__scroller
-          .token-box__input.data-editor-input(contenteditable spellcheck="false")
+          .token-box__input(contenteditable spellcheck="false")
 
         //- TODO [>=1.0.0]: Use data-popover instead of select.
         //- button.token-box__chevron
-        div.token-box__chevron
-          select.token-box__select(style="min-width: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; opacity: 0")
+        button.token-box__chevron
           +icon('chevron-down').token-box__chevron-icon
 
 
@@ -145,7 +144,6 @@ block body
 
 
 block scripts
-  script(src="../assets/scripts/components/token-box.js")
   script(src="../assets/scripts/components/token.js")
   script(src="../assets/scripts/components/number-input.js")
   script(src="../assets/scripts/data.js")
