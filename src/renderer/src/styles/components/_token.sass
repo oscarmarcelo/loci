@@ -32,20 +32,21 @@
   &--data
     background: var(--color-token-data-background)
 
-    &#{$block}--male
-      background: var(--color-male)
-
-    &#{$block}--female
-      background: var(--color-female)
-
     &#{$block}--selected
       background: var(--color-token-data-selected-background)
 
-      &#{$block}--male
-        background: var(--color-male-highlighted)
+  &--male
+    background: var(--color-male)
 
-      &#{$block}--female
-        background: var(--color-female-highlighted)
+  &--female
+    background: var(--color-female)
+
+  &--selected
+    &#{$block}--male
+      background: var(--color-male-highlighted)
+
+    &#{$block}--female
+      background: var(--color-female-highlighted)
 
   &__icon
     stroke: currentColor
