@@ -37,29 +37,31 @@
         box-shadow: none
 
   &__list
-    padding-bottom: 3px
+    padding:
+      top: 4px
+      bottom: 4px - 1 // 1px is to compensate `&__item` margin-bottom
     flex-grow: 1
     overflow-y: auto
 
   &__group
-    display: flex
-    flex-direction: column
-
-    &:not(&--hidden) ~ &
-      border-top: 1px solid var(--color-separator)
+    &:not(&--hidden):not(:last-child)
+      border-bottom: 1px solid var(--color-separator)
+      margin-bottom: 4px
 
     &--hidden
       display: none
 
   &__heading
-    margin: 12px 10px 6px
+    margin: 0 10px 6px
+    padding-top: 8px // Using padding instead of margin to avoid margin collapse with previous `&__group`.
 
   &__item
     border-radius: 4px
     height: 24px
-    max-width: 100%
+    width: calc(100% - #{4px * 2})
     margin: 0 4px 1px
     padding: 0 6px
+    display: block
     text:
       align: left
       overflow: ellipsis
@@ -68,13 +70,10 @@
     overflow: hidden
     white-space: nowrap
 
-    &:first-child
-      margin-top: 4px
-
-    &--current
+    &--selected
       background: var(--color-separator) // TODO: Not the right variable, but probably the right color.
 
-    &--selected
+    &--highlighted
       color: var(--color-token-selected-text) // TODO: Not the right variable, but probably the right color.
       background: var(--color-token-data-selected-background) // TODO: Not the right variable, but probably the right color.
 
