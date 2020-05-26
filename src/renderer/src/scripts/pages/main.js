@@ -234,6 +234,8 @@ tokenBoxInput.addEventListener('keydown', event => {
 
 
 tokenBoxInput.addEventListener('blur', () => {
+  window.loci.dataSuggestion = undefined;
+
   window.postMessage('close-data-suggestions', null)
     .catch(error => {
       console.error('close-data-suggestions', error);
