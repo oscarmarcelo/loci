@@ -94,7 +94,7 @@ export default (field, value) => {
 
   checkedControl.checked = true;
 
-  window.initButtonGroup(buttonGroupClone);
+  window.initButtonGroup(component);
   appendToSettings(buttonGroupClone);
 
   checkedControl.dispatchEvent(new Event('change', {
