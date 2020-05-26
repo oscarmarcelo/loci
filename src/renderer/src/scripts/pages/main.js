@@ -70,6 +70,8 @@ function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
 
   tokenBoxInput.parentNode.insertBefore(token, tokenBoxInput);
   window.initToken(token);
+
+  tokenBoxInput.focus();
 }
 
 
