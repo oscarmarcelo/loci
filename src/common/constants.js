@@ -11,6 +11,7 @@ export default {
   TOKEN_POPOVER_WINDOW_ID: `${pluginId}.${tokenPopover}`,
   DATA_SUGGESTIONS_WINDOW_ID: `${pluginId}.${selectPopover}.data-suggestions`,
   DATA_LIST_WINDOW_ID: `${pluginId}.${selectPopover}.data-list`,
+  SELECT_WINDOW_ID: `${pluginId}.${selectPopover}.select`,
   DATA_SCRIPTS_ID: 'scripts',
   DATA_SUPPLIER_ACTION: 'SupplyData'
 };

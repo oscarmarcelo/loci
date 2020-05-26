@@ -113,6 +113,12 @@ form.addEventListener('change', event => {
         group: dataListSelect.selectedOptions[0].dataset.group,
         item: value
       };
+    } else if (name === 'languages') {
+      if (Array.isArray(config.languages) === false) {
+        config.languages = [];
+      }
+
+      config.languages.push(value);
     } else {
       config[name] = value;
     }

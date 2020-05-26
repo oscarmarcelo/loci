@@ -4,13 +4,7 @@ const list = document.querySelector('.select-menu__list');
 
 let groups;
 let items;
-let current;
-
-
-
-function setActions(actions) {
-  window.loci.actions = actions;
-}
+let selectedItems;
 
 
 
@@ -32,7 +26,7 @@ function setPlaceholder(text) {
 // const selectMenuListObserver = new MutationObserver(mutations => {
 //   mutations.forEach(mutation => {
 //     if (mutation.attributeName === 'class') {
-//       if (mutation.target.classList.contains('select-menu__item--current')) {
+//       if (mutation.target.classList.contains('select-menu__item--selected')) {
 //         current = mutation.target;
 //       }
 //     }
@@ -50,49 +44,87 @@ function setPlaceholder(text) {
 function setMenu(menu) {
   const menuList = new DocumentFragment();
 
-  // TODO: Support menu lists without groups.
-  menu.forEach(groupObject => {
-    const group = document.createElement('div');
-    const heading = document.createElement('div');
+  const setMenuItem = (parent, itemObject) => {
+    const item = document.createElement('button');
 
-    group.classList.add('select-menu__group');
-    group.dataset.group = groupObject.id;
+    item.classList.add('select-menu__item');
+    item.dataset.value = itemObject.id;
+    item.textContent = itemObject.name;
 
-    heading.classList.add('select-menu__heading', 'heading-1');
-    heading.textContent = groupObject.name;
+    if (itemObject.selected) {
+      item.classList.add('select-menu__item--selected');
+    }
 
-    group.append(heading);
+    item.addEventListener('mousedown', () => {
+      [...items].find(item => item.classList.contains('select-menu__item--highlighted'))
+        ?.classList.remove('select-menu__item--highlighted');
 
-    groupObject.items.forEach(itemObject => {
-      const item = document.createElement('button');
+      if (window.loci.multiple !== true) {
+        [...items].find(item => item.classList.contains('select-menu__item--selected'))
+          ?.classList.remove('select-menu__item--selected');
+      }
 
-      item.classList.add('select-menu__item');
-      item.dataset.value = itemObject.id;
-      item.textContent = itemObject.name;
-
-      item.addEventListener('mousedown', () => {
-        [...items].find(item => item.classList.contains('select-menu__item--current'))
-          ?.classList.remove('select-menu__item--selected', 'select-menu__item--current');
-
-        item.classList.add('select-menu__item--selected', 'select-menu__item--current');
-      });
-
-      item.addEventListener('click', () => {
-        if (window.loci.actions?.includes('submitResult')) {
-          window.postMessage('select-menu__submit-result', {
-            group: groupObject.id,
-            item: itemObject.id
-          })
-            .catch(error => {
-              console.error('select-menu__submit-result', error);
-            });
-        }
-      });
-
-      group.append(item);
+      item.classList.toggle('select-menu__item--highlighted', 'select-menu__item--selected');
     });
 
-    menuList.append(group);
+    item.addEventListener('click', () => {
+      if (window.loci.multiple && item.classList.contains('select-menu__item--selected')) {
+        const selectedIndex = selectedItems.findIndex(selectedItem => selectedItem === item);
+
+        if (selectedIndex > -1) {
+          selectedItems.splice(selectedIndex, 1);
+        }
+      } else {
+        selectedItems.push(item);
+      }
+
+      if (window.loci.actions?.includes('submitResult')) {
+        const result = selectedItems.map(selectedItem => {
+          let currentItem;
+
+          if (selectedItem.parentElement.dataset.group) {
+            currentItem = {
+              group: selectedItem.parentElement.dataset.group,
+              item: selectedItem.dataset.value
+            };
+          } else {
+            currentItem = selectedItem.dataset.value
+          }
+
+          return currentItem;
+        });
+
+        window.postMessage('select-menu__submit-result', result)
+          .catch(error => {
+            console.error('select-menu__submit-result', error);
+          });
+      }
+    });
+
+    parent.append(item);
+  };
+
+  menu.forEach(itemObject => {
+    if (Array.isArray(itemObject.items)) {
+      const group = document.createElement('div');
+      const heading = document.createElement('div');
+
+      group.classList.add('select-menu__group');
+      group.dataset.group = itemObject.id;
+
+      heading.classList.add('select-menu__heading', 'heading-1');
+      heading.textContent = itemObject.name;
+
+      group.append(heading);
+
+      itemObject.items.forEach(subItemObject => {
+        setMenuItem(group, subItemObject);
+      });
+
+      menuList.append(group);
+    } else {
+      setMenuItem(menuList, itemObject);
+    }
   });
 
   // TODO: Find another way to do this, because it defeats the usage of DocumentFragment.
@@ -104,10 +136,10 @@ function setMenu(menu) {
 
   groups = document.querySelectorAll('.select-menu__group');
   items = document.querySelectorAll('.select-menu__item');
-  // TODO: set current item, if available.
+  selectedItems = [...items].filter(item => item.classList.contains('select-menu__item--selected'));
 
-  if (current) {
-    current.scrollIntoView({
+  if (selectedItems.length > 0) {
+    selectedItems[0].scrollIntoView({
       block: 'center'
     });
   }
@@ -172,31 +204,35 @@ function navigateMenu(key) {
   // TODO: Store this globally to avoid regenerating it everytime.
   //       Should be updated on `filterMenu()` or via MutationObserver.
   const visibleItems = [...items].filter(item => item.classList.contains('select-menu__item--hidden') === false);
-  // If there isn't a current, `indexOf` will return `-1`, which will be clamped to `0` in `siblingIndex`,
-  // resulting in the selection of the first item in `sibling`.
-  const currentIndex = visibleItems.indexOf(current);
-  const siblingIndex = Math.min(Math.max(currentIndex + (key === 'ArrowUp' ? -1 : 1), 0), visibleItems.length - 1);
-  const sibling = visibleItems[siblingIndex];
+  const highlightedItem = [...items].find(item => item.classList.contains('select-menu__item--highlighted'));
+  const visibleHighlightedIndex = highlightedItem ? visibleItems.indexOf(highlightedItem) : -1;
+  const visibleSiblingIndex = Math.min(Math.max(visibleHighlightedIndex + (key === 'ArrowUp' ? -1 : 1), 0), visibleItems.length - 1);
+  const visibleSibling = visibleItems[visibleSiblingIndex];
 
-  if (sibling) {
-    if (current) {
-      current.classList.remove('select-menu__item--selected', 'select-menu__item--current');
-    }
+  // TODO: Interrupt function if navigation is already at the edge to avoid sending unncessary IPC.
 
-    sibling.focus();
-    sibling.scrollIntoView({
-      block: 'center'
-    });
-    sibling.classList.add('select-menu__item--selected', 'select-menu__item--current');
-
-    current = sibling;
+  if (highlightedItem) {
+    highlightedItem.classList.remove('select-menu__item--highlighted');
   }
 
+  visibleSibling.classList.add('select-menu__item--highlighted');
+  visibleSibling.scrollIntoView({
+    block: 'center'
+  });
+
   if (window.loci.actions?.includes('navigationResult')) {
-    window.postMessage('select-menu__navigation-result', {
-      group: current.parentElement.dataset.group,
-      item: current.dataset.value
-    })
+    let highlightedItem;
+
+    if (visibleSibling.parentElement.dataset.group) {
+      highlightedItem = {
+        group: visibleSibling.parentElement.dataset.group,
+        item: visibleSibling.dataset.value
+      };
+    } else {
+      highlightedItem = visibleSibling.dataset.value;
+    }
+
+    window.postMessage('select-menu__navigation-result', highlightedItem)
       .catch(error => {
         console.error('select-menu__navigation-result', error);
       });
@@ -212,8 +248,8 @@ input.addEventListener('input', () => {
 
 
 window.addEventListener('blur', () => {
-  [...items].find(item => item.classList.contains('select-menu__item--selected'))
-    ?.classList.remove('select-menu__item--selected');
+  [...items].find(item => item.classList.contains('select-menu__item--highlighted'))
+    ?.classList.remove('select-menu__item--highlighted');
 });
 
 
@@ -222,5 +258,7 @@ window.addEventListener('keydown', event => {
   if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
     event.preventDefault();
     navigateMenu(event.key);
+  } else if (event.key === 'Enter') {
+    [...items].find(item => item.classList.contains('select-menu__item--highlighted')).click();
   }
 });

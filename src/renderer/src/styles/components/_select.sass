@@ -5,11 +5,14 @@
  */
 
 .select
+  $block: &
+  $e-reference: #{$block}__reference
+
   display: inline-flex
   align-items: center
   position: relative
 
-  &__reference
+  @at-root #{$e-reference}
     width: 100%
 
   &__icon
@@ -21,3 +24,50 @@
     position: absolute
     right: 6px
     pointer-events: none
+
+  &--multiple
+    $border-width: 1px
+
+    border: $border-width solid var(--color-label-border)
+      radius: 4px
+    background: var(--color-label-background)
+    min-width: 65px
+    max-width: 100%
+    min-height: 30px
+    padding: (6px - $border-width - 1px) (17px - $border-width) (6px - $border-width - 1px) (6px - $border-width - 1px) // 1px is the token margin.
+
+    #{$e-reference}
+      width: 1px
+      height: 1px
+      position: absolute
+      overflow: hidden
+      clip-path: inset(100%)
+
+    #{$block}__placeholder
+      color: var(--color-placeholder)
+      font-size: 11px
+      line-height: 21px - $border-width * 2
+      letter-spacing: -.07px
+
+      &--hidden
+        display: none
+
+  // TODO: Merge this with `.token`. We also need to separate concerns in JS.
+  &__token
+    border-radius: 3px
+    background: var(--color-token-data-background)
+    color: var(--color-token-text)
+    max-width: 100%
+    margin: 1px
+    padding: 3px 5px
+    display: inline-block
+    white-space: pre
+    text-overflow: ellipsis
+    overflow: hidden
+    font-size: 11px
+    line-height: 12px
+    letter-spacing: -0.07px
+
+    &--selected
+      background: var(--color-token-data-selected-background)
+      color: var(--color-token-selected-text)

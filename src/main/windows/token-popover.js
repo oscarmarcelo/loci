@@ -2,6 +2,7 @@ import BrowserWindow from 'sketch-module-web-view';
 
 import theme from '../utils/theme';
 import constants from '../../common/constants';
+import * as selectPopover from './select-popover';
 
 
 
@@ -70,8 +71,15 @@ export function create(options) {
   });
 
 
-  window.once('blur', () => {
-    window.close();
+  window.on('blur', () => {
+    const selectMenuPopover = BrowserWindow.fromId(constants.SELECT_WINDOW_ID);
+
+    // HACK: Setting timeout to force getting `isFocused()` in the right time.
+    setTimeout(() => {
+      if (selectMenuPopover?.isFocused() !== 1) {
+          window.close();
+        }
+    }, 0);
   });
 
 
@@ -95,6 +103,38 @@ export function create(options) {
       .catch(error => {
         console.error('updateTokenConfig', error);
       });
+  });
+
+
+  window.webContents.on('open-select', options => {
+    const selectMenuPopover = BrowserWindow.fromId(constants.SELECT_WINDOW_ID);
+
+    if (!selectMenuPopover) {
+      selectPopover.create(constants.SELECT_WINDOW_ID, {
+        parent: window,
+        anchorBounds: options.anchorBounds,
+        placeholder: options.placeholder,
+        multiple: options.multiple,
+        menu: options.menu,
+        actions: {
+          submitResult: selectSubmitResult
+        }
+      });
+    }
+
+    function selectSubmitResult(selectedItems) {
+      window.webContents.executeJavaScript(`updateSelectResult("${options.name}", ${JSON.stringify(selectedItems)})`)
+        .catch(error => {
+          console.error('updateSelectResult', error);
+        });
+
+      const selectMenuPopover = BrowserWindow.fromId(constants.SELECT_WINDOW_ID);
+
+      if (selectMenuPopover) {
+        selectMenuPopover.close();
+        options.parent?.focus();
+      }
+    }
   });
 
 

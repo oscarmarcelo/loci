@@ -115,7 +115,9 @@ function createWindow(dataKey, items) {
     // TODO: Consider listing all window ids somewhere on creation.
     const windowIds = [
       constants.TOKEN_POPOVER_WINDOW_ID,
-      constants.DATA_SUGGESTIONS_WINDOW_ID
+      constants.DATA_SUGGESTIONS_WINDOW_ID,
+      constants.DATA_LIST_WINDOW_ID,
+      constants.SELECT_WINDOW_ID
     ];
 
     for (const id of windowIds) {
@@ -157,6 +159,7 @@ function createWindow(dataKey, items) {
       dataSuggestionsPopover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
         parent: window,
         anchorBounds: anchorBounds,
+        align: 'left',
         search: false,
         menu: dataList.map(group => {
           return {
@@ -208,8 +211,11 @@ function createWindow(dataKey, items) {
   }
 
 
-  function dataSuggestionSubmitResult(item) {
-    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(item.group, item.item).config.name}", ${JSON.stringify({data: item})}, false)`);
+  function dataSuggestionSubmitResult(selectedItems) {
+    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(selectedItems[0].group, selectedItems[0].item).config.name}", ${JSON.stringify({data: selectedItems[0]})}, false)`)
+      .catch(error => {
+        console.error(createToken, error);
+      });
 
     const dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
@@ -269,20 +275,18 @@ function createWindow(dataKey, items) {
   });
 
 
-  function dataListSubmitResult(item) {
-    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(item.group, item.item).config.name}", ${JSON.stringify({data: item})})`)
-      .then(() => {
-        const popover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
-
-        if (popover) {
-          console.log('closing popover');
-          popover.close();
-          window.focus();
-        }
-      })
+  function dataListSubmitResult(selectedItems) {
+    window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(selectedItems[0].group, selectedItems[0].item).config.name}", ${JSON.stringify({data: selectedItems[0]})});`)
       .catch(error => {
         console.error('createToken', error);
       });
+
+    const dataListPopover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
+
+    if (dataListPopover) {
+      dataListPopover.close();
+      window.focus();
+    }
   }
 
 
