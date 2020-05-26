@@ -96,17 +96,16 @@ export function create(id, options) {
 
 
   if (options.actions?.navigationResult) {
-    window.webContents.on('select-menu__navigation-result', item => {
+    window.webContents.on('select-menu__navigation-result', highlightedItem => {
 
-      options.actions.navigationResult(item);
+      options.actions.navigationResult(highlightedItem);
     });
   }
 
 
   if (options.actions?.submitResult) {
-    window.webContents.on('select-menu__submit-result', item => {
-
-      options.actions.submitResult(item);
+    window.webContents.on('select-menu__submit-result', selectedItems => {
+      options.actions.submitResult(selectedItems);
     });
   }
 

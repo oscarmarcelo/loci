@@ -6,10 +6,6 @@ let groups;
 let items;
 let current;
 
-if (typeof window.loci === 'undefined') {
-  window.loci = window.loci || {};
-}
-
 
 
 function setActions(actions) {
@@ -125,7 +121,6 @@ function filterMenu(query) {
 
   let numberOfResults = 0;
 
-  // `words` length needs to be checked because `Array.some()` always returns `true` on empty arrays.
   if (words.length > 0) {
     if (groups.length > 0) {
       groups.forEach(group => {

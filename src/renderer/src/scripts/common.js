@@ -5,6 +5,12 @@ document.addEventListener('contextmenu', event => {
 
 
 
+if (typeof window.loci === 'undefined') {
+  window.loci = {};
+}
+
+
+
 function setTheme(theme) {
   const themes = [
     'theme-blue',

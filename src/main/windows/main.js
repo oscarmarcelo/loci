@@ -119,10 +119,10 @@ function createWindow(dataKey, items) {
     ];
 
     for (const id of windowIds) {
-      const window = BrowserWindow.fromId(id);
+      const childWindow = BrowserWindow.fromId(id);
 
-      if (window) {
-        window.close();
+      if (childWindow) {
+        childWindow.close();
       }
     }
 

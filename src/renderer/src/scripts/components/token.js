@@ -82,7 +82,7 @@ function selectToken(token) {
   });
 
   const maybeUnselectToken = event => {
-    if (!event || event.target.nodeType !== 1 || (token !== event.target && token.contains(event.target) === false)) {
+    if (!event || event.target.nodeType !== Node.ELEMENT_NODE || (token !== event.target && token.contains(event.target) === false)) {
       token.classList.remove('token--selected');
 
       window.removeEventListener('mousedown', maybeUnselectToken);
@@ -117,9 +117,9 @@ function selectToken(token) {
 
 // Remove token and select the previous sibling.
 function removeToken(token) {
-  const previousElement = token.previousElementSibling;
-  if (previousElement?.classList.contains('token')) {
-    selectToken(previousElement);
+  const previousToken = token.previousElementSibling;
+  if (previousToken?.classList.contains('token')) {
+    selectToken(previousToken);
   }
 
   token.remove();
