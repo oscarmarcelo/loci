@@ -151,11 +151,10 @@ function createWindow(dataKey, items) {
 
 
   window.webContents.on('data-suggestion', (suggestion, anchorBounds) => {
-    let popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+    let dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (!popover && suggestion?.length > 0) {
-      console.log('creating popover');
-      popover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
+    if (!dataSuggestionsPopover && suggestion?.length > 0) {
+      dataSuggestionsPopover = selectPopover.create(constants.DATA_SUGGESTIONS_WINDOW_ID, {
         parent: window,
         anchorBounds: anchorBounds,
         search: false,
@@ -180,56 +179,51 @@ function createWindow(dataKey, items) {
     }
 
     if (suggestion?.length > 0) {
-      console.log(`filter options: "${suggestion}", ${suggestion.length}`)
-      popover.webContents.executeJavaScript(`filterMenu("${suggestion}")`)
+      dataSuggestionsPopover.webContents.executeJavaScript(`filterMenu("${suggestion}")`)
         .catch(error => {
           console.error('filterMenu', error);
         });
     } else {
-      console.log('hiding popover!');
-      popover?.hide();
+      dataSuggestionsPopover?.hide();
     }
   });
 
 
   function dataSuggestionFilterResult(numberOfResults) {
-    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+    const dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (popover && numberOfResults > 0) {
-      console.log('showing')
-      popover.showInactive();
+    if (dataSuggestionsPopover && numberOfResults > 0) {
+      dataSuggestionsPopover.showInactive();
     } else {
-      console.log('hiding')
-      popover.hide();
+      dataSuggestionsPopover.hide();
     }
   }
 
 
-  function dataSuggestionNavigationResult(item) {
-    window.webContents.executeJavaScript(`suggestionNavigationResult(${JSON.stringify(item)})`)
-    .catch(error => {
-      console.log('suggestionNavigationResult', error);
-    })
+  function dataSuggestionNavigationResult(highlightedItem) {
+    window.webContents.executeJavaScript(`suggestionNavigationResult(${JSON.stringify(highlightedItem)})`)
+      .catch(error => {
+        console.error('suggestionNavigationResult', error);
+      })
   }
 
 
   function dataSuggestionSubmitResult(item) {
     window.webContents.executeJavaScript(`createToken(undefined, "data", "${getData(item.group, item.item).config.name}", ${JSON.stringify({data: item})}, false)`);
 
-    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+    const dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (popover) {
-      console.log('closing')
-      popover.close();
+    if (dataSuggestionsPopover) {
+      dataSuggestionsPopover.close();
     }
   }
 
 
   window.webContents.on('navigate-data-suggestions', key => {
-    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+    const dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (popover) {
-      popover.webContents.executeJavaScript(`navigateMenu("${key}")`)
+    if (dataSuggestionsPopover) {
+      dataSuggestionsPopover.webContents.executeJavaScript(`navigateMenu("${key}")`)
         .catch(error => {
           console.error('navigateMenu', error);
         });
@@ -239,20 +233,18 @@ function createWindow(dataKey, items) {
 
 
   window.webContents.on('close-data-suggestions', () => {
-    const popover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
+    const dataSuggestionsPopover = BrowserWindow.fromId(constants.DATA_SUGGESTIONS_WINDOW_ID);
 
-    if (popover && Boolean(popover.isFocused()) === false) {
-      console.log('closing popover');
-      popover.close();
+    if (dataSuggestionsPopover && Boolean(dataSuggestionsPopover?.isFocused()) === false) {
+      dataSuggestionsPopover.close();
     }
   });
 
 
   window.webContents.on('open-data-list-popover', anchorBounds => {
-    const popover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
+    const dataListPopover = BrowserWindow.fromId(constants.DATA_LIST_WINDOW_ID);
 
-    if (!popover) {
-      console.log('creating popover');
+    if (!dataListPopover) {
       selectPopover.create(constants.DATA_LIST_WINDOW_ID, {
         parent: window,
         anchorBounds: anchorBounds,
