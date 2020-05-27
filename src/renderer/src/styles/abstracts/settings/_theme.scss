@@ -36,6 +36,7 @@ $theme: (
   secondary-label-text: #0000007f #ffffff8c, // inspectorSecondaryLabelTextColor
 
   // Custom
+  window-border: transparent rgba(#fff, .2),
   male: #62ba4626 #62ba4680, // layerListFilterTokenBackgroundColor
   male-highlighted: #62ba46 #62ba46, // layerListFilterTokenSelectedBackgroundColor
   female: #f74f9e26 #f74f9e80, // layerListFilterTokenBackgroundColor
@@ -46,6 +47,7 @@ $theme: (
   token-background: #98989826 #8c8c8c80, // layerListFilterTokenBackgroundColor
   token-selected-background: #989898 #8c8c8c, // layerListFilterTokenSelectedBackgroundColor
   popover-background: #fff rgba(#282828, .93), // colorPlist: popover-window-background, popover-window-background-dark
+  popover-border: transparent rgba(#fff, .2),
   input-no-outline: rgba(#fff, 0) rgba(#000, 0),
   focus-ring-outline: rgba(#005cd7, .44) rgba(#2ea8ff, .5),
   focus-ring-border: rgba(darken(#005cd7, 10%), .55) rgba(lighten(#2ea8ff, 10%), .5)

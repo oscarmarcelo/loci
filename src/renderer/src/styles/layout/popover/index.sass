@@ -3,26 +3,54 @@
 
 
 .popover
+  --caret-position: 50%
+
   &__caret
     border: solid
       width: 0 10px 10px
       color: transparent transparent var(--color-popover-background)
     width: 0
     height: 0
-    margin-left: 50%
+    margin-left: var(--caret-position)
     transform: translateX(-50%)
+    position: relative
+    z-index: 1
+
+    &::after
+      content: ''
+      border: 1px solid var(--color-popover-border)
+      width: 15px + 1
+      height: 15px + 1
+      position: absolute
+      top: 0
+      left: 0
+      transform: rotate(45deg)
+        origin: top left
+      clip-path: polygon(0 0, calc(100% - 2px) 0, calc(100% - 1px) 1px, 1px calc(100% - 1px), 0 calc(100% - 2px))
+      pointer-events: none
+
 
   &__body
     border-radius: 5px
     background: var(--color-popover-background)
     padding: 9px
     overflow: hidden
-    // TODO: Remove this. This kind of layout is now decided on per-page basis.
-    // display: flex
-    // flex-direction: column
+    position: relative
 
     &--full-height
       height: calc(100vh - 10px)
 
     &--no-padding
       padding: 0
+
+    &::after
+      content: ''
+      border: 1px solid var(--color-popover-border)
+        radius: inherit
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+      clip-path: polygon(0 0, calc(var(--caret-position) - 10px) 0, calc(var(--caret-position) - 10px) 1px, calc(var(--caret-position) + 10px) 1px, calc(var(--caret-position) + 10px) 0, 100% 0, 100% 100%, 0 100%)
+      pointer-events: none

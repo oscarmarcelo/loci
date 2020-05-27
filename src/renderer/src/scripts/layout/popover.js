@@ -1,7 +1,7 @@
 function setPopoverCaretPosition(position) {
-  const caret = document.querySelector('.popover__caret');
+  const popover = document.querySelector('.popover');
 
-  caret.style.marginLeft = `${position}px`;
+  popover.style.setProperty('--caret-position', `${position}px`);
 }
 
 // TODO: Safari 13.1+ supports ResizeObserver. Use it when available.
