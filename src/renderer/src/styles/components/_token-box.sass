@@ -4,6 +4,8 @@
  * ========================================================
  */
 
+// 1. Used to increase click area without affecting distance between the anchor and its popover.
+
 .token-box
   $border-width: 1px
 
@@ -40,13 +42,20 @@
       box-shadow: none
 
   &__chevron
-    height: 21px
-    padding: 0 6px
+    padding: 1px
     align-self: center
     display: flex
     align-items: center
     position: absolute
-    right: 0
+    right: 5px
+
+    &::after // [1]
+      content: ''
+      position: absolute
+      top: -8px
+      right: -5px
+      bottom: -8px
+      left: -5px
 
     &-icon
       stroke: var(--color-secondary-label-text)
