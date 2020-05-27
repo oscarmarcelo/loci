@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
   "identifier": "com.oscarmarcelo.loci",
-  "compatibleVersion": "64",
+  "compatibleVersion": "66.1",
   "bundleVersion": 1,
   "suppliesData": true,
   "commands": [
