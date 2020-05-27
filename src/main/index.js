@@ -90,6 +90,7 @@ export function onClearDataRecord() {
 
   items.forEach(item => {
     Settings.setLayerSettingForKey(item, 'dataConfig', undefined);
+    Settings.setLayerSettingForKey(item, 'version', undefined);
   });
 }
 
@@ -101,5 +102,6 @@ export function onRemoveAllOverrides(context) {
 
   items.forEach(item => {
     Settings.setLayerSettingForKey(item, 'symbolDataConfig', undefined);
+    Settings.setLayerSettingForKey(item, 'version', undefined);
   });
 }

@@ -309,6 +309,7 @@ function createWindow(dataKey, items) {
           item = getSelectedDocument().getLayerWithID(dataItem.id);
 
           Settings.setLayerSettingForKey(item, 'dataConfig', dataConfig);
+          Settings.setLayerSettingForKey(item, 'version', constants.PLUGIN_VERSION);
         } else {
           symbol = getSelectedDocument().getLayerWithID(dataItem.parent);
 
@@ -317,6 +318,7 @@ function createWindow(dataKey, items) {
           symbolDataConfig[dataItem.id] = dataConfig;
 
           Settings.setLayerSettingForKey(symbol, 'symbolDataConfig', symbolDataConfig);
+          Settings.setLayerSettingForKey(symbol, 'version', constants.PLUGIN_VERSION);
         }
 
         // This happens when the user wants to use the plugin opened via Inspector Data Override more than once without changing selection.
