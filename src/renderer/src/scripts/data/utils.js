@@ -3,13 +3,15 @@ import faker from 'faker';
 
 
 export function language(language) {
-  if (language && language !== '0') {
-    // TODO: language = faker.random.arrayElement(language);
+  let selectedLanguage;
+
+  if (Array.isArray(language) && language.length > 0) {
+    selectedLanguage = faker.random.arrayElement(language);
   } else {
-    language = faker.random.locale();
+    selectedLanguage = faker.random.locale();
   }
 
-  return language;
+  return selectedLanguage;
 }
 
 
