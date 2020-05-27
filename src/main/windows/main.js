@@ -377,9 +377,9 @@ export function setSelection(dataKey, items) {
   // This check is necessary because it is being called by `SelectionChanged` action,
   // and it doesn't take into account of plugin window existance.
   if (window) {
-    // If `key` is not defined, it means that the items doesn't come from the `DataSupply` action.
+    // If `dataKey` is not defined, it means that the items doesn't come from the `DataSupply` action.
     // If so, filter all items to get only the Text and Text Override items.
-    if (typeof key === 'undefined') {
+    if (typeof dataKey === 'undefined') {
       items = items.filter(item => {
         let result = false;
 
