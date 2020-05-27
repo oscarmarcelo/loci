@@ -61,6 +61,7 @@ export function onSupplyData(context) {
     if (dataConfig && isConnected && Settings.sessionVariable('refreshData') === true) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);
     } else {
+      // TODO: Make mainWindow open only once when there are multiple layers.
       mainWindow.create(context.data.key, items);
     }
 
