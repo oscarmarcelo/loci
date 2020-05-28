@@ -157,7 +157,7 @@ function updateSelectResult(selectName, selectedItems) {
   const reference = document.querySelector(`.select__reference[name="${selectName}"]`);
 
   [...reference.options].forEach(option => {
-    const selected = selectedItems.some(item => typeof item === 'string' ? item === option.value : item.group === option.parentElement.dataset.group && item.id === option.value);
+    const selected = selectedItems.some(item => typeof item === 'string' ? item === option.value : item.group === option.parentElement.dataset.group && item.item === option.value);
 
     option.selected = selected;
   });
