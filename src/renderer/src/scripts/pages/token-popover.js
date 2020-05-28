@@ -93,6 +93,28 @@ for (const group of window.loci.data.list) {
 
 dataListSelect.append(tokenBoxSelectOptions);
 
+dataListSelect.addEventListener('mousedown', event => {
+  event.preventDefault();
+
+  window.postMessage('open-select', {
+    name: dataListSelect.name,
+    anchorBounds: dataListSelect.getBoundingClientRect(),
+    placeholder: dataListSelect.dataset.placeholder,
+    menu: [...dataListSelect.children].map(group => ({
+      id: group.dataset.group,
+      name: group.label,
+      items: [...group.children].map(item => ({
+        id: item.value,
+        name: item.textContent,
+        selected: item.selected
+      }))
+    }))
+  })
+    .catch(error => {
+      console.error('open-select', error);
+    });
+});
+
 
 
 /*
