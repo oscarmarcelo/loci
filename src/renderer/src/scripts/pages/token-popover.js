@@ -23,12 +23,13 @@ function renderTokenSettings(tokenConfig) {
       });
     }
 
-    if (fields[fields.length - 1].type !== 'separator') {
-      fields.push({
-        type: 'separator',
-        fillEdges: true
-      });
-    }
+    // TODO: Uncomment this when the field has its handling finished.
+    // if (fields[fields.length - 1].type !== 'separator') {
+    //   fields.push({
+    //     type: 'separator',
+    //     fillEdges: true
+    //   });
+    // }
 
     for (const field of fields) {
       window.loci.fields(field, tokenConfig);
@@ -49,16 +50,17 @@ function setTokenConfig(tokenConfig) {
   dataListSelect.value = tokenConfig.data.item;
 
   // Then update the Chance of Appearance combo fields.
-  if (tokenConfig.appearance) {
-    const appearance = document.querySelector('[name="appearance"]');
+  // TODO: Uncomment this when the field has its handling finished.
+  // if (tokenConfig.appearance) {
+  //   const appearance = document.querySelector('[name="appearance"]');
 
-    appearance.value = tokenConfig.appearance;
+  //   appearance.value = tokenConfig.appearance;
 
-    // Make range input detect the value change.
-    appearance.dispatchEvent(new Event('change', {
-      cancelable: true
-    }));
-  }
+  //   // Make range input detect the value change.
+  //   appearance.dispatchEvent(new Event('change', {
+  //     cancelable: true
+  //   }));
+  // }
 
   // And then procceed with the data-specific settings.
   renderTokenSettings(tokenConfig);
