@@ -246,16 +246,6 @@ tokenBoxInput.addEventListener('blur', () => {
 
 /*
  * ========================================================
- * Limit inputs
- * ========================================================
- */
-
-pairMinMaxInputs(document.querySelector('.limits__min'), document.querySelector('.limits__max'));
-
-
-
-/*
- * ========================================================
  * Apply Data
  * ========================================================
  */
@@ -313,7 +303,7 @@ applyButton.addEventListener('click', () => {
   for (const [name, value] of formData.entries()) {
     // Only add fields with one of the following conditions:
     // - if aren't related to limits;
-    // - if are related to limits, but only if limit-min or limit-max have values.
+    // - if are related to limits, but only if limit-max have values.
     if (
       (
         value.length > 0 &&
@@ -322,14 +312,8 @@ applyButton.addEventListener('click', () => {
       (
         ['limit-unit', 'ellipsis'].includes(name) &&
         (
-          (
-            formData.get('limit-min') !== null &&
-            formData.get('limit-min') !== ''
-          ) ||
-          (
-            formData.get('limit-max') !== null &&
-            formData.get('limit-max') !== ''
-          )
+          formData.get('limit-max') !== null &&
+          formData.get('limit-max') !== ''
         )
       )
     ) {

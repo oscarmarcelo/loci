@@ -95,25 +95,14 @@ block body
 
 
         .combo-field.limits
-          .input-combo
-            .number-input
-              input.number-input__reference.limits__min(type="number" name="limit-min" min=1 placeholder="Min")
+          .number-input
+            input.number-input__reference.limits__max(type="number" name="limit-max" min=1 placeholder="Max")
 
-              button.number-input__spinner.number-input__spinner--up(tabindex=-1)
-                +icon('spinner-up').number-input__spinner-icon
+            button.number-input__spinner.number-input__spinner--up(tabindex=-1)
+              +icon('spinner-up').number-input__spinner-icon
 
-              button.number-input__spinner.number-input__spinner--down(tabindex=-1)
-                +icon('spinner-down').number-input__spinner-icon
-
-
-            .number-input
-              input.number-input__reference.limits__max(type="number" name="limit-max" min=1 placeholder="Max")
-
-              button.number-input__spinner.number-input__spinner--up(tabindex=-1)
-                +icon('spinner-up').number-input__spinner-icon
-
-              button.number-input__spinner.number-input__spinner--down(tabindex=-1)
-                +icon('spinner-down').number-input__spinner-icon
+            button.number-input__spinner.number-input__spinner--down(tabindex=-1)
+              +icon('spinner-down').number-input__spinner-icon
 
 
           .select
