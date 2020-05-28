@@ -12,7 +12,7 @@ function renderTokenSettings(tokenConfig) {
 
   const option = dataListSelect.selectedOptions[0];
 
-  const dataItem = window.loci.data.get(option.dataset.group, option.value);
+  const dataItem = window.loci.data.get(option.parentElement.dataset.group, option.value);
   const fields = dataItem.config.fields;
 
   if (fields.length > 0) {
@@ -76,14 +76,14 @@ function setTokenConfig(tokenConfig) {
 
 for (const group of window.loci.data.list) {
   const optgroup = document.createElement('optgroup');
-  optgroup.setAttribute('label', group.name);
+  optgroup.label = group.name;
+  optgroup.dataset.group = group.id;
 
   group.items.forEach(({config: item}) => {
     const option = document.createElement('option');
 
     option.textContent = item.name;
     option.value = item.id;
-    option.dataset.group = group.id;
 
     optgroup.append(option);
   });
@@ -112,7 +112,7 @@ form.addEventListener('change', event => {
   for (const [name, value] of formData.entries()) {
     if (name === 'data') {
       config.data = {
-        group: dataListSelect.selectedOptions[0].dataset.group,
+        group: dataListSelect.selectedOptions[0].parentElement.dataset.group,
         item: value
       };
     } else if (name === 'languages') {
