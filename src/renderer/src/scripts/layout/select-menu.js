@@ -68,14 +68,18 @@ function setMenu(menu) {
     });
 
     item.addEventListener('click', () => {
-      if (window.loci.multiple && item.classList.contains('select-menu__item--selected')) {
-        const selectedIndex = selectedItems.findIndex(selectedItem => selectedItem === item);
+      if (window.loci.multiple) {
+        if(item.classList.contains('select-menu__item--selected')) {
+          const selectedIndex = selectedItems.findIndex(selectedItem => selectedItem === item);
 
-        if (selectedIndex > -1) {
-          selectedItems.splice(selectedIndex, 1);
+          if (selectedIndex > -1) {
+            selectedItems.splice(selectedIndex, 1);
+          }
+        } else {
+          selectedItems.push(item);
         }
       } else {
-        selectedItems.push(item);
+        selectedItems[0] = item;
       }
 
       if (window.loci.actions?.includes('submitResult')) {
