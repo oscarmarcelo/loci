@@ -44,6 +44,8 @@ function setPlaceholder(text) {
 function setMenu(menu) {
   const menuList = new DocumentFragment();
 
+  let hasFirstToNavigate;
+
   const setMenuItem = (parent, itemObject) => {
     const item = document.createElement('button');
 
@@ -53,6 +55,11 @@ function setMenu(menu) {
 
     if (itemObject.selected) {
       item.classList.add('select-menu__item--selected');
+
+      if (hasFirstToNavigate !== true) {
+        item.classList.add('js-first-to-navigate');
+        hasFirstToNavigate = true;
+      }
     }
 
     item.addEventListener('mousedown', () => {
@@ -208,7 +215,7 @@ function navigateMenu(key) {
   // TODO: Store this globally to avoid regenerating it everytime.
   //       Should be updated on `filterMenu()` or via MutationObserver.
   const visibleItems = [...items].filter(item => item.classList.contains('select-menu__item--hidden') === false);
-  const highlightedItem = [...items].find(item => item.classList.contains('select-menu__item--highlighted'));
+  const highlightedItem = [...items].find(item => item.classList.contains('select-menu__item--highlighted')) || [...items].find(item => item.classList.contains('js-first-to-navigate'));
   const visibleHighlightedIndex = highlightedItem ? visibleItems.indexOf(highlightedItem) : -1;
   const visibleSiblingIndex = Math.min(Math.max(visibleHighlightedIndex + (key === 'ArrowUp' ? -1 : 1), 0), visibleItems.length - 1);
   const visibleSibling = visibleItems[visibleSiblingIndex];
@@ -216,7 +223,7 @@ function navigateMenu(key) {
   // TODO: Interrupt function if navigation is already at the edge to avoid sending unncessary IPC.
 
   if (highlightedItem) {
-    highlightedItem.classList.remove('select-menu__item--highlighted');
+    highlightedItem.classList.remove('select-menu__item--highlighted', 'js-first-to-navigate');
   }
 
   visibleSibling.classList.add('select-menu__item--highlighted');
