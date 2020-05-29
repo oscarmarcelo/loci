@@ -76,12 +76,6 @@ function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
 
 
 
-function suggestionNavigationResult(highlightedItem) {
-  window.loci.dataSuggestion = highlightedItem;
-}
-
-
-
 function setDataConfig(dataKey, dataItems, documentId) {
   window.loci.dataKey = dataKey;
   window.loci.dataItems = dataItems;

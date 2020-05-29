@@ -204,9 +204,9 @@ function createWindow(dataKey, items) {
 
 
   function dataSuggestionNavigationResult(highlightedItem) {
-    window.webContents.executeJavaScript(`suggestionNavigationResult(${JSON.stringify(highlightedItem)})`)
+    window.webContents.executeJavaScript(`window.loci.dataSuggestion = ${JSON.stringify(highlightedItem)};`)
       .catch(error => {
-        console.error('suggestionNavigationResult', error);
+        console.error('set dataSuggestion', error);
       })
   }
 
