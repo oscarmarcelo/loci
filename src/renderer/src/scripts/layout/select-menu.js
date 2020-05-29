@@ -160,6 +160,7 @@ function setMenu(menu) {
 
 function filterMenu(query) {
   // TODO: Improve this!!!
+  // https://github.com/brianreavis/sifter.js/blob/master/lib/sifter.js#L444
   const words = query.trim().toLowerCase().split(' ').filter(word => word.length > 0 && word !== ' ');
 
   let numberOfResults = 0;
