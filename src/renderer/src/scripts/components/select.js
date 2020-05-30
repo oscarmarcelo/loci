@@ -42,6 +42,11 @@ function createSelectToken(select, text, groupValue, value) {
   token.textContent = text;
 
   token.addEventListener('mousedown', () => {
+    // Ignore if it's not the first click of a click sequence or is in edit mode.
+    if (event.detail > 1 || token.contentEditable === true) {
+      return;
+    }
+
     selectSelectToken(token);
   });
 
@@ -56,7 +61,7 @@ function updateSelectView(select) {
   const placeholder = select.querySelector('.select__placeholder');
   const selectedTokens = [];
 
-  // TODO: Try to use DocumentFragment, for performance reasons, and also because there's a MutationObserver watching.
+  // TODO: Use DocumentFragment.
   select.querySelectorAll('.select__token').forEach(token => {
     if (token.classList.contains('select__token--selected')) {
       selectedTokens.push({
@@ -64,12 +69,13 @@ function updateSelectView(select) {
         value: token.dataset.value
       });
     }
+
     token.remove();
   });
 
   placeholder.classList.toggle('select__placeholder--hidden', [...reference.selectedOptions].length > 0);
 
-  // TODO: Try to use DocumentFragment, for performance reasons, and also because there's a MutationObserver watching.
+  // TODO: Use DocumentFragment.
   [...reference.selectedOptions].forEach(option => {
     const token = createSelectToken(select, option.textContent, option.parentElement.dataset.group, option.value);
     const selectionState = selectedTokens.find(token => token.group === option.parentElement.dataset.group && token.value === option.value);
@@ -86,41 +92,63 @@ function selectSelectToken(token) {
   // TODO: Make the token toggle on click.
   token.classList.add('select__token--selected');
 
-  const maybeUnselectSelectToken = event => {
-    if (
-      !event ||
-      event.target.nodeType !== Node.ELEMENT_NODE ||
-      (
-        token !== event.target &&
-        token.contains(event.target) === false
-      )
-    ) {
-      token.classList.remove('select__token--selected');
+  // Create token event listeners to unselect or remove the token when applicable.
+  ['mousedown', 'blur', 'resize', 'keydown'].forEach(eventName => {
+    window.addEventListener(eventName, eventName === 'keydown' ? maybeRemoveSelectToken : maybeUnselectSelectToken);
+  });
+}
 
-      window.removeEventListener('mousedown', maybeUnselectSelectToken);
-      window.removeEventListener('blur', maybeUnselectSelectToken);
-      window.removeEventListener('resize', maybeUnselectSelectToken);
-      window.removeEventListener('keydown', maybeRemoveSelectToken);
-    }
-  };
 
-  const maybeRemoveSelectToken = event => {
-    if (event.key === 'Backspace') {
-      const token = document.querySelector('.select__token--selected');
 
-      removeSelectToken(token);
+function maybeUnselectSelectToken(event) {
+  let selectedTokens = document.querySelectorAll('.select__token--selected');
 
-      window.removeEventListener('mousedown', maybeUnselectSelectToken);
-      window.removeEventListener('blur', maybeUnselectSelectToken);
-      window.removeEventListener('resize', maybeUnselectSelectToken);
-      window.removeEventListener('keydown', maybeRemoveSelectToken);
-    }
-  };
+  // If the event is directly related to the token, remove it from `selectedTokens`.
+  if (['mousedown', 'keydown'].includes(event.type)) {
+    selectedTokens = [...selectedTokens].filter(selectedToken =>
+      selectedToken !== event.target &&
+      event.target.nodeType === Node.ELEMENT_NODE &&
+      selectedToken.contains(event.target) === false
+    );
+  }
 
-  window.addEventListener('mousedown', maybeUnselectSelectToken);
-  window.addEventListener('blur', maybeUnselectSelectToken);
-  window.addEventListener('resize', maybeUnselectSelectToken);
-  window.addEventListener('keydown', maybeRemoveSelectToken);
+  // Deselect all tokens.
+  selectedTokens.forEach(selectedToken => {
+    selectedToken.classList.remove('select__token--selected');
+  });
+
+  // Remove token event listeners related to deselection or removal if there are no selected tokens.
+  // All tokens were deselected previously. We only need to check if the `event.target`
+  // is also a selected token, to then deselected it.
+  if (
+    event.target.nodeType !== Node.ELEMENT_NODE ||
+    (
+      event.target.classList.contains('select__token--selected') === false &&
+      event.target.closest('.select__token--selected') === null
+    )
+  ) {
+    removeSelectTokenEvents();
+  }
+}
+
+
+
+function maybeRemoveSelectToken(event) {
+  if (event.key === 'Backspace') {
+    const token = document.querySelector('.select__token--selected');
+
+    removeSelectTokenEvents();
+    removeSelectToken(token);
+  }
+}
+
+
+
+// Remove all token event listeners related to deselection or removal.
+function removeSelectTokenEvents() {
+  ['mousedown', 'blur', 'resize', 'keydown'].forEach(eventName => {
+    window.removeEventListener(eventName, eventName === 'keydown' ? maybeRemoveSelectToken : maybeUnselectSelectToken);
+  });
 }
 
 
@@ -128,16 +156,20 @@ function selectSelectToken(token) {
 // Remove token and select the previous sibling.
 function removeSelectToken(token) {
   const reference = token.closest('.select').querySelector('.select__reference');
-  const previousToken = token.previousElementSibling;
 
   [...reference.options].find(option => option.dataset.group === token.dataset.group && option.value === token.dataset.value)
-  .selected = false;
+    .selected = false;
+
+  const previousToken = token.previousElementSibling;
+
+  token.remove();
+
+  // Remove token event listeners related to deselection or removal.
+  removeSelectTokenEvents();
 
   if (previousToken?.classList.contains('select__token')) {
     selectSelectToken(previousToken);
   }
-
-  token.remove();
 
   reference.dispatchEvent(new Event('change', {
     bubbles: true,
