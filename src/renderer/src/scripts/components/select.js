@@ -30,7 +30,7 @@ function initSelect(select) {
 
 
 function createSelectToken(select, text, groupValue, value) {
-  const selectIcon = select.querySelector('select__icon');
+  const tokenList = select.querySelector('.select__token-list');
 
   const token = document.createElement('div');
 
@@ -50,7 +50,7 @@ function createSelectToken(select, text, groupValue, value) {
     selectSelectToken(token);
   });
 
-  select.insertBefore(token, selectIcon);
+  tokenList.append(token);
 
   return token;
 }
