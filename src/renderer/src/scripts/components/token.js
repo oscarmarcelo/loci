@@ -144,18 +144,18 @@ function removeTokenEvents() {
 
 
 
-// Remove token and select the previous sibling.
-function removeToken(token, selectPreviousToken = true) {
-  const previousToken = token.previousElementSibling;
+// Remove token and select a sibling. Look for a previous sibling first, then for the next, if there isn't a previous.
+function removeToken(token, selectSibling = true) {
+  const sibling = token.previousElementSibling || token.nextElementSibling;
 
   token.remove();
 
   // Remove token event listeners related to deselection or removal.
   removeTokenEvents();
 
-  // Select previous sibling token, if there is one and we are allowed to do that.
-  if (previousToken?.classList.contains('token') && selectPreviousToken === true) {
-    selectToken(previousToken);
+  // Select sibling token, if there is one and we are allowed to do that.
+  if (sibling?.classList.contains('token') && selectSibling === true) {
+    selectToken(sibling);
   }
 
   // TODO: Should also select `tokenBoxInput` when possible.

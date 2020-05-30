@@ -153,10 +153,10 @@ function removeSelectTokenEvents() {
 
 
 
-// Remove token and select the previous sibling.
+// Remove token and select a sibling. Look for a previous sibling first, then for the next, if there isn't a previous.
 function removeSelectToken(token) {
   const reference = token.closest('.select').querySelector('.select__reference');
-  const previousToken = token.previousElementSibling;
+  const sibling = token.previousElementSibling || token.nextElementSibling;
 
   [...reference.options].find(option => option.dataset.group === token.dataset.group && option.value === token.dataset.value)
     .selected = false;
@@ -166,8 +166,9 @@ function removeSelectToken(token) {
   // Remove token event listeners related to deselection or removal.
   removeSelectTokenEvents();
 
-  if (previousToken?.classList.contains('select__token')) {
-    selectSelectToken(previousToken);
+  // Select sibling token, if there is one.
+  if (sibling?.classList.contains('select__token')) {
+    selectSelectToken(sibling);
   }
 
   reference.dispatchEvent(new Event('change', {
