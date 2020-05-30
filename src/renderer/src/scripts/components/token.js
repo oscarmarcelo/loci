@@ -146,12 +146,12 @@ function removeTokenEvents() {
 
 // Remove token and select the previous sibling.
 function removeToken(token, selectPreviousToken = true) {
+  const previousToken = token.previousElementSibling;
+
   token.remove();
 
   // Remove token event listeners related to deselection or removal.
   removeTokenEvents();
-
-  const previousToken = token.previousElementSibling;
 
   // Select previous sibling token, if there is one and we are allowed to do that.
   if (previousToken?.classList.contains('token') && selectPreviousToken === true) {
