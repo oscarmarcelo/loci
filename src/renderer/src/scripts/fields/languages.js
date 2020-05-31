@@ -9,9 +9,13 @@ export default (field, selectedLanguages) => {
   const reference = clone.querySelector('.select__reference');
   const availableLanguages = [];
   const options = new DocumentFragment();
+  const languagesBlacklist = [
+    'en_AU_ocker',
+    'en_BORK'
+  ];
 
   Object.entries(faker.locales).forEach(([id, {title: name}]) => {
-    if (faker.locales[id]?.[field.group]?.[field.item]) {
+    if (languagesBlacklist.includes(id) === false && faker.locales[id]?.[field.group]?.[field.item]) {
       availableLanguages.push({
         id,
         name
@@ -19,7 +23,7 @@ export default (field, selectedLanguages) => {
     }
   });
 
-  availableLanguages.forEach(language => {
+  availableLanguages.sort((a, b) => a.name.localeCompare(b.name)).forEach(language => {
     const option = document.createElement('option');
 
     option.value = language.id;
