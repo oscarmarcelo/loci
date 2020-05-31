@@ -12,6 +12,8 @@ const config = {
       type: 'languages',
       group: 'name',
       item: 'first_name'
+      // TODO: We need to combine `first_name`, `male_first_name`, and `female_first_name`.
+      //       `sk` language doesn't have `first_name`.
     },
     {
       type: 'gender'
