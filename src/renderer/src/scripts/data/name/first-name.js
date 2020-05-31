@@ -9,7 +9,9 @@ const config = {
   name: 'First Name',
   fields: [
     {
-      type: 'languages'
+      type: 'languages',
+      group: 'name',
+      item: 'first_name'
     },
     {
       type: 'gender'

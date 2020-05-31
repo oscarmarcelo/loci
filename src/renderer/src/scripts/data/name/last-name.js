@@ -9,7 +9,9 @@ const config = {
   name: 'Last Name',
   fields: [
     {
-      type: 'languages'
+      type: 'languages',
+      group: 'name',
+      item: 'last_name'
     },
     {
       type: 'separator'
