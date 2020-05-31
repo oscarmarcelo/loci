@@ -24,7 +24,7 @@
     "sketch": ">=51.0"
   },
   "dependencies": {
-    "faker": "github:Marak/faker.js",
+    "faker": "github:oscarmarcelo/faker.js",
     "mocha-js-delegate": "^0.2.0",
     "sketch-module-web-view": "^3.4.1"
   },
