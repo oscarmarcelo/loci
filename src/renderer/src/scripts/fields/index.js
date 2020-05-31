@@ -23,7 +23,7 @@ export default (field, tokenConfig) => {
       break;
 
     case 'languages':
-      languages(tokenConfig?.languages);
+      languages(field, tokenConfig?.languages);
       break;
 
     case 'button-group':
