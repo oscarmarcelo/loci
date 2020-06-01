@@ -3,7 +3,7 @@ template#min-max
     .input-combo
       .label-below
         .number-input.label-below__field
-          input.number-input__reference(type="number" name="limit-min" step="any" placeholder="0")
+          input.number-input__reference(type="number" name="min" step="any" placeholder="0")
 
           button.number-input__spinner.number-input__spinner--up(tabindex=-1)
             +icon('spinner-up').number-input__spinner-icon
@@ -16,7 +16,7 @@ template#min-max
 
       .label-below
         .number-input.label-below__field
-          input.number-input__reference(type="number" name="limit-max" step="any" placeholder="100")
+          input.number-input__reference(type="number" name="max" step="any" placeholder="100")
 
           button.number-input__spinner.number-input__spinner--up(tabindex=-1)
             +icon('spinner-up').number-input__spinner-icon
@@ -38,3 +38,10 @@ template#min-max
           +icon('spinner-down').number-input__spinner-icon
 
       .label-below__label Precision
+
+    .label-below
+      .select
+        select.select__reference(name="unit")
+        +icon('chevron-up-down').select__icon
+
+      .label-below__label Unit

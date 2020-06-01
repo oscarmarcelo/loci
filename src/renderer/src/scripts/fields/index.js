@@ -37,7 +37,12 @@ export default (field, tokenConfig) => {
       break;
 
     case 'min-max':
-      minMax(tokenConfig?.['limit-min'], tokenConfig?.['limit-max'], field?.precision, tokenConfig?.precision);
+      minMax(field, {
+        min: tokenConfig?.[`${field.prefix}-min`],
+        max: tokenConfig?.[`${field.prefix}-max`],
+        precision: tokenConfig?.[`${field.prefix}-precision`],
+        unit: tokenConfig?.[`${field.prefix}-unit`]
+      });
       break;
 
     default:

@@ -19,7 +19,8 @@ const config = {
     // },
     {
       type: 'min-max',
-      precision: true
+      prefix: 'limit',
+      usePrecision: true
     },
     {
       type: 'checkbox',
