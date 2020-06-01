@@ -150,7 +150,7 @@ function generator(options) {
 
   const min = Number(options['limit-min']) || 0;
   const max = Number(options['limit-max']) || 100;
-  const precision = options['limit-precision'] && Number(options['limit-precision']) >= 0 ? Number(options['limit-precision']) : 0;
+  const precision = options['limit-precision'] && Number(options['limit-precision']) >= 0 ? Math.min(Number(options['limit-precision']), 20) : 0; // TODO: Number range validation should be in a `validation()`.
   const keepDecimalZeros = options['keep-decimal-zeros'] ? precision : 0;
   const separators = {
     none: '',
@@ -163,7 +163,7 @@ function generator(options) {
     minimumFractionDigits: keepDecimalZeros,
     maximumFractionDigits: precision
   })
-    .formatToParts((Math.random() * (max - min)) + min)
+    .formatToParts((Math.random() * (max - min)) + min) // TODO: `Math.random()` doesn't produce enough fraction digits (should be up to 20).
     .map(({type, value}) => {
       switch (type) {
         case 'group':

@@ -29,7 +29,7 @@ template#min-max
 
     .label-below
       .number-input.label-below__field
-        input.number-input__reference(type="number" name="precision" min=0 step=1 placeholder="0")
+        input.number-input__reference(type="number" name="precision" min=0 max=20 step=1 placeholder="0")
 
         button.number-input__spinner.number-input__spinner--up(tabindex=-1)
           +icon('spinner-up').number-input__spinner-icon
