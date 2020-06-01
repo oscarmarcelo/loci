@@ -12,8 +12,8 @@
           First Beta Release 🤞
         ]]>
       </description>
-      <pubDate>Wed, 27 May 2020 23:51:00 +0000</pubDate>
-      <sparkle:releaseNotesLink>https://oscarmarcelo.com/loci/releases#0.1.0</sparkle:releaseNotesLink>
+      <pubDate>Mon, 1 Jun 2020 12:15:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.1.0</sparkle:releaseNotesLink>
       <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/0.1.0/loci.sketchplugin.zip" sparkle:version="0.1.0"/>
     </item>
   </channel>
