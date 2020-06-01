@@ -1,6 +1,9 @@
-// Disable the context menu (eg. the right click menu) to have a more native feel
+// Disable the context menu (eg. the right click menu) to have a more native feel,
+// but keep it on input fields, so the user can have access to clipboard actions.
 document.addEventListener('contextmenu', event => {
-  // event.preventDefault();
+  if (event.target.tagName !== 'INPUT' && event.target.contentEditable !== 'true') {
+    event.preventDefault();
+  }
 });
 
 

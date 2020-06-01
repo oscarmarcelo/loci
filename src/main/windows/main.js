@@ -30,8 +30,7 @@ function createWindow(dataKey, items) {
     acceptsFirstMouse: true,
     vibrancy: 'sidebar',
     webPreferences: {
-      // TODO [>=1.0.0]: Enable this and disable context menu except for non-input/menu controls.
-      // devTools: false
+      devTools: false
     }
   });
 

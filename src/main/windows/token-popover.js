@@ -21,7 +21,10 @@ export function create(options) {
     show: false,
     frame: false,
     acceptsFirstMouse: true,
-    transparent: true
+    transparent: true,
+    webPreferences: {
+      devTools: false
+    }
   });
 
 
