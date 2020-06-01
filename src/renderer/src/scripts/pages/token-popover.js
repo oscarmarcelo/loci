@@ -34,10 +34,10 @@ function renderTokenSettings(tokenConfig) {
     for (const field of fields) {
       window.loci.fields(field, tokenConfig);
     }
+  }
 
-    if (typeof dataItem.handler === 'function') {
-      dataItem.handler();
-    }
+  if (typeof dataItem.handler === 'function') {
+    dataItem.handler();
   }
 
   window.updatePopoverHeight();
