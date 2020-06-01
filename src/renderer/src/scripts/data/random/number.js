@@ -150,7 +150,7 @@ function generator(options) {
 
   const min = Number(options['limit-min']) || 0;
   const max = Number(options['limit-max']) || 100;
-  const precision = options.precision && Number(options.precision) >= 0 ? Number(options.precision) : 0;
+  const precision = options['limit-precision'] && Number(options['limit-precision']) >= 0 ? Number(options['limit-precision']) : 0;
   const keepDecimalZeros = options['keep-decimal-zeros'] ? precision : 0;
   const separators = {
     none: '',
