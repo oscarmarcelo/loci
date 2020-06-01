@@ -267,27 +267,29 @@ function initNumberInput(component) {
 
 
 function pairMinMaxInputs(minInput, maxInput) {
+  const fixInputValue = limit => {
+    const min = Number.isFinite(minInput.valueAsNumber) ? minInput.valueAsNumber : Number.parseFloat(minInput.placeholder);
+    const max = Number.isFinite(maxInput.valueAsNumber) ? maxInput.valueAsNumber : Number.parseFloat(maxInput.placeholder);
+    const targetInput = limit === 'min' ? minInput : maxInput;
+
+    if (
+      Number.isFinite(min) &&
+      Number.isFinite(max) &&
+      min > max
+    ) {
+      targetInput.valueAsNumber = limit === 'min' ? max : min;
+    }
+  };
+
   ['change', 'pseudo-change'].forEach(event => {
     // Ensure that max limit is not smaller than the min limit.
     minInput.addEventListener(event, () => {
-      if (
-        Number.isFinite(minInput.valueAsNumber) &&
-        Number.isFinite(maxInput.valueAsNumber) &&
-        minInput.valueAsNumber > maxInput.valueAsNumber
-      ) {
-        maxInput.valueAsNumber = minInput.valueAsNumber;
-      }
+      fixInputValue('max');
     });
 
     // Ensure that min limit is not greater than the max limit.
     maxInput.addEventListener(event, () => {
-      if (
-        Number.isFinite(minInput.valueAsNumber) &&
-        Number.isFinite(maxInput.valueAsNumber) &&
-        minInput.valueAsNumber > maxInput.valueAsNumber
-      ) {
-        minInput.valueAsNumber = maxInput.valueAsNumber;
-      }
+      fixInputValue('min');
     });
   });
 }
