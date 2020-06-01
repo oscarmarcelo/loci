@@ -3,7 +3,7 @@
   <channel>
     <title>Loci Release Notes</title>
     <link>https://raw.githubusercontent.com/oscarmarcelo/loci/master/.appcast.xml</link>
-    <description></description>
+    <description>Release notes for Loci, a customizable Sketch Data builder.</description>
     <language>en</language>
     <item>
       <title>Version 0.1.0</title>
@@ -14,7 +14,7 @@
       </description>
       <pubDate>Mon, 1 Jun 2020 12:15:00 +0000</pubDate>
       <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.1.0</sparkle:releaseNotesLink>
-      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/0.1.0/loci.sketchplugin.zip" sparkle:version="0.1.0"/>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.1.0/loci.sketchplugin.zip" sparkle:version="0.1.0"/>
     </item>
   </channel>
 </rss>
