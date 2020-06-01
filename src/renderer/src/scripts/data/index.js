@@ -26,6 +26,7 @@ export const list = [
     id: 'random',
     name: 'Random',
     items: [
+      require('./random/lorem-ipsum'),
       require('./random/number')
     ]
   }
