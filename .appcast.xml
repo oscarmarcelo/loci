@@ -6,6 +6,20 @@
     <description>Release notes for Loci, a customizable Sketch Data builder.</description>
     <language>en</language>
     <item>
+      <title>Version 0.1.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fix Number data token not applying the correct precision setting;</li>
+            <li>Fix context menu being enabled in non-input areas.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Mon, 1 Jun 2020 20:35:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.1.1</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.1.1/loci.sketchplugin.zip" sparkle:version="0.1.1"/>
+    </item>
+    <item>
       <title>Version 0.1.0</title>
       <description>
         <![CDATA[
