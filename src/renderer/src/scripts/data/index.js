@@ -8,6 +8,13 @@ export const list = [
     ]
   },
   {
+    id: 'art-design',
+    name: 'Art & Design',
+    items: [
+      require('./art-design/color-name')
+    ]
+  },
+  {
     id: 'finance',
     name: 'Finance',
     items: [
