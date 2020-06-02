@@ -11,7 +11,8 @@ export const list = [
     id: 'address',
     name: 'Address',
     items: [
-      require('./address/country')
+      require('./address/country'),
+      require('./address/country-code')
     ]
   },
   {
