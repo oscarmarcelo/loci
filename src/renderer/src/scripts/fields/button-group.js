@@ -1,11 +1,13 @@
 import {appendToSettings} from './utils';
 
-export default (field, value) => {
+export default (field, value = field.default) => {
   const buttonGroupTemplate = document.querySelector('#button-group');
   const buttonTemplate = document.querySelector('#button-group__button');
   const buttonGroupClone = buttonGroupTemplate.content.cloneNode(buttonGroupTemplate);
   const component = buttonGroupClone.querySelector('.button-group');
   const buttonList = buttonGroupClone.querySelector('.button-group__list');
+
+  const excludedItems = field.exclude;
 
   if (field.type === 'gender') {
     field = {
@@ -63,6 +65,10 @@ export default (field, value) => {
         }
       ]
     };
+  }
+
+  if (excludedItems) {
+    field.items = field.items.filter(item => excludedItems.includes(item.value) === false);
   }
 
   if (field.largeButtonText) {
