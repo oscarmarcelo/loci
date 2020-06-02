@@ -21,7 +21,7 @@ const config = {
 
 
 function generator(options) {
-  return textTransform(faker.internet.protocol(), options['text-transform'], 'en');
+  return textTransform(faker.internet.protocol(), options['text-transform']);
 }
 
 

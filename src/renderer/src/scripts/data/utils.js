@@ -30,7 +30,7 @@ export function gender(gender) {
 
 
 
-export function textTransform(text, transform, language) {
+export function textTransform(text, transform, language = 'en') {
   language = language.replace('_', '-');
 
   if (typeof transform === 'string') {

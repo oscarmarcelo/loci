@@ -234,7 +234,7 @@ function generator(options) {
     result = result.join('\u2029');
   }
 
-  return textTransform(result, options['text-transform'], 'en');
+  return textTransform(result, options['text-transform']);
 }
 
 

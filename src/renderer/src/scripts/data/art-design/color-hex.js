@@ -41,7 +41,7 @@ function generator(options) {
     color = color.slice(1);
   }
 
-  return textTransform(color, transform, 'en');
+  return textTransform(color, transform);
 }
 
 
