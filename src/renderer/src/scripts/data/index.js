@@ -11,7 +11,8 @@ export const list = [
     id: 'art-design',
     name: 'Art & Design',
     items: [
-      require('./art-design/color-name')
+      require('./art-design/color-name'),
+      require('./art-design/color-hex')
     ]
   },
   {
