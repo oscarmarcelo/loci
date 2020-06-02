@@ -8,6 +8,13 @@ export const list = [
     ]
   },
   {
+    id: 'address',
+    name: 'Address',
+    items: [
+      require('./address/country')
+    ]
+  },
+  {
     id: 'art-design',
     name: 'Art & Design',
     items: [
