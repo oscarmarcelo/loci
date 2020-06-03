@@ -351,7 +351,12 @@ function createWindow(dataKey, items) {
 }
 
 
-
+/**
+ * Create a new main window if there isn't one, or show the existing one.
+ *
+ * @param {string | boolean} dataKey The Data Supplier key. If explicitly set to `false`, it will signal `setDataConfig()` that any existing Data Keys should be removed.
+ * @param {array} items The selected Sketch layers.
+ */
 export function create(dataKey, items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
@@ -368,7 +373,12 @@ export function create(dataKey, items) {
 }
 
 
-
+/**
+ * Sends update information to the webview of the current selected layers.
+ *
+ * @param {string | boolean} dataKey The Data Supplier key. If explicitly set to `false`, it will signal `setDataConfig()` that any existing Data Keys should be removed.
+ * @param {array} items The selected Sketch layers.
+ */
 export function setSelection(dataKey, items) {
   const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
 
@@ -422,12 +432,6 @@ export function setSelection(dataKey, items) {
         })
       }
     });
-
-    // Prepare Data Key to be sent.
-    // REVIEW: Investigate why dataKey is an object.
-    if (typeof dataKey !== 'undefined') {
-      dataKey = String(dataKey);
-    }
 
     // TODO: Find a way to detect when the document focus changed and trigger a new selection instead.
     const documentId = getSelectedDocument().id;

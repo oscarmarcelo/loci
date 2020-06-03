@@ -80,15 +80,15 @@ function setDataConfig(options) {
   // Set datakey, dataItems, and documentId.
   // If an option is explicitly set to `false`, then remove the property.
   if (typeof options.dataKey !== 'undefined') {
-    window.loci.dataKey = options.dataKey ?? undefined;
+    window.loci.dataKey = options.dataKey || undefined;
   }
 
   if (typeof options.dataItems !== 'undefined') {
-    window.loci.dataItems = options.dataItems ?? undefined;
+    window.loci.dataItems = options.dataItems || undefined;
   }
 
   if (typeof options.documentId !== 'undefined') {
-    window.loci.document = options.documentId ?? undefined;
+    window.loci.document = options.documentId || undefined;
   }
 
   const tokens = tokenBoxScroller.querySelectorAll('.token');

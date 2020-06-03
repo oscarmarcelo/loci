@@ -10,7 +10,7 @@ import {getOverrideDataConfig} from './utils/overrides';
 export default function () {
   const items = getSelectedDocument()?.selectedLayers?.layers || [];
 
-  mainWindow.create(undefined, items);
+  mainWindow.create(false, items);
 }
 
 
@@ -62,7 +62,9 @@ export function onSupplyData(context) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);
     } else {
       // TODO: Make mainWindow open only once when there are multiple layers.
-      mainWindow.create(context.data.key, items);
+
+      // REVIEW: Forcing Data Key to be a string, since it comes as an object.
+      mainWindow.create(String(context.data.key), items);
     }
 
     Settings.setSessionVariable('refreshData', undefined);
@@ -81,7 +83,7 @@ export function onRefreshData() {
 export function onSelectionChanged(context) {
   const items = toArray(context.actionContext.newSelection).map(fromNative);
 
-  mainWindow.setSelection(undefined, items);
+  mainWindow.setSelection(false, items);
 }
 
 
