@@ -76,10 +76,20 @@ function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
 
 
 
-function setDataConfig(dataKey, dataItems, documentId) {
-  window.loci.dataKey = dataKey;
-  window.loci.dataItems = dataItems;
-  window.loci.document = documentId;
+function setDataConfig(options) {
+  // Set datakey, dataItems, and documentId.
+  // If an option is explicitly set to `false`, then remove the property.
+  if (typeof options.dataKey !== 'undefined') {
+    window.loci.dataKey = options.dataKey ?? undefined;
+  }
+
+  if (typeof options.dataItems !== 'undefined') {
+    window.loci.dataItems = options.dataItems ?? undefined;
+  }
+
+  if (typeof options.documentId !== 'undefined') {
+    window.loci.document = options.documentId ?? undefined;
+  }
 
   const tokens = tokenBoxScroller.querySelectorAll('.token');
 
@@ -92,7 +102,7 @@ function setDataConfig(dataKey, dataItems, documentId) {
 
   // TODO: Handle multiple selections.
   //       Analyze dataConfigs and decide what to show.
-  const dataConfig = dataItems.find(item => item.dataConfig)?.dataConfig || {};
+  const dataConfig = options.dataItems.find(item => item.dataConfig)?.dataConfig || {};
 
   dataConfig.tokens?.forEach(tokenConfig => {
     let name;
