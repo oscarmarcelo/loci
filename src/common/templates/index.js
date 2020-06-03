@@ -1,5 +1,3 @@
-import ip from './ip';
-
-export default {
-  ip
-};
+export default [
+  require('./ip')
+];
