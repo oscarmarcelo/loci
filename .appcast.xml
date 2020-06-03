@@ -5,6 +5,29 @@
     <link>https://raw.githubusercontent.com/oscarmarcelo/loci/master/.appcast.xml</link>
     <description>Release notes for Loci, a customizable Sketch Data builder.</description>
     <language>en</language>
+
+    <item>
+      <title>Version 0.2.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Add 4 more Data Tokens:
+              <ul>
+                <li>Color</li>
+                <li>Hex Color</li>
+                <li>Country</li>
+                <li>Country Code</li>
+              </ul>
+            </li>
+            <li>Temporarily change Release Notes link to GitHub Releases.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Wed, 3 Jun 2020 10:52:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.2.0</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.2.0/loci.sketchplugin.zip" sparkle:version="0.2.0"/>
+    </item>
+
     <item>
       <title>Version 0.1.1</title>
       <description>
@@ -19,6 +42,7 @@
       <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.1.1</sparkle:releaseNotesLink>
       <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.1.1/loci.sketchplugin.zip" sparkle:version="0.1.1"/>
     </item>
+
     <item>
       <title>Version 0.1.0</title>
       <description>
