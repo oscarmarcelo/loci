@@ -7,6 +7,22 @@
     <language>en</language>
 
     <item>
+      <title>Version 0.2.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fix Sketch Data sometimes being applied to some layers of the previous selection.</li>
+            <li>Fix plugin window still opening on "Refresh Data" when there are both Text layers and Symbols selected.</li>
+            <li>Fix some native system controls, like the scrollbars, still showing with the light color scheme when Sketch or macOS is in Dark Mode.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Thu, 4 Jun 2020 14:43:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.2.1</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.2.1/loci.sketchplugin.zip" sparkle:version="0.2.1"/>
+    </item>
+
+    <item>
       <title>Version 0.2.0</title>
       <description>
         <![CDATA[
