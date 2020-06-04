@@ -3,7 +3,7 @@ import {toArray} from 'util';
 
 import constants from '../common/constants';
 import * as mainWindow from './windows/main';
-import {getOverrideDataConfig} from './utils/overrides';
+import {getSelectedOverrides, getOverrideDataConfig} from './utils/overrides';
 
 
 
@@ -29,11 +29,11 @@ export function onShutdown() {
 
 
 export function onSupplyData(context) {
-  const items = toArray(context.data.items).map(fromNative).filter(({type}) => ['Text', 'DataOverride'].includes(type));
+  const items = toArray(context.data.items).map(fromNative);
 
-  // TODO: Find out why when selecting a Text layer and a Text Override,
-  //       `context.data` only returns one type, not both,
-  //       but when `RefreshData` is called, it returns all of them.
+  // TODO [>=1.0.0]: Find out why when selecting a Text layers and a Text Overrides go in separate actions,
+  //                 causing only one of both types having data applied.
+  //                 Find a way to get both and apply data using the appropriate Data Key.
 
   items.forEach((item, index) => {
     let dataConfig;
@@ -57,8 +57,10 @@ export function onSupplyData(context) {
     const dataSupplierId = [constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_');
     const isConnected = String(layer.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId;
 
+    let itemsToRefresh = Settings.sessionVariable('itemsToRefresh');
+
     // REVIEW: Find a way to make `onDataSupply()` distinguish a `RefreshData` from a `DataSupply` action natively.
-    if (dataConfig && isConnected && Settings.sessionVariable('refreshData') === true) {
+    if (dataConfig && isConnected && Number.isFinite(itemsToRefresh) && itemsToRefresh > 0) {
       DataSupplier.supplyDataAtIndex(context.data.key, mainWindow.generateData(dataConfig), index);
     } else {
       // TODO: Make mainWindow open only once when there are multiple layers.
@@ -67,7 +69,10 @@ export function onSupplyData(context) {
       mainWindow.create(String(context.data.key), items);
     }
 
-    Settings.setSessionVariable('refreshData', undefined);
+    // Decrease number of items left to refresh.
+    if (Number.isFinite(itemsToRefresh)) {
+      Settings.setSessionVariable('itemsToRefresh', itemsToRefresh > 1 ? --itemsToRefresh : undefined);
+    }
   });
 }
 
@@ -75,7 +80,32 @@ export function onSupplyData(context) {
 
 export function onRefreshData() {
   // REVIEW: Find a way to make `onDataSupply()` distinguish a `RefreshData` from a `DataSupply` action natively.
-  Settings.setSessionVariable('refreshData', true);
+  //         Also, see if it is possible to merge multiple `DataSupply` actions, since DataOverrides goes in a separate
+  //         `DataSupply` action instead of going in the same action with the Text layers.
+
+  const items = getSelectedDocument()?.selectedLayers?.layers || [];
+
+  // TODO: Find a way to get the identifier without hardcoding it.
+  //       Still missing the handler part: [context.plugin.identifier(), context.command.identifier()].join('_').
+  const dataSupplierId = [constants.PLUGIN_ID, constants.DATA_SCRIPTS_ID, constants.DATA_SUPPLIER_ACTION].join('_');
+
+  let itemsToRefresh = 0;
+
+  items.forEach(item => {
+    if (item.type === 'Text') {
+      if (String(item.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId) {
+        itemsToRefresh++;
+      }
+    } else if (item.type === 'SymbolInstance' && item?.overrides.length > 0) {
+      getSelectedOverrides(item).forEach(override => {
+        if (String(override.affectedLayer.sketchObject.userInfo()?.valueForKey('datasupplier.key')) === dataSupplierId) {
+          itemsToRefresh++;
+        }
+      });
+    }
+  });
+
+  Settings.setSessionVariable('itemsToRefresh', itemsToRefresh);
 }
 
 
