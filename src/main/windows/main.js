@@ -374,7 +374,7 @@ export function create(dataKey, items) {
 
 
 /**
- * Sends update information to the webview of the current selected layers.
+ * Sends updated information to the webview of the current selected layers.
  *
  * @param {string | boolean} dataKey The Data Supplier key. If explicitly set to `false`, it will signal `setDataConfig()` that any existing Data Keys should be removed.
  * @param {array} items The selected Sketch layers.
