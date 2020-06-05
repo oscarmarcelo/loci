@@ -14,7 +14,7 @@ function initNumberInput(component) {
     const max = Number.parseFloat(input.max);
 
     // If `input` doesn't have a value, use placeholder as fallback.
-    let value = input.valueAsNumber || Number.parseFloat(input.placeholder);
+    let value = Number.isFinite(input.valueAsNumber) ? input.valueAsNumber : Number.parseFloat(input.placeholder);
 
     // If `value` is a number, increase/decrease it. If not, fallback to `0`.
     if (Number.isFinite(value)) {
