@@ -64,7 +64,7 @@ const config = {
       id: 'sentence-separator',
       items: [
         {
-          value: 'dot',
+          value: 'space',
           text: 'Space',
           description: 'Use a space between sentences.',
           buttonText: '⌴'
@@ -113,6 +113,7 @@ const config = {
     }
   ]
 };
+
 
 
 function handler() {

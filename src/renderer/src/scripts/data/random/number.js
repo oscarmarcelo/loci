@@ -102,6 +102,7 @@ const config = {
 };
 
 
+
 // Ensure that number doesn't use dot or comma for both `group-separator` and the `decimal-separator`.
 function handler() {
   const groupSeparatorInputs = document.querySelectorAll('[name="group-separator"]');
