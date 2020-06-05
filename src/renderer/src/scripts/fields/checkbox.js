@@ -8,7 +8,7 @@ export default (field, value) => {
   const description = clone.querySelector('.checkable__description');
 
   control.name = field.id;
-  if (value === 'on') {
+  if (['on', true].includes(value)) {
     control.checked = true;
   }
 
