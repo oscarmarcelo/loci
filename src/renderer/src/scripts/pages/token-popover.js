@@ -129,7 +129,7 @@ form.addEventListener('change', event => {
   }
 
   const formData = new FormData(form);
-  const config = {};
+  let config = {};
 
   for (const [name, value] of formData.entries()) {
     if (name === 'data') {
@@ -146,6 +146,12 @@ form.addEventListener('change', event => {
     } else {
       config[name] = value;
     }
+  }
+
+  const dataItem = window.loci.data.get(config.data.group, config.data.item);
+
+  if (typeof dataItem.sanitize === 'function') {
+    config = dataItem.sanitize(config);
   }
 
   window.postMessage('update-token-config', config)
