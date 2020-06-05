@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-// import {language} from '../utils';
+import {/*language, */sanitizeValue} from '../utils';
 
 
 
@@ -22,6 +22,15 @@ const config = {
 
 
 
+function sanitize (options) {
+  // Expect a boolean. Default is `false` (undefined).
+  options.formatted = sanitizeValue('boolean', options.formatted);
+
+  return options;
+}
+
+
+
 function generator(options) {
   // const _language = language(options.languages);
 
@@ -32,5 +41,6 @@ function generator(options) {
 
 export default {
   config,
+  sanitize,
   generator
 };
