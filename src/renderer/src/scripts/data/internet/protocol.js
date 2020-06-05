@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {textTransform} from '../utils';
+import {textTransform, sanitizeValue} from '../utils';
 
 
 
@@ -20,6 +20,15 @@ const config = {
 
 
 
+function sanitize(options) {
+  // Expect a string. Default is 'none'.
+  options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');
+
+  return options;
+}
+
+
+
 function generator(options) {
   return textTransform(faker.internet.protocol(), options['text-transform']);
 }
@@ -28,5 +37,6 @@ function generator(options) {
 
 export default {
   config,
+  sanitize,
   generator
 };
