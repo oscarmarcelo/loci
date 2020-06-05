@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {textTransform} from '../utils';
+import {textTransform, sanitizeValue} from '../utils';
 
 
 
@@ -10,8 +10,9 @@ const config = {
   fields: [
     {
       type: 'checkbox',
-      id: 'no-number-sign',
-      text: 'Hide “#” before value.'
+      id: 'number-sign',
+      text: 'Show “#” before value.',
+      checked: true
     },
     {
       type: 'separator'
@@ -31,13 +32,25 @@ const config = {
 
 
 
+function sanitize(options) {
+  // Expect a boolean. Although default is `true`.
+  options['number-sign'] = sanitizeValue('boolean', options['number-sign'], true);
+
+  // Expect a string. Default is 'none'.
+  options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');
+
+  return options;
+}
+
+
+
 function generator(options) {
   // Make Hex print in uppercase by default.
   const transform = options['text-transform'] === 'none' ? 'uppercase' : options['text-transform'];
 
   let color = faker.internet.color();
 
-  if (['on', true].includes(options['no-number-sign'])) {
+  if (['off', false].includes(options['number-sign'])) {
     color = color.slice(1);
   }
 
@@ -48,5 +61,6 @@ function generator(options) {
 
 export default {
   config,
+  sanitize,
   generator
 };
