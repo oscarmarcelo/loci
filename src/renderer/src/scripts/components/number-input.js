@@ -13,41 +13,27 @@ function initNumberInput(component) {
     const min = Number.parseFloat(input.min);
     const max = Number.parseFloat(input.max);
 
-    let value = input.valueAsNumber;
+    // If `input` doesn't have a value, use placeholder as fallback.
+    let value = input.valueAsNumber || Number.parseFloat(input.placeholder);
 
-
-    // Set a base value if there isn't, having limits in mind.
-    if (Number.isNaN(value)) {
+    // If `value` is a number, increase/decrease it. If not, fallback to `0`.
+    if (Number.isFinite(value)) {
+      value += direction === 'up' ? step : -step;
+    } else {
       value = 0;
-
-      if (Number.isFinite(min)) {
-        value = Math.max(value, min);
-      }
-
-      if (Number.isFinite(max)) {
-        value = Math.min(value, max);
-      }
     }
 
+    // Ensure that `value` is between `min` and `max`, if defined.
 
-    // Step up/down value, having limits in mind.
-    if (direction === 'up') {
-      if (Number.isFinite(max) && value + step > max) {
-        value = max;
-      } else {
-        value += step;
-      }
-    } else {
-      // eslint-disable-next-line no-lonely-if
-      if (Number.isFinite(min) && value - step < min) {
-        value = min;
-      } else {
-        value -= step;
-      }
+    if (Number.isFinite(min)) {
+      value = Math.max(value, min);
+    }
+
+    if (Number.isFinite(max)) {
+      value = Math.min(value, max);
     }
 
     input.valueAsNumber = value;
-
 
     // This event is used to sync with other fields without triggering `input` or `change`.
     input.dispatchEvent(new Event('pseudo-change', {
