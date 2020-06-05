@@ -33,8 +33,8 @@ const config = {
 
 
 function sanitize(options) {
-  // Expect a boolean. Default is `false` (undefined).
-  options.formatted = sanitizeValue('boolean', options.formatted);
+  // Expect a boolean. Default is `false`.
+  options.formatted = sanitizeValue('boolean', options.formatted, false);
 
   // Expect a string. Default is 'none'.
   options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');

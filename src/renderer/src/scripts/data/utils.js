@@ -84,8 +84,12 @@ export function sanitizeValue(type, value, excluders = [], options = {}, callbac
     if (excluders?.includes(result)) {
       result = undefined;
     }
-  } else if (type === 'boolean' && ['on', true].includes(value)) {
-    result = true;
+  } else if (type === 'boolean') {
+    if (['on', true].includes(value) && excluders?.some(excluder => ['on', true].includes(excluder)) === false) {
+      result = true;
+    } else if (['off', false].includes(value) && excluders?.some(excluder => ['off', false].includes(excluder)) === false) {
+      result = false;
+    }
   }
 
 

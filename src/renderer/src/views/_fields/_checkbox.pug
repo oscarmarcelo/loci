@@ -9,3 +9,6 @@ template#checkbox
       .checkable__label
 
     small.checkable__description
+
+    //- Used as replacement when the checkbox is not checked, since form submission doesn't collect it when unchecked.
+    input.checkable__replacement-reference(type="hidden" value="off" disabled)

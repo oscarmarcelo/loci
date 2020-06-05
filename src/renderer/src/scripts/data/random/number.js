@@ -161,8 +161,8 @@ function sanitize(options) {
     max: 20
   });
 
-  // Expect a boolean. Default is `false` (undefined).
-  options['keep-decimal-zeros'] = sanitizeValue('boolean', options['keep-decimal-zeros']);
+  // Expect a boolean. Default is `false`.
+  options['keep-decimal-zeros'] = sanitizeValue('boolean', options['keep-decimal-zeros'], false);
 
   // Expect a string. Default is `none`.
   options['group-separator'] = sanitizeValue('string', options['group-separator'], 'none'); // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.

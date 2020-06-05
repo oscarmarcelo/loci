@@ -33,7 +33,7 @@ export default (field, tokenConfig) => {
       break;
 
     case 'checkbox':
-      checkbox(field, tokenConfig?.[field.id] || tokenConfig?.[field.type]);
+      checkbox(field, tokenConfig?.[field.id]);
       break;
 
     case 'min-max':
