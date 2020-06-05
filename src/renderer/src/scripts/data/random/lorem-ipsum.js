@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {textTransform} from '../utils';
+import {textTransform, sanitizeValue} from '../utils';
 
 
 
@@ -14,12 +14,12 @@ const config = {
       min: {
         min: 1,
         step: 1,
-        placeholder: '1'
+        placeholder: 1
       },
       max: {
         min: 1,
         step: 1,
-        placeholder: '10'
+        placeholder: 10
       },
       units: [
         {
@@ -47,12 +47,12 @@ const config = {
       min: {
         min: 1,
         step: 1,
-        placeholder: '3'
+        placeholder: 3
       },
       max: {
         min: 1,
         step: 1,
-        placeholder: '15'
+        placeholder: 15
       }
     },
     {
@@ -67,7 +67,7 @@ const config = {
           value: 'space',
           text: 'Space',
           description: 'Use a space between sentences.',
-          buttonText: '⌴'
+          buttonText: '⌴' // TODO: Use an icon instead. This character isn't really beautiful.
         },
         {
           value: 'line-break',
@@ -93,12 +93,12 @@ const config = {
       min: {
         min: 1,
         step: 1,
-        placeholder: '1'
+        placeholder: 1
       },
       max: {
         min: 1,
         step: 1,
-        placeholder: '5'
+        placeholder: 5
       }
     },
     {
@@ -173,17 +173,76 @@ function handler() {
 
 
 
+function sanitize(options) {
+  const amountConfig = config.fields.find(field => field.prefix === 'amount');
+  const wordConfig = config.fields.find(field => field.prefix === 'word');
+  const sentenceConfig = config.fields.find(field => field.prefix === 'sentence');
+
+  // Expect a number. Default is 1.
+  options['amount-min'] = sanitizeValue('number', options['amount-min'], amountConfig.min.placeholder, {
+    roundingMethod: 'floor',
+    min: amountConfig.min.min
+  });
+
+  // Expect a number. Default is 10.
+  options['amount-max'] = sanitizeValue('number', options['amount-max'], amountConfig.max.placeholder, {
+    roundingMethod: 'floor',
+    min: amountConfig.max.min
+  });
+
+  // Expect a string. Default is 'word'.
+  options['amount-unit'] = sanitizeValue('string', options['amount-unit'], amountConfig.units.find(unit => unit.selected));
+
+  // Expect a number. Default is 3.
+  options['word-min'] = sanitizeValue('number', options['word-min'], wordConfig.min.placeholder, {
+    roundingMethod: 'floor',
+    min: wordConfig.min.min
+  });
+
+  // Expect a number. Default is 15.
+  options['word-max'] = sanitizeValue('number', options['word-max'], wordConfig.max.placeholder, {
+    roundingMethod: 'floor',
+    min: wordConfig.max.min
+  });
+
+  // Expect a string. Default is 'space'.
+  options['sentence-separator'] = sanitizeValue('string', options['sentence-separator'], 'space'); // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.
+
+  // Expect a number. Default is 1.
+  options['sentence-min'] = sanitizeValue('number', options['sentence-min'], sentenceConfig.min.placeholder, {
+    roundingMethod: 'floor',
+    min: sentenceConfig.min.min
+  });
+
+  // Expect a number. Default is 5.
+  options['sentence-max'] = sanitizeValue('number', options['sentence-max'], sentenceConfig.max.placeholder, {
+    roundingMethod: 'floor',
+    min: sentenceConfig.max.min
+  });
+
+  // Expect a string. Default is 'none'.
+  options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');
+
+  return options;
+}
+
+
+
 function generator(options) {
-  const minAmount = Number(options['amount-min']) || 1;
-  const maxAmount = Number(options['amount-max']) || 10;
-  const amountUnit = options['amount-unit'] || 'word';
+  const amountConfig = config.fields.find(field => field.prefix === 'amount');
+  const wordConfig = config.fields.find(field => field.prefix === 'word');
+  const sentenceConfig = config.fields.find(field => field.prefix === 'sentence');
 
-  const minWords = Number(options['word-min']) || 3;
-  const maxWords = Number(options['word-max']) || 15;
-
-  const minSentences = Number(options['sentence-min']) || 1;
-  const maxSentences = Number(options['sentence-max']) || 5;
-
+  options = Object.assign({
+    'amount-min': amountConfig.min.placeholder,
+    'amount-max': amountConfig.max.placeholder,
+    'amount-unit': amountConfig.units.find(unit => unit.selected),
+    'word-min': wordConfig.min.placeholder,
+    'word-max': wordConfig.max.placeholder,
+    'sentence-separator': 'space', // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.
+    'sentence-min': sentenceConfig.min.placeholder,
+    'sentence-max': sentenceConfig.max.placeholder
+  }, options);
 
   let sentenceSeparator;
 
@@ -201,31 +260,31 @@ function generator(options) {
       break;
   }
 
-  let amount = (Math.random() * (maxAmount - minAmount)) + minAmount;
+  let amount = (Math.random() * (options['amount-max'] - options['amount-min'])) + options['amount-min'];
   let result;
 
-  if (amountUnit === 'word') {
+  if (options['amount-unit'] === 'word') {
     result = faker.lorem.words(amount);
     result = `${result.charAt(0).toUpperCase()}${result.slice(1)}`;
-  } else if (amountUnit === 'sentence') {
+  } else if (options['amount-unit'] === 'sentence') {
     result = [];
 
     for (amount; amount > 0; amount--) {
-      const wordAmount = (Math.random() * (maxWords - minWords)) + minWords;
+      const wordAmount = (Math.random() * (options['word-max'] - options['word-min'])) + options['word-min'];
       result.push(faker.lorem.sentence(wordAmount));
     }
 
     result = result.join(sentenceSeparator);
-  } else if (amountUnit === 'paragraph') {
+  } else if (options['amount-unit'] === 'paragraph') {
     result = [];
 
     for (amount; amount > 0; amount--) {
       const paragrah = [];
 
-      let sentenceAmount = (Math.random() * (maxSentences - minSentences)) + minSentences;
+      let sentenceAmount = (Math.random() * (options['sentence-max'] - options['sentence-min'])) + options['sentence-min'];
 
       for (sentenceAmount; sentenceAmount > 0; sentenceAmount--) {
-        const wordAmount = (Math.random() * (maxWords - minWords)) + minWords;
+        const wordAmount = (Math.random() * (options['word-max'] - options['word-min'])) + options['word-min'];
         paragrah.push(faker.lorem.sentence(wordAmount));
       }
 
@@ -243,5 +302,6 @@ function generator(options) {
 export default {
   config,
   handler,
+  sanitize,
   generator
 };
