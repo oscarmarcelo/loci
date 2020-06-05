@@ -1,4 +1,4 @@
-// import {language} from '../utils';
+import {/*language, */sanitizeValue} from '../utils';
 
 
 
@@ -142,16 +142,51 @@ function handler() {
 }
 
 
+
+function sanitize(options) {
+  // Expect a number. Default is 0.
+  options['limit-min'] = sanitizeValue('number', options['limit-min'], 0);
+
+  // Expect a number. Default is 100.
+  options['limit-max'] = sanitizeValue('number', options['limit-max'], 100);
+
+  // TODO: Find a way to handle min > max, since the token-popover can be closed without letting the inputs validate themselves.
+
+  // Expect an integer between 0 and 20. Default is 0.
+  // Negative numbers are also excluded. Numbers above 20 are clamped.
+  options['limit-precision'] = sanitizeValue('number', options['limit-precision'], 0, value => {
+    value = Math.min(Math.floor(value), 20);
+    return value > 0 ? value : undefined;
+  });
+
+  // Expect a boolean. Default is `false` (undefined).
+  options['keep-decimal-zeros'] = sanitizeValue('boolean', options['keep-decimal-zeros']);
+
+  // Expect a string. Default is `none`.
+  options['group-separator'] = sanitizeValue('string', options['group-separator'], 'none');
+
+  // Expect a string. Default is `dot`.
+  options['decimal-separator'] = sanitizeValue('string', options['decimal-separator'], 'dot');
+
+  return options;
+}
+
+
+
 function generator(options) {
+  options = Object.assign({
+    'limit-min': 0,
+    'limit-max': 100,
+    'limit-precision': 0,
+    'group-separator': 'none',
+    'decimal-separator': 'dot'
+  }, options);
+
   // TODO:
   // const _language = language(options.languages);
 
   // faker.locale = _language;
 
-  const min = Number(options['limit-min']) || 0;
-  const max = Number(options['limit-max']) || 100;
-  const precision = options['limit-precision'] && Number(options['limit-precision']) >= 0 ? Math.min(Number(options['limit-precision']), 20) : 0; // TODO: Number range validation should be in a `validation()`.
-  const keepDecimalZeros = options['keep-decimal-zeros'] ? precision : 0;
   const separators = {
     none: '',
     space: ' ',
@@ -160,10 +195,10 @@ function generator(options) {
   };
 
   return new Intl.NumberFormat('en', {
-    minimumFractionDigits: keepDecimalZeros,
-    maximumFractionDigits: precision
+    minimumFractionDigits: options['keep-decimal-zeros'] ? options['limit-precision'] : 0,
+    maximumFractionDigits: options['limit-precision']
   })
-    .formatToParts((Math.random() * (max - min)) + min) // TODO: `Math.random()` doesn't produce enough fraction digits (should be up to 20).
+    .formatToParts((Math.random() * (options['limit-max'] - options['limit-min'])) + options['limit-min']) // TODO: `Math.random()` doesn't produce enough fraction digits (should be up to 20).
     .map(({type, value}) => {
       switch (type) {
         case 'group':
@@ -184,5 +219,6 @@ function generator(options) {
 export default {
   config,
   handler,
+  sanitize,
   generator
 };
