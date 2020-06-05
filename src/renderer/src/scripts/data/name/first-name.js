@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {language, gender, textTransform} from '../utils';
+import {language, gender, textTransform, sanitizeValue} from '../utils';
 
 
 
@@ -33,6 +33,18 @@ const config = {
 
 
 
+function sanitize(options) {
+  // Expect a string. Default is 'both'.
+  options.gender = sanitizeValue('string', options.gender, 'both');
+
+  // Expect a string. Default is 'none'.
+  options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');
+
+  return options;
+}
+
+
+
 function generator(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
@@ -46,5 +58,6 @@ function generator(options) {
 
 export default {
   config,
+  sanitize,
   generator
 };
