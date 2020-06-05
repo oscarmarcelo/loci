@@ -155,19 +155,20 @@ function sanitize(options) {
 
   // Expect an integer between 0 and 20. Default is 0.
   // Negative numbers are also excluded. Numbers above 20 are clamped.
-  options['limit-precision'] = sanitizeValue('number', options['limit-precision'], 0, value => {
-    value = Math.min(Math.floor(value), 20);
-    return value > 0 ? value : undefined;
+  options['limit-precision'] = sanitizeValue('number', options['limit-precision'], 0, {
+    roundingMethod: 'floor',
+    min: 0,
+    max: 20
   });
 
   // Expect a boolean. Default is `false` (undefined).
   options['keep-decimal-zeros'] = sanitizeValue('boolean', options['keep-decimal-zeros']);
 
   // Expect a string. Default is `none`.
-  options['group-separator'] = sanitizeValue('string', options['group-separator'], 'none');
+  options['group-separator'] = sanitizeValue('string', options['group-separator'], 'none'); // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.
 
   // Expect a string. Default is `dot`.
-  options['decimal-separator'] = sanitizeValue('string', options['decimal-separator'], 'dot');
+  options['decimal-separator'] = sanitizeValue('string', options['decimal-separator'], 'dot'); // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.
 
   return options;
 }
