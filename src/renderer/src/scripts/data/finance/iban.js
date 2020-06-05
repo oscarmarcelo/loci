@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {/*language, */sanitizeValue} from '../utils';
+import {/*language, */textTransform, sanitizeValue} from '../utils';
 
 
 
@@ -16,15 +16,28 @@ const config = {
       type: 'checkbox',
       id: 'formatted',
       text: 'Formatted IBAN'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      type: 'heading-2',
+      text: 'Text Options'
+    },
+    {
+      type: 'text-transform'
     }
   ]
 };
 
 
 
-function sanitize (options) {
+function sanitize(options) {
   // Expect a boolean. Default is `false` (undefined).
   options.formatted = sanitizeValue('boolean', options.formatted);
+
+  // Expect a string. Default is 'none'.
+  options['text-transform'] = sanitizeValue('string', options['text-transform'], 'none');
 
   return options;
 }
@@ -34,7 +47,7 @@ function sanitize (options) {
 function generator(options) {
   // const _language = language(options.languages);
 
-  return faker.finance.iban(options.formatted);
+  return textTransform(faker.finance.iban(options.formatted), options['text-transform']);
 }
 
 
