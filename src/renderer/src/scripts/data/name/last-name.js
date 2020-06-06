@@ -38,7 +38,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
   // TODO: Only add gender field to languages that support it.
@@ -53,5 +53,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

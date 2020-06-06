@@ -43,7 +43,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   const _language = language(options.languages);
 
   faker.locale = _language;
@@ -56,5 +56,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

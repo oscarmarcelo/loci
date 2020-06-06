@@ -44,7 +44,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   // const _language = language(options.languages);
 
   return textTransform(faker.finance.iban(options.formatted), options['text-transform']);
@@ -55,5 +55,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

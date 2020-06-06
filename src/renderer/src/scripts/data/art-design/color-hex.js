@@ -44,7 +44,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   // Make Hex print in uppercase by default.
   const transform = options['text-transform'] === 'none' ? 'uppercase' : options['text-transform'];
 
@@ -62,5 +62,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

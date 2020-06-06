@@ -45,7 +45,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   const _language = language(options.languages);
   const _gender = gender(options.gender);
 
@@ -59,5 +59,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

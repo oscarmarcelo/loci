@@ -31,7 +31,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   return textTransform(faker.address.countryCode(), options['text-transform']);
 }
 
@@ -40,5 +40,5 @@ function generator(options) {
 export default {
   config,
   sanitize,
-  generator
+  generate
 };

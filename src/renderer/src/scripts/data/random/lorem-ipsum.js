@@ -228,7 +228,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   const amountConfig = config.fields.find(field => field.prefix === 'amount');
   const wordConfig = config.fields.find(field => field.prefix === 'word');
   const sentenceConfig = config.fields.find(field => field.prefix === 'sentence');
@@ -303,5 +303,5 @@ export default {
   config,
   handler,
   sanitize,
-  generator
+  generate
 };

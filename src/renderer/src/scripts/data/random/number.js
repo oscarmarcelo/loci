@@ -175,7 +175,7 @@ function sanitize(options) {
 
 
 
-function generator(options) {
+function generate(options) {
   options = Object.assign({
     'limit-min': 0,
     'limit-max': 100,
@@ -222,5 +222,5 @@ export default {
   config,
   handler,
   sanitize,
-  generator
+  generate
 };

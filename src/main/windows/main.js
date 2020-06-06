@@ -454,7 +454,7 @@ export function generateData(dataConfig) {
     if (tokenConfig.type === 'data') {
       const dataItem = getData(tokenConfig.config.data.group, tokenConfig.config.data.item);
 
-      result += dataItem.generator(tokenConfig.config);
+      result += dataItem.generate(tokenConfig.config);
     } else if (tokenConfig.type === 'newline') {
       result += '\u2029';
     } else if (tokenConfig.type === 'shift-newline') {
