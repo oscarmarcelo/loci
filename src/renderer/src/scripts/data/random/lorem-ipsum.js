@@ -116,7 +116,7 @@ const config = {
 
 
 
-function handler() {
+function handle() {
   const amountUnit = document.querySelector('[name="amount-unit"]');
 
   const wordsPerSentenceInputs = document.querySelectorAll('[name^="word-"]');
@@ -161,7 +161,7 @@ function handler() {
 
   toggleConditionalFields();
   // We don't need to update popover height here since it will be done at the
-  // end of `renderTokenSettings()`, which will happen after calling `handler()`.
+  // end of `renderTokenSettings()`, which will happen after calling `handle()`.
 
   amountUnit.addEventListener('change', () => {
     toggleConditionalFields();
@@ -301,7 +301,7 @@ function generate(options) {
 
 export default {
   config,
-  handler,
+  handle,
   sanitize,
   generate
 };

@@ -36,8 +36,8 @@ function renderTokenSettings(tokenConfig) {
     }
   }
 
-  if (typeof dataItem.handler === 'function') {
-    dataItem.handler();
+  if (typeof dataItem.handle === 'function') {
+    dataItem.handle();
   }
 
   window.updatePopoverHeight();

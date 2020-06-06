@@ -104,7 +104,7 @@ const config = {
 
 
 // Ensure that number doesn't use dot or comma for both `group-separator` and the `decimal-separator`.
-function handler() {
+function handle() {
   const groupSeparatorInputs = document.querySelectorAll('[name="group-separator"]');
   const decimalSeparatorInputs = document.querySelectorAll('[name="decimal-separator"]');
 
@@ -220,7 +220,7 @@ function generate(options) {
 
 export default {
   config,
-  handler,
+  handle,
   sanitize,
   generate
 };
