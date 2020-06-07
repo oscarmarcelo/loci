@@ -60,13 +60,10 @@ function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
     token.textContent = text;
   }
 
-  // TODO: Consider generating a GUID instead.
-  //       Ex.: NSUUID.UUID().UUIDString()
-  token.id = id || new Array(16)
-    .fill(0)
-    .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 97))
-    .join('') +
-    Date.now().toString(24);
+  // TODO: Use browser implementation when available: https://github.com/tc39/proposal-uuid
+  token.dataset.id = id || ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
 
   tokenBoxInput.parentNode.insertBefore(token, tokenBoxInput);
   window.initToken(token);
@@ -133,7 +130,7 @@ function setDataConfig(options) {
 
 
 function updateTokenConfig(id, tokenConfig) {
-  const token = document.querySelector(`#${id}`);
+  const token = document.querySelector(`.token[data-id="${id}"]`);
 
   if (token) {
     token.tokenConfig = tokenConfig;
@@ -288,7 +285,7 @@ applyButton.addEventListener('click', () => {
 
   for (const token of tokens) {
     const tokenObject = {
-      id: token.id
+      id: token.dataset.id
     };
 
     if (token.classList.contains('token--data')) {

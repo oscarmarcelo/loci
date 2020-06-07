@@ -23,7 +23,7 @@ function initDataToken(token) {
   // Open the token popover with the token configuration.
   token.addEventListener('dblclick', () => {
     window.postMessage('open-token-popover', {
-      id: token.id,
+      id: token.dataset.id,
       tokenConfig: token.tokenConfig,
       anchorBounds: token.getBoundingClientRect()
     })
