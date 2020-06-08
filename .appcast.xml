@@ -7,6 +7,31 @@
     <language>en</language>
 
     <item>
+      <title>Version 0.3.0</title>
+      <description>
+        <![CDATA[
+          <p>This release is mostly a preparation for the upcoming release of the Templates feature.</p>
+          <p>However, there are some breaking changes in some data tokens. I am very sorry that this happened. Being in a beta stage, this is somewhat expected to happen sometimes. A solution to prevent this in the future is already being made, though. Currently, an easy fix is to remove the affected data tokens and add them again with the intended settings.</p>
+          <ul>
+            <li><strong>Breaking Change:</strong> Fixed an internal misconfiguration in the "Lorem Ipsum" data token. This affects all layers using the "Sentences" unit and the Sentence Separator set to "Space".</li>
+            <li><strong>Breaking Change:</strong> Inverted "Hex Color" data "Hide “#” before value" setting to avoid confusion between the checkbox and the label. The setting is now "Show “#” before value" and is checked by default. This affects all layers using the "Hex Color" data token.</li>
+            <li>Improved data configuration storage process to be more reliable and smaller in size. These improvements are in fact the first part of the solution mentioned above to deal with data configurations generated with previous plugin versions.</li>
+            <li>Improved the stepping behaviour (using the arrow up/down buttons) of number inputs:
+              <ul>
+                <li>If an input is empty, but has a number as placeholder, the first step will start with the next sibling of that number, depending on the direction used.
+                <li>Fixed a bug in empty inputs with a minimum limit bigger than zero where the first step would start in the next sibling number of the minimum limit instead of the minimum limit itself.</li>
+              </ul>
+            </li>
+            <li>Fixed text tokens and the token box allowing text formatting.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Mon, 8 Jun 2020 17:38:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.3.0</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.3.0/loci.sketchplugin.zip" sparkle:version="0.3.0"/>
+    </item>
+
+    <item>
       <title>Version 0.2.1</title>
       <description>
         <![CDATA[
