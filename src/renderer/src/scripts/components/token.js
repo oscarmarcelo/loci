@@ -9,7 +9,7 @@ function initToken(token) {
   // Select tokens.
   token.addEventListener('mousedown', event => {
     // Ignore if it's not the first click of a click sequence or is in edit mode.
-    if (event.detail > 1 || token.contentEditable === true) {
+    if (event.detail > 1 || token.contentEditable === 'plaintext-only') {
       return;
     }
 
@@ -38,8 +38,8 @@ function initDataToken(token) {
 function initTextToken(token) {
   // Edit a text token when double-clicking it.
   token.addEventListener('dblclick', () => {
-    if (token.contentEditable !== 'true') {
-      token.contentEditable = true;
+    if (token.contentEditable !== 'plaintext-only') {
+      token.contentEditable = 'plaintext-only';
 
       const range = document.createRange();
       const selection = window.getSelection();
@@ -126,7 +126,7 @@ function maybeRemoveToken(event) {
 
     // Only remove token if it's not in edit mode.
     // If removed, also remove all token event listeners.
-    if (token?.contentEditable !== 'true') {
+    if (token?.contentEditable !== 'plaintext-only') {
       removeTokenEvents();
       removeToken(token);
     }

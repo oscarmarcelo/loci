@@ -43,7 +43,7 @@ function createSelectToken(select, text, groupValue, value) {
 
   token.addEventListener('mousedown', () => {
     // Ignore if it's not the first click of a click sequence or is in edit mode.
-    if (event.detail > 1 || token.contentEditable === true) {
+    if (event.detail > 1 || token.contentEditable === 'plaintext-only') {
       return;
     }
 
