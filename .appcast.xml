@@ -7,6 +7,21 @@
     <language>en</language>
 
     <item>
+      <title>Version 0.3.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixed "Hex Color" data token not generating text in uppercase by default.</li>
+            <li>Removed "Uppercase" option in "Text Transform" setting in "Hex Color" data token, since it is already the default value.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Mon, 9 Jun 2020 12:48:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.3.1</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.3.1/loci.sketchplugin.zip" sparkle:version="0.3.1"/>
+    </item>
+
+    <item>
       <title>Version 0.3.0</title>
       <description>
         <![CDATA[
