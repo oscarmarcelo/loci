@@ -15,7 +15,6 @@ import {dirToFile} from '../utils';
  * ================================
  * Compile Sass files.
  * Autoprefix.
- * Inject files into browser.
  * Notify end of task.
  * ================================
  */
