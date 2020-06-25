@@ -253,7 +253,7 @@ function createWindow(dataKey, items) {
       selectPopover.create(constants.DATA_LIST_WINDOW_ID, {
         parent: window,
         anchorBounds: anchorBounds,
-        placeholder: 'Search Data',
+        placeholder: 'Search Data Tokens',
         menu: dataList.map(group => {
           return {
             id: group.id,

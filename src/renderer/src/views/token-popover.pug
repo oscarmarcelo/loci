@@ -22,8 +22,9 @@ block body
     .popover__body
       form.token-settings-form.js-no-submit
         .heading-1 Data
+
         .select
-          select.select__reference.js-data-list(name="data")
+          select.select__reference.js-data-list(name="data" data-placeholder="Search Data Tokens")
           +icon('chevron-up-down').select__icon
 
         hr.fill-edges
