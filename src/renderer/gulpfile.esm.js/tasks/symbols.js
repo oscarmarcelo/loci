@@ -1,3 +1,4 @@
+import {parse as parsePath} from 'path';
 import {src, dest} from 'gulp';
 import plumber from 'gulp-plumber';
 import cheerio from 'gulp-cheerio';
@@ -20,7 +21,7 @@ import {getDirs, path} from '../utils';
  * ================================
  */
 
-export default done => {
+export const symbols = done => {
   const dirs = getDirs(config.src.symbols);
 
   if (dirs.length === 0) {
@@ -63,3 +64,56 @@ export default done => {
       onLast: true
     }));
 };
+
+
+
+/**
+ * ================================
+ * Add visible overflow to all SVG files.
+ * Optimize SVG files.
+ * Concatenate SVG files into symbols files.
+ * Notify end of task.
+ * ================================
+ */
+
+export const templateIcons = () =>
+  src(config.src.templateIcons)
+    .pipe(plumber())
+    .pipe(cheerio(($, file) => {
+      $('svg').attr('overflow', 'visible');
+      $('#light #fill').attr('fill', 'var(--color-icon-fill-light)');
+      $('#light #fill').removeAttr('opacity');
+      $('#light #stroke').attr('fill', 'var(--color-icon-stroke-light)');
+      $('#dark #fill').attr('fill', 'var(--color-icon-fill-dark)');
+    }))
+    .pipe(imagemin({
+      svgoPlugins: [{
+        removeViewBox: false
+      }]
+    }))
+    .pipe(svgSprite({
+      shape: {
+        id: {
+          generator: path => `template-icon__${parsePath(path).name}`
+        }
+      },
+      mode: {
+        symbol: {
+          dest: '.',
+          sprite: 'template-icons.svg'
+        }
+      },
+      svg: {
+        xmlDeclaration: false,
+        doctypeDeclaration: false
+      }
+    }))
+    .on('error', onError({
+      title: 'Error in templateIcons',
+      message: '<%= error.message %>'
+    }))
+    .pipe(dest(config.build.images))
+    .pipe(notify({
+      message: 'Template icons generated!',
+      onLast: true
+    }));

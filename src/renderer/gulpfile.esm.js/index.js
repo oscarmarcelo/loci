@@ -1,7 +1,7 @@
 import {series, parallel} from 'gulp';
 
 import * as styles from './tasks/styles';
-import symbols from './tasks/symbols';
+import {symbols, templateIcons} from './tasks/symbols';
 import images from './tasks/images';
 import * as scripts from './tasks/scripts';
 import views from './tasks/views';
@@ -12,11 +12,22 @@ import watch from './tasks/watch';
 
 
 export const build = series(
-  parallel(styles.build, symbols, images, scripts.build),
+  parallel(
+    styles.build,
+    series(
+      symbols,
+      templateIcons
+    ),
+    images,
+    scripts.build),
   views
 );
 
-export const dist = parallel(styles.dist, scripts.dist, copy);
+export const dist = parallel(
+  styles.dist,
+  scripts.dist,
+  copy
+);
 
 export {deploy};
 

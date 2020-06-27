@@ -14,6 +14,7 @@ export default {
   src: {
     styles: `${src.base}/styles/**/*.s+(a|c)ss`,
     symbols: `${src.base}/symbols`,
+    templateIcons: `${src.base}/template-icons/**/*.svg`,
     images: `${src.base}/images/**/*`,
     scripts: `${src.base}/scripts/**/*.js`,
     views: `${src.base}/views/**/*.pug`
