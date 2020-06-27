@@ -9,6 +9,7 @@ import * as selectPopover from './select-popover';
 import theme from '../utils/theme';
 import {getSelectedOverrides, getOverrideDataConfig} from '../utils/overrides';
 import {list as dataList, get as getData} from '../../renderer/src/scripts/data';
+import defaultTemplates from '../../common/templates';
 
 
 
@@ -100,6 +101,8 @@ function createWindow(dataKey, items) {
 
     threadDictionary[constants.MAIN_WINDOW_OBSERVERS] = delegate;
 
+    setTemplates();
+
     items = items || getSelectedDocument()?.selectedLayers?.layers || [];
 
     if (items) {
@@ -139,6 +142,79 @@ function createWindow(dataKey, items) {
       NSNotificationCenter.defaultCenter().removeObserver(delegate);
       threadDictionary.removeObjectForKey(constants.MAIN_WINDOW_OBSERVERS);
     }
+  });
+
+
+  let templateId;
+  const menu = NSMenu.alloc().init();
+  menu.setAutoenablesItems(false);
+
+  const updateMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Update', nil, '');
+  updateMenuItem.setCOSJSTargetFunction(() => {
+    window.webContents.executeJavaScript(`updateTemplate("${templateId}")`)
+      .catch(error => {
+        console.error('updateTemplate', error);
+      });
+
+      templateId = undefined;
+  });
+  updateMenuItem.setEnabled(false);
+
+  const resetMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Reset', nil, '');
+  resetMenuItem.setCOSJSTargetFunction(() => {
+    window.webContents.executeJavaScript(`resetTemplate("${templateId}")`)
+      .catch(error => {
+        console.error('resetTemplate', error);
+      });
+
+      templateId = undefined;
+  });
+  resetMenuItem.setEnabled(false);
+
+  const changeIconMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Change Icon...', nil, '');
+  changeIconMenuItem.setCOSJSTargetFunction(() => {
+    window.webContents.executeJavaScript(`requestTemplateIconChange("${templateId}")`)
+      .catch(error => {
+        console.error('requestTemplateIconChange', error);
+      });
+
+      templateId = undefined;
+  });
+  changeIconMenuItem.setEnabled(false);
+
+  const renameMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Rename', nil, '');
+  renameMenuItem.setCOSJSTargetFunction(() => {
+    window.webContents.executeJavaScript(`renameTemplate("${templateId}")`)
+      .catch(error => {
+        console.error('renameTemplate', error);
+      });
+
+    templateId = undefined;
+  });
+
+  const deleteMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Delete', nil, '');
+  deleteMenuItem.setCOSJSTargetFunction(() => {
+    window.webContents.executeJavaScript(`deleteTemplate("${templateId}")`)
+      .catch(error => {
+        console.error('deleteTemplate', error);
+      });
+
+    templateId = undefined;
+  });
+
+  menu.addItem(updateMenuItem);
+  menu.addItem(resetMenuItem);
+  menu.addItem(NSMenuItem.separatorItem());
+  menu.addItem(changeIconMenuItem);
+  menu.addItem(renameMenuItem);
+  menu.addItem(NSMenuItem.separatorItem());
+  menu.addItem(deleteMenuItem);
+
+
+  window.webContents.on('open-sidebar-item-context-menu', id => {
+    templateId = id;
+
+    menu.popUpMenuPositioningItem_atLocation_inView(nil, NSEvent.mouseLocation(), nil);
   });
 
 
@@ -371,6 +447,35 @@ export function create(dataKey, items) {
     createWindow(dataKey, items);
   }
 }
+
+
+
+function setTemplates() {
+  const window = BrowserWindow.fromId(constants.MAIN_WINDOW_ID);
+
+  if (window) {
+    const templateSettings = Settings.settingForKey('templates');
+    let sidebarItems = [];
+
+    if (Array.isArray(templateSettings)) {
+      sidebarItems = templateSettings;
+    } else {
+      defaultTemplates.forEach(({default: template}) => { // TODO: Find a way to make Webpack not export all exportables inside a "default" property.
+        sidebarItems.push(template);
+      });
+
+      // Settings.setSettingForKey('templates', templates);
+    }
+
+    if (sidebarItems.length > 0) {
+      window.webContents.executeJavaScript(`setSidebarItems(${JSON.stringify(sidebarItems)})`)
+      .catch(error => {
+        console.error('setSidebarItems', error);
+      });
+    }
+  }
+}
+
 
 
 /**

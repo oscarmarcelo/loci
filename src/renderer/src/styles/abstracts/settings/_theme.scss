@@ -51,6 +51,7 @@ $theme: (
   input-no-outline: rgba(#fff, 0) rgba(#000, 0),
   focus-ring-outline: rgba(#005cd7, .44) rgba(#2ea8ff, .5),
   focus-ring-border: rgba(darken(#005cd7, 10%), .55) rgba(lighten(#2ea8ff, 10%), .5),
+  sidebar-input-background: #fff #1d1e1f, // canvasBackgroundColor
   icon-fill-light: rgba(#7b7b7b, .35) transparent,
   icon-stroke-light: #7b7b7b transparent,
   icon-fill-dark: transparent #a1a1a1

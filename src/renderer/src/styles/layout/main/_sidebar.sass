@@ -4,6 +4,9 @@
  * ========================================================
  */
 
+// 1. Add breathing space for ::selection rectangle.
+// 1.1 - Revert padding.
+
 .sidebar
   margin-bottom: 10px
   grid-area: sidebar
@@ -25,17 +28,22 @@
     padding: 5px 8px
     width: calc(100% - .5px)
     position: relative
+    text-align: left
 
     &--active
       &::after
         content: ''
-        background: rgba(#000, .15)
+        background: rgba(#000, .15) // TODO:
         position: absolute
         top: 0
         right: 0
         bottom: 0
         left: 0
+        z-index: -1
         transform: translateX(-.5px)
+
+        @media (prefers-color-scheme: dark)
+          background: rgba(#fff, .18) // TODO:
 
     &-icon
       border-radius: 4px
@@ -43,15 +51,21 @@
       height: 15px
       margin-right: 8px
       flex-shrink: 0
-      background: rgba(255,59,48,0.20)
-      border: 1px solid rgba(255,59,48,0.20)
 
     &-name
       max-width: 100%
+      margin: 0 -1px // [1.1]
+      padding: 1px // [1]
       overflow: hidden
       white-space: nowrap
-      text-overflow: ellipsis
       flex-grow: 1
+
+      &[contenteditable]
+        outline: 0
+        background: var(--color-sidebar-input-background)
+
+      &:not([contenteditable])
+        text-overflow: ellipsis
 
     &-data
       width: 15px
@@ -74,6 +88,7 @@
   &__footer
     color: #7B7B7B
     margin: 0 8px
+    flex-shrink: 0
     display: flex
     justify-content: space-between
     line-height: 21px

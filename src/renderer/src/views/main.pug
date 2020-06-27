@@ -9,6 +9,14 @@ block styles
 
 
 block body
+  template(id="sidebar-item")
+    .sidebar__item
+      svg.sidebar__item-icon: use
+      .sidebar__item-name
+      //- TODO: Support adding template as Sketch Data Supplier.
+      //- .sidebar__item-data
+      //-  +icon('data').sidebar__item-data-icon
+
   .wrapper
     .wrapper__bg
     .wrapper__outline
@@ -25,60 +33,11 @@ block body
 
 
     .sidebar
-      //- TODO: Implement templates.
-      small(style="margin: auto; padding-bottom: 16px; text-align: center") Templates are#[br]coming soon
-      //- .sidebar__list
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Names
-          .sidebar__item-data.sidebar__item-data--active
-            +icon('data').sidebar__item-data-icon
+      .sidebar__list
 
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Cities
-          .sidebar__item-data
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Names/Female Names
-          .sidebar__item-data
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Pets
-          .sidebar__item-data.sidebar__item-data--active
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Time
-          .sidebar__item-data.sidebar__item-data--active
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name IBAN
-          .sidebar__item-data
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Phone Numbers
-          .sidebar__item-data
-            +icon('data').sidebar__item-data-icon
-
-        .sidebar__item
-          .sidebar__item-icon
-          .sidebar__item-name Colors
-          .sidebar__item-data
-            +icon('data').sidebar__item-data-icon
-
-      //- .sidebar__footer
-        button 􀅼
-        button 􀄂
+      .sidebar__footer
+        button.js-add-template 􀅼
+        // button 􀄂 // TODO: Support window collapsed modes.
 
 
     .main

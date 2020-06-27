@@ -1,3 +1,198 @@
+function generateUUID() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  )
+}
+
+
+
+/*
+ * ========================================================
+ * Sidebar
+ * ========================================================
+ */
+
+const sidebarList = document.querySelector('.sidebar__list');
+
+
+
+function createSidebarItem (id = generateUUID(), icon = 'person', name = 'Template', dataConfig) {
+  const template = document.querySelector('#sidebar-item');
+  const clone = template.content.cloneNode(template);
+
+  const sidebarItem = clone.querySelector('.sidebar__item');
+  const sidebarItemIconUse = sidebarItem.querySelector('.sidebar__item-icon use');
+  const sidebarItemName = sidebarItem.querySelector('.sidebar__item-name');
+  // const sidebarItemData = sidebarItem.querySelector('.sidebar__item-data'); // TODO: Support adding template as Sketch Data Supplier.
+
+  sidebarItem.dataset.id = id;
+  sidebarItem.dataConfig = dataConfig;
+
+  sidebarItem.addEventListener('click', () => {
+    // Ignore if it's not the first click of a click sequence or is in edit mode.
+    if (event.detail > 1 || sidebarItemName.contentEditable === 'plaintext-only') {
+      return;
+    }
+
+    setDataConfig({
+      dataConfig: sidebarItem.dataConfig
+    });
+  });
+
+  sidebarItem.addEventListener('dblclick', () => {
+    sidebarItemName.originalText = sidebarItemName.textContent;
+    sidebarItemName.contentEditable = 'plaintext-only';
+
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(sidebarItemName);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  });
+
+  sidebarItem.addEventListener('contextmenu', () => {
+    // Ensure native context menu still opens when in edit mode.
+    if (sidebarItemName.contentEditable === 'inherit') {
+      window.postMessage('open-sidebar-item-context-menu', sidebarItem.dataset.id)
+      .catch(error => {
+        console.error('open-sidebar-item-context-menu', error);
+      });
+    }
+  });
+
+  sidebarItemIconUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#template-icon__${icon}`);
+
+  sidebarItemName.textContent = name;
+
+  sidebarItemName.addEventListener('keydown', event => {
+    if (['Enter', 'Escape'].includes(event.key)) {
+      event.preventDefault();
+      sidebarItemName.blur();
+    }
+  });
+
+  sidebarItemName.addEventListener('blur', () => {
+    sidebarItemName.contentEditable = 'inherit';
+    sidebarItemName.scrollLeft = 0;
+
+    if (sidebarItemName.textContent === '') {
+      sidebarItemName.textContent = sidebarItemName.originalText;
+    }
+
+    // TODO: Save name.
+  });
+
+  return clone;
+}
+
+
+
+function setSidebarItems(sidebarItems) {
+  const sidebarItemList = new DocumentFragment();
+
+  sidebarItems.forEach(item => {
+    sidebarItemList.append(createSidebarItem(undefined, item.icon, item.name, item.data));
+  });
+
+  sidebarList.append(sidebarItemList);
+}
+
+
+
+function updateSidebarSelection(dataConfig = getDataConfig()) {
+  // TODO: Compare between properties instead of stringified JSONs when we implement token relations.
+
+  let dataConfigString = dataConfig;
+
+  // Remove token IDs, since they are not need to for comparison.
+  dataConfigString.tokens = dataConfigString.tokens?.map(token => {
+    delete token.id;
+
+    return token;
+  });
+
+  dataConfigString = JSON.stringify(dataConfigString)
+  dataConfigString = dataConfigString.replace('\xA0', ' '); // Normalize spaces before comparison.
+
+  const sidebarItemList = document.querySelectorAll('.sidebar__item');
+
+  [...sidebarItemList].forEach(sidebarItem => {
+    let sidebarItemDataConfigString = sidebarItem.dataConfig;
+
+    sidebarItemDataConfigString.tokens = sidebarItemDataConfigString.tokens?.map(token => {
+      delete token.id;
+
+      return token;
+    });
+
+    sidebarItemDataConfigString = JSON.stringify(sidebarItemDataConfigString);
+    sidebarItemDataConfigString = sidebarItemDataConfigString.replace('\xA0', ' '); // Normalize spaces before comparison.
+
+    sidebarItem.classList.toggle('sidebar__item--active', dataConfigString === sidebarItemDataConfigString);
+  });
+}
+
+
+
+const updateSidebarObserver = new MutationObserver(() => {
+  updateSidebarSelection();
+});
+
+// TODO: This selector is also defined in a variable used below. Use that variable instead.
+updateSidebarObserver.observe(document.querySelector('.token-box__scroller'), {
+  childList: true
+});
+
+
+
+const addTemplateButton = document.querySelector('.js-add-template');
+
+addTemplateButton.addEventListener('click', () => {
+  createTemplate();
+});
+
+
+
+/*
+ * ========================================================
+ * Templates
+ * ========================================================
+ */
+
+function createTemplate() {
+  // TODO: Add template to plugin settings.
+  const templateId = generateUUID();
+  const sidebarItem = createSidebarItem(templateId, undefined, undefined, getDataConfig());
+
+  sidebarList.append(sidebarItem);
+
+  document.querySelector(`[data-id="${templateId}"]`).scrollIntoView();
+
+  renameTemplate(templateId);
+}
+
+
+
+function renameTemplate(id) {
+  const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+
+  sidebarItem.classList.add('sidebar__item--active');
+
+  sidebarItem.dispatchEvent(new Event('dblclick', {
+    cancelable: true
+  }));
+}
+
+
+
+function deleteTemplate(id) {
+  // TODO: Remove template from plugin settings.
+  sidebarList.querySelector(`[data-id="${id}"]`).remove();
+}
+
+
+
 /*
  * ========================================================
  * Data Editor Input
@@ -61,14 +256,69 @@ function createToken(id, type, text, tokenConfig, insertPendingTextFirst) {
   }
 
   // TODO: Use browser implementation when available: https://github.com/tc39/proposal-uuid
-  token.dataset.id = id || ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+  token.dataset.id = id || generateUUID();
 
   tokenBoxInput.parentNode.insertBefore(token, tokenBoxInput);
   window.initToken(token);
 
   tokenBoxInput.focus();
+}
+
+
+
+function getDataConfig() {
+  const tokens = document.querySelectorAll('.token-box .token');
+  const formData = new FormData(dataGeneralSettingsForm);
+  const dataConfig = {
+    tokens: [],
+    general: {}
+  };
+
+  for (const token of tokens) {
+    const tokenObject = {
+      id: token.dataset.id
+    };
+
+    if (token.classList.contains('token--data')) {
+      tokenObject.type = 'data';
+      tokenObject.config = token.tokenConfig;
+    } else if (token.classList.contains('token--newline')) {
+      tokenObject.type = `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
+    } else {
+      tokenObject.type = 'text';
+      tokenObject.text = token.textContent;
+    }
+
+    dataConfig.tokens.push(tokenObject);
+  }
+
+  for (const [name, value] of formData.entries()) {
+    // Only add fields with one of the following conditions:
+    // - if aren't related to limits;
+    // - if are related to limits, but only if limit-max have values.
+    if (
+      (
+        value.length > 0 &&
+        ['limit-unit', 'ellipsis'].includes(name) === false
+      ) ||
+      (
+        ['limit-unit', 'ellipsis'].includes(name) &&
+        (
+          formData.get('limit-max') !== null &&
+          formData.get('limit-max') !== ''
+        )
+      )
+    ) {
+      dataConfig.general[name] = value;
+    }
+  }
+
+  // Remove property if unused.
+  if (Object.keys(dataConfig.general).length === 0) {
+    delete dataConfig.general;
+  }
+
+  return dataConfig;
 }
 
 
@@ -99,7 +349,7 @@ function setDataConfig(options) {
 
   // TODO: Handle multiple selections.
   //       Analyze dataConfigs and decide what to show.
-  const dataConfig = options.dataItems.find(item => item.dataConfig)?.dataConfig || {};
+  const dataConfig = options.dataConfig || options.dataItems.find(item => item.dataConfig)?.dataConfig || {};
 
   dataConfig.tokens?.forEach(tokenConfig => {
     let name;
@@ -125,6 +375,8 @@ function setDataConfig(options) {
       field.value = value;
     }
   });
+
+  updateSidebarSelection(dataConfig);
 }
 
 
@@ -148,6 +400,8 @@ function updateTokenConfig(id, tokenConfig) {
       token.style.removeProperty('text-transform');
     }
   }
+
+  updateSidebarSelection();
 }
 
 
@@ -276,56 +530,7 @@ toggleApplyButtonObserver.observe(tokenBoxScroller, {
 
 
 applyButton.addEventListener('click', () => {
-  const tokens = document.querySelectorAll('.token-box .token');
-  const formData = new FormData(dataGeneralSettingsForm);
-  const dataConfig = {
-    tokens: [],
-    general: {}
-  };
-
-  for (const token of tokens) {
-    const tokenObject = {
-      id: token.dataset.id
-    };
-
-    if (token.classList.contains('token--data')) {
-      tokenObject.type = 'data';
-      tokenObject.config = token.tokenConfig;
-    } else if (token.classList.contains('token--newline')) {
-      tokenObject.type = `${token.textContent.includes('⇧') ? 'shift-' : ''}newline`
-    } else {
-      tokenObject.type = 'text';
-      tokenObject.text = token.textContent;
-    }
-
-    dataConfig.tokens.push(tokenObject);
-  }
-
-  for (const [name, value] of formData.entries()) {
-    // Only add fields with one of the following conditions:
-    // - if aren't related to limits;
-    // - if are related to limits, but only if limit-max have values.
-    if (
-      (
-        value.length > 0 &&
-        ['limit-unit', 'ellipsis'].includes(name) === false
-      ) ||
-      (
-        ['limit-unit', 'ellipsis'].includes(name) &&
-        (
-          formData.get('limit-max') !== null &&
-          formData.get('limit-max') !== ''
-        )
-      )
-    ) {
-      dataConfig.general[name] = value;
-    }
-  }
-
-  // Remove property if unused.
-  if (Object.keys(dataConfig.general).length === 0) {
-    delete dataConfig.general;
-  }
+  const dataConfig = getDataConfig();
 
   window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig, window.loci.document)
     .catch(error => {
