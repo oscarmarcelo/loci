@@ -57,18 +57,15 @@
 
   &__item
     border-radius: 4px
-    height: 24px
+    height: 25px
     width: calc(100% - #{4px * 2})
     margin: 0 4px 1px
     padding: 0 6px
-    display: block
-    text:
-      align: left
-      overflow: ellipsis
+    display: flex
+    align-items: center
+    text-align: left
     font-size: 11px
     letter-spacing: .05px
-    overflow: hidden
-    white-space: nowrap
 
     &--selected
       background: var(--color-separator) // TODO: Not the right variable, but probably the right color.
@@ -77,5 +74,28 @@
       color: var(--color-token-selected-text) // TODO: Not the right variable, but probably the right color.
       background: var(--color-token-data-selected-background) // TODO: Not the right variable, but probably the right color.
 
+      // FIXME: Currently, Sass doesn't support negation in media queries very well.
+      //        Should be `@media not (prefers-color-scheme: dark)`.
+      @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference)
+        --color-icon-fill-light: #{rgba(#fff, .35)}
+        --color-icon-stroke-light: #fff
+
+      @media (prefers-color-scheme: dark)
+        --color-icon-fill-dark: #fff
+
     &--hidden
       display: none
+
+    &-name
+      flex-grow: 1
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+
+    &-icon
+      width: 15px
+      height: 15px
+      margin:
+        right: 5px
+        left: -2px
+      flex-shrink: 0

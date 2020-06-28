@@ -51,7 +51,6 @@ function setMenu(menu) {
 
     item.classList.add('select-menu__item');
     item.dataset.value = itemObject.id;
-    item.textContent = itemObject.name;
 
     if (itemObject.selected) {
       item.classList.add('select-menu__item--selected');
@@ -61,6 +60,24 @@ function setMenu(menu) {
         hasFirstToNavigate = true;
       }
     }
+
+    if (itemObject.icon) {
+      const itemIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const itemUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+
+      itemIcon.classList.add('select-menu__item-icon');
+      itemUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#template-icon__${itemObject.icon}`);
+
+      itemIcon.append(itemUse);
+      item.append(itemIcon);
+    }
+
+    const itemName = document.createElement('span');
+
+    itemName.classList.add('select-menu__item-name');
+    itemName.textContent = itemObject.name;
+
+    item.append(itemName);
 
     item.addEventListener('mousedown', () => {
       [...items].find(item => item.classList.contains('select-menu__item--highlighted'))
