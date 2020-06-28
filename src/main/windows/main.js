@@ -10,6 +10,7 @@ import theme from '../utils/theme';
 import {getSelectedOverrides, getOverrideDataConfig} from '../utils/overrides';
 import {list as dataList, get as getData} from '../../renderer/src/scripts/data';
 import defaultTemplates from '../../common/templates';
+import templateIcons from '../../common/template-icons';
 
 
 
@@ -180,7 +181,6 @@ function createWindow(dataKey, items) {
 
       templateId = undefined;
   });
-  changeIconMenuItem.setEnabled(false);
 
   const renameMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Rename', nil, '');
   renameMenuItem.setCOSJSTargetFunction(() => {
@@ -215,6 +215,35 @@ function createWindow(dataKey, items) {
     templateId = id;
 
     menu.popUpMenuPositioningItem_atLocation_inView(nil, NSEvent.mouseLocation(), nil);
+  });
+
+
+  window.webContents.on('open-icon-popover', (id, icon, anchorBounds) => {
+    const selectMenu = JSON.parse(JSON.stringify(templateIcons));
+    const selectedItem = selectMenu.find(({items}) => items.find(({id}) => id === icon))?.items.find(({id}) => id === icon);
+
+    selectedItem.selected = true;
+
+    selectPopover.create(constants.ICON_POPOVER_WINDOW_ID, {
+      parent: window,
+      anchorBounds: anchorBounds,
+      placeholder: 'Search Icons',
+      menu: selectMenu,
+      actions: {
+        submitResult: selectedIcons => {
+          window.webContents.executeJavaScript(`changeTemplateIcon("${id}", ${JSON.stringify(selectedIcons[0].item)});`)
+            .catch(error => {
+              console.error('changeTemplateIcon', error);
+            })
+
+          const templateIconsPopover = BrowserWindow.fromId(constants.ICON_POPOVER_WINDOW_ID);
+
+          if (templateIconsPopover) {
+            templateIconsPopover.close();
+          }
+        }
+      }
+    });
   });
 
 

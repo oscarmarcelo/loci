@@ -9,6 +9,7 @@ export default {
   PLUGIN_VERSION: '0.3.1', // TODO: Get version from manifest.json.
   MAIN_WINDOW_ID: `${pluginId}.${mainWindow}`,
   MAIN_WINDOW_OBSERVERS: `${pluginId}.${mainWindow}.observers`,
+  ICON_POPOVER_WINDOW_ID: `${pluginId}.${selectPopover}.icons`,
   TOKEN_POPOVER_WINDOW_ID: `${pluginId}.${tokenPopover}`,
   DATA_SUGGESTIONS_WINDOW_ID: `${pluginId}.${selectPopover}.data-suggestions`,
   DATA_LIST_WINDOW_ID: `${pluginId}.${selectPopover}.data-list`,

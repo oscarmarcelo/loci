@@ -174,6 +174,31 @@ function createTemplate() {
 
 
 
+function requestTemplateIconChange (id) {
+  const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+  const sidebarItemIcon = sidebarItem.querySelector('.sidebar__item-icon');
+  const sidebarItemIconUse = sidebarItem.querySelector('.sidebar__item-icon use');
+  const icon = sidebarItemIconUse.getAttributeNS('http://www.w3.org/1999/xlink', 'href').slice('#template-icon__'.length);
+
+  sidebarItem.classList.add('sidebar__item--active');
+
+  window.postMessage('open-icon-popover', id, icon, sidebarItemIcon.getBoundingClientRect())
+    .catch(error => {
+      console.error('open-icon-popover', error);
+    });
+}
+
+
+
+function changeTemplateIcon(id, icon) {
+  const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+  const sidebarItemIconUse = sidebarItem.querySelector('.sidebar__item-icon use');
+
+  sidebarItemIconUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#template-icon__${icon}`);
+}
+
+
+
 function renameTemplate(id) {
   const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
 
