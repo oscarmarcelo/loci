@@ -147,7 +147,7 @@ function updateSidebarSelection(dataConfig = getDataConfig()) {
     sidebarItem.classList.toggle('sidebar__item--active', dataConfigString === sidebarItemDataConfigString);
   });
 
-  document.querySelector('.sidebar__item--active').scrollIntoView({
+  document.querySelector('.sidebar__item--active')?.scrollIntoView({
     block: 'nearest'
   });
 }
