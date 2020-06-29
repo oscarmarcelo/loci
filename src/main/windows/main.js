@@ -247,6 +247,11 @@ function createWindow(dataKey, items) {
   });
 
 
+  window.webContents.on('update-template-settings', templateSettings => {
+    Settings.setSettingForKey('templates', templateSettings);
+  });
+
+
   window.webContents.on('open-token-popover', message => {
     const payload = Object.assign(message, {
       parentBounds: window.getBounds()
@@ -490,10 +495,11 @@ function setTemplates() {
       sidebarItems = templateSettings;
     } else {
       defaultTemplates.forEach(({default: template}) => { // TODO: Find a way to make Webpack not export all exportables inside a "default" property.
+        template.version = constants.PLUGIN_VERSION;
         sidebarItems.push(template);
       });
 
-      // Settings.setSettingForKey('templates', templates);
+      Settings.setSettingForKey('templates', sidebarItems);
     }
 
     if (sidebarItems.length > 0) {

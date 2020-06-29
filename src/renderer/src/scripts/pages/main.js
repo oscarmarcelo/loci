@@ -88,13 +88,14 @@ function createSidebarItem (id = generateUUID(), icon = 'person', name = 'Templa
 
   sidebarItemName.addEventListener('blur', () => {
     sidebarItemName.contentEditable = 'inherit';
+    sidebarItemName.textContent = sidebarItemName.textContent.trim();
     sidebarItemName.scrollLeft = 0;
 
     if (sidebarItemName.textContent === '') {
       sidebarItemName.textContent = sidebarItemName.originalText;
     }
 
-    // TODO: Save name.
+    updateTemplateSettings();
   });
 
   return clone;
@@ -145,6 +146,31 @@ function updateSidebarSelection(dataConfig = getDataConfig()) {
 
     sidebarItem.classList.toggle('sidebar__item--active', dataConfigString === sidebarItemDataConfigString);
   });
+
+  document.querySelector('.sidebar__item--active').scrollIntoView({
+    block: 'nearest'
+  });
+}
+
+
+
+function updateTemplateSettings() {
+  const sidebarItems = document.querySelectorAll('.sidebar__item');
+  const templateSettings = [];
+
+  sidebarItems.forEach(item => {
+    templateSettings.push({
+      name: item.querySelector('.sidebar__item-name').textContent,
+      icon: item.querySelector('.sidebar__item-icon use').getAttributeNS('http://www.w3.org/1999/xlink', 'href').slice('#template-icon__'.length),
+      // version: constants.PLUGIN_VERSION, // TODO: Store version for backwards compatibility.
+      data: item.dataConfig
+    });
+  });
+
+  window.postMessage('update-template-settings', templateSettings)
+    .catch(error => {
+      console.error('update-template-settings', error);
+    });
 }
 
 
@@ -181,7 +207,11 @@ function createTemplate() {
 
   sidebarList.append(sidebarItem);
 
-  document.querySelector(`[data-id="${templateId}"]`).scrollIntoView();
+  document.querySelector(`[data-id="${templateId}"]`).scrollIntoView({
+    block: 'nearest'
+  });
+
+  updateTemplateSettings();
 
   renameTemplate(templateId);
 }
@@ -209,6 +239,8 @@ function changeTemplateIcon(id, icon) {
   const sidebarItemIconUse = sidebarItem.querySelector('.sidebar__item-icon use');
 
   sidebarItemIconUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#template-icon__${icon}`);
+
+  updateTemplateSettings();
 }
 
 
@@ -228,6 +260,8 @@ function renameTemplate(id) {
 function deleteTemplate(id) {
   // TODO: Remove template from plugin settings.
   sidebarList.querySelector(`[data-id="${id}"]`).remove();
+
+  updateTemplateSettings();
 }
 
 
