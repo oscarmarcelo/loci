@@ -97,5 +97,42 @@ export default [
         ]
       }
     ]
+  },
+  {
+    id: 'time',
+    name: 'Time',
+    items: [
+      {
+        id: 'clock',
+        icon: 'clock',
+        name: 'Clock'
+      },
+      {
+        id: 'desk-clock',
+        icon: 'desk-clock',
+        name: 'Desk Clock'
+      },
+      {
+        id: 'alarm-clock',
+        icon: 'alarm-clock',
+        name: 'Alarm Clock'
+      },
+      {
+        id: 'stopwatch',
+        icon: 'stopwatch',
+        name: 'Stopwatch',
+        alternatives: [
+          'clock'
+        ]
+      },
+      {
+        id: 'timer',
+        icon: 'timer',
+        name: 'Timer',
+        alternatives: [
+          'clock'
+        ]
+      }
+    ]
   }
 ];
