@@ -89,11 +89,48 @@ export default [
         ]
       },
       {
+        id: 'drop',
+        icon: 'drop',
+        name: 'Water Drop'
+      },
+      {
         id: 'bolt',
         icon: 'bolt',
         name: 'Bolt',
         alternatives: [
           'Lightning'
+        ]
+      },
+      {
+        id: 'hare',
+        icon: 'hare',
+        name: 'Hare',
+        alternatives: [
+          'Rabbit'
+        ]
+      },
+      {
+        id: 'tortoise',
+        icon: 'tortoise',
+        name: 'Tortoise',
+        alternatives: [
+          'Turtle'
+        ]
+      },
+      {
+        id: 'ant',
+        icon: 'ant',
+        name: 'Ant',
+        alternatives: [
+          'Bug'
+        ]
+      },
+      {
+        id: 'leaf',
+        icon: 'leaf',
+        name: 'Leaf',
+        alternatives: [
+          'Tree'
         ]
       }
     ]
