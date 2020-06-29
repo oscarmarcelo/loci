@@ -4,6 +4,20 @@ function generateUUID() {
   )
 }
 
+/*
+ * ========================================================
+ * Window
+ * ========================================================
+ */
+
+window.addEventListener('focus', () => {
+  document.body.classList.remove('window-blurred');
+});
+
+window.addEventListener('blur', () => {
+  document.body.classList.add('window-blurred');
+});
+
 
 
 /*

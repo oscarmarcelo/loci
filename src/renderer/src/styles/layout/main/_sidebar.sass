@@ -30,7 +30,22 @@
     position: relative
     text-align: left
 
+    .window-blurred &
+      @media (prefers-color-scheme: dark)
+        --color-icon-solid-dark: var(--color-icon-solid-dark-blurred)
+        --color-icon-translucent-dark: var(--color-icon-translucent-dark-blurred)
+
     &--active
+      --color-icon-solid-light: var(--color-icon-solid-light-active)
+      --color-icon-translucent-light: var(--color-icon-translucent-light-active)
+      --color-icon-solid-dark: var(--color-icon-solid-dark-active)
+      --color-icon-translucent-dark: var(--color-icon-translucent-dark-active)
+
+      .window-blurred &
+        @media (prefers-color-scheme: dark)
+          --color-icon-solid-dark: var(--color-icon-solid-dark-blurred-active)
+          --color-icon-translucent-dark: var(--color-icon-translucent-dark-blurred-active)
+
       &::after
         content: ''
         background: rgba(#000, .15) // TODO:

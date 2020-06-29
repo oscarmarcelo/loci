@@ -86,6 +86,7 @@ export const templateIcons = () =>
       $('#light #translucent').attr('fill', 'var(--color-icon-translucent-light)').removeAttr('opacity');
 
       $('#dark #solid').attr('fill', 'var(--color-icon-solid-dark)');
+      $('#dark #translucent').attr('fill', 'var(--color-icon-translucent-dark)').removeAttr('opacity');
     }))
     .pipe(imagemin({
       svgoPlugins: [{

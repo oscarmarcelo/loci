@@ -54,7 +54,16 @@ $theme: (
   sidebar-input-background: #fff #1d1e1f, // canvasBackgroundColor
   icon-solid-light: rgba(#000, .415) transparent,
   icon-translucent-light: rgba(#000, .185) transparent,
-  icon-solid-dark: transparent rgba(#fff, .84)
+  icon-solid-light-active: rgba(#000, .56) transparent,
+  icon-translucent-light-active: rgba(#000, .215) transparent,
+  icon-solid-dark: transparent rgba(#fff, .84),
+  icon-translucent-dark: transparent rgba(#fff, .58),
+  icon-solid-dark-active: transparent #fff,
+  icon-translucent-dark-active: transparent rgba(#fff, .88),
+  icon-solid-dark-blurred: transparent rgba(#fff, .665),
+  icon-translucent-dark-blurred: transparent rgba(#fff, .46),
+  icon-solid-dark-blurred-active: transparent rgba(#fff, .82),
+  icon-translucent-dark-blurred-active: transparent rgba(#fff, .57)
 );
 
 $tints: (
