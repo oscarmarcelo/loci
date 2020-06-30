@@ -22,10 +22,6 @@ block body
     .wrapper__outline
 
 
-    //- Just to make the sidebar top draggable.
-    div(data-app-region="drag")
-
-
     .titlebar(data-app-region="drag")= constants.PLUGIN_NAME
       |
       |
@@ -33,11 +29,11 @@ block body
 
 
     .sidebar
-      .sidebar__list
+      .sidebar__actions(data-app-region="drag")
+        button.sidebar__button.js-add-template(data-app-region="no-drag")
+          +icon('plus').sidebar__button-icon
 
-      .sidebar__footer
-        button.js-add-template 􀅼
-        // button 􀄂 // TODO: Support window collapsed modes.
+      .sidebar__list
 
 
     .main

@@ -51,6 +51,8 @@ $theme: (
   input-no-outline: rgba(#fff, 0) rgba(#000, 0),
   focus-ring-outline: rgba(#005cd7, .44) rgba(#2ea8ff, .5),
   focus-ring-border: rgba(darken(#005cd7, 10%), .55) rgba(lighten(#2ea8ff, 10%), .5),
+  sidebar-button: #0000007f #ffffff8c, // layerListTabButtonColor
+  sidebar-button-pressed: #000000d8 #ffffffd8, // layerListSelectedTabButtonColor
   sidebar-input-background: #fff #1d1e1f, // canvasBackgroundColor
   icon-solid-light: rgba(#000, .415) transparent,
   icon-translucent-light: rgba(#000, .185) transparent,

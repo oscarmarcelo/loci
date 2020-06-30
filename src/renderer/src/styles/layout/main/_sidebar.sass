@@ -4,19 +4,40 @@
  * ========================================================
  */
 
-// 1. Add breathing space for ::selection rectangle.
-// 1.1 - Revert padding.
+// 1. Fix vertical whitespace caused by inline-* display.
+// 2. Add breathing space for ::selection rectangle.
+// 2.1 - Revert padding.
 
 .sidebar
-  margin-bottom: 10px
   grid-area: sidebar
   display: flex
   flex-direction: column
 
+  &__actions
+    height: 29px
+    padding: 0 (8px - 6) 0 (8px + 15 + 8)
+    flex-shrink: 0
+    display: flex
+    justify-content: flex-end
+    align-items: flex-start
+
+  &__button
+    color: var(--color-sidebar-button)
+    padding: 6px
+    display: inline-flex
+    align-items: center
+    vertical-align: top // [1]
+
+    &:active
+      color: var(--color-sidebar-button-pressed)
+
+    &-icon
+      width: 11px
+      height: 11px
+
   &__list
     flex-grow: 1
     overflow-y: auto
-    margin-top: -5px
 
   &__item
     $element: &
@@ -69,8 +90,8 @@
 
     &-name
       max-width: 100%
-      margin: 0 -1px // [1.1]
-      padding: 1px // [1]
+      margin: 0 -1px // [2.1]
+      padding: 1px // [2]
       overflow: hidden
       white-space: nowrap
       flex-grow: 1
@@ -99,11 +120,3 @@
           width: .75px
         width: 11px
         height: 11px
-
-  &__footer
-    color: #7B7B7B
-    margin: 0 8px
-    flex-shrink: 0
-    display: flex
-    justify-content: space-between
-    line-height: 21px
