@@ -28,8 +28,11 @@
     align-items: center
     vertical-align: top // [1]
 
-    &:active
+    &:not(:disabled):active
       color: var(--color-sidebar-button-pressed)
+
+    &:disabled
+      opacity: .5
 
     &-icon
       width: 11px

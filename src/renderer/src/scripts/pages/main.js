@@ -588,6 +588,7 @@ function toggleApplyButton() {
   const dataTokens = tokenBoxScroller.querySelectorAll('.token--data');
 
   applyButton.disabled = dataTokens.length === 0;
+  addTemplateButton.disabled = dataTokens.length === 0;
 
   if (dataTokens.length === 0) {
     applyButton.title = 'Data should have at least one dynamic token.';
