@@ -418,6 +418,9 @@ function setDataConfig(options) {
     token.remove();
   });
 
+  // Clear token box input to avoid having its content prepended as text token.
+  tokenBoxInput.textContent = '';
+
   dataGeneralSettingsForm.reset();
 
   // TODO: Handle multiple selections.
