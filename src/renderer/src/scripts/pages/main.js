@@ -188,8 +188,11 @@ updateSidebarObserver.observe(document.querySelector('.token-box__scroller'), {
 
 const addTemplateButton = document.querySelector('.js-add-template');
 
-addTemplateButton.addEventListener('click', () => {
-  createTemplate();
+addTemplateButton.addEventListener('click', event => {
+  // FIXME: Workaround for bug of `sketch-module-web-view` forcing a mouse event on disabled elements.
+  if (addTemplateButton.disabled !== true && event.isTrusted) {
+    createTemplate();
+  }
 });
 
 
@@ -606,15 +609,18 @@ toggleApplyButtonObserver.observe(tokenBoxScroller, {
 });
 
 
-applyButton.addEventListener('click', () => {
-  const dataConfig = getDataConfig();
+applyButton.addEventListener('click', event => {
+  // FIXME: Workaround for bug of `sketch-module-web-view` forcing a mouse event on disabled elements.
+  if (applyButton.disabled !== true) {
+    const dataConfig = getDataConfig();
 
-  window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig, window.loci.document)
-    .catch(error => {
-      console.error('apply-data', error);
-    });
+    window.postMessage('apply-data', window.loci.dataKey, window.loci.dataItems, dataConfig, window.loci.document)
+      .catch(error => {
+        console.error('apply-data', error);
+      });
 
-  // Reset `dataKey` after `apply-data`, since it can only be used once.
-  // The plugin will look for selected items for the next `apply-data` messages in this session.
-  window.loci.dataKey = undefined;
+    // Reset `dataKey` after `apply-data`, since it can only be used once.
+    // The plugin will look for selected items for the next `apply-data` messages in this session.
+    window.loci.dataKey = undefined;
+  }
 });
