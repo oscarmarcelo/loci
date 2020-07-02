@@ -171,5 +171,31 @@ export default [
         ]
       }
     ]
+  },
+  {
+    id: 'math',
+    name: 'Math',
+    items: [
+      {
+        id: 'sum',
+        icon: 'sum',
+        name: 'Sum'
+      },
+      {
+        id: 'percent',
+        icon: 'percent',
+        name: 'Percent'
+      },
+      {
+        id: 'plus-minus',
+        icon: 'plus-minus',
+        name: 'Plus or Minus'
+      },
+      {
+        id: 'number',
+        icon: 'number',
+        name: 'Number'
+      }
+    ]
   }
 ];
