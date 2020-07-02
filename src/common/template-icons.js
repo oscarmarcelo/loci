@@ -38,7 +38,37 @@ export default [
       {
         id: 'network',
         icon: 'network',
-        name: 'Network'
+        name: 'Network',
+        alternatives: [
+          'globe',
+          'grid'
+        ]
+      },
+      {
+        id: 'bolt-horizontal',
+        icon: 'bolt-horizontal',
+        name: 'Horizontal Bolt',
+        alternatives: [
+          'Energy',
+          'Electricity'
+        ]
+      },
+      {
+        id: 'wifi',
+        icon: 'wifi',
+        name: 'Wi-Fi',
+        alternatives: [
+          'Wifi',
+          'Internet'
+        ]
+      },
+      {
+        id: 'antenna-radiowaves',
+        icon: 'antenna-radiowaves',
+        name: 'Radio Antenna',
+        alternatives: [
+          'Radiowaves'
+        ]
       }
     ]
   },
@@ -98,7 +128,9 @@ export default [
         icon: 'bolt',
         name: 'Bolt',
         alternatives: [
-          'Lightning'
+          'Lightning',
+          'Energy',
+          'Electricity'
         ]
       },
       {
