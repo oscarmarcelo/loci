@@ -207,6 +207,101 @@ export default [
     ]
   },
   {
+    id: 'health',
+    name: 'Health',
+    items: [
+      {
+        id: 'heart',
+        icon: 'heart',
+        name: 'Heart',
+        alternatives: [
+          'Love'
+        ]
+      },
+      {
+        id: 'bandage',
+        icon: 'bandage',
+        name: 'Bandage',
+        alternatives: [
+          'Plaster',
+          'Gauze',
+          'Compress',
+          'First Aid'
+        ]
+      },
+      {
+        id: 'cross-case',
+        icon: 'cross-case',
+        name: 'Cross Case',
+        alternatives: [
+          'First Aid',
+          'Med Kit',
+          'Medical Kit'
+        ]
+      },
+      {
+        id: 'bed-double',
+        icon: 'bed-double',
+        name: 'Bed',
+        alternatives: [
+          'Double Bed'
+        ]
+      },
+      {
+        id: 'pills',
+        icon: 'pills',
+        name: 'Pills',
+        alternatives: [
+          'Capsules',
+          'Tablet',
+          'Dose',
+          'Medicine',
+          'Bolus',
+          'Pellet',
+          'Pilule'
+        ]
+      },
+      {
+        id: 'cross',
+        icon: 'cross',
+        name: 'Cross',
+        alternatives: [
+          'Health Cross',
+          'Medical Cross'
+        ]
+      },
+      {
+        id: 'ecg',
+        icon: 'ecg',
+        name: 'Electrocardiogram',
+        alternatives: [
+          'ECG',
+          'EKG',
+          'Electrocardiography',
+          'Waveform',
+          'Heart',
+          'Rate',
+          'Pulse',
+          'Beating',
+          'Cardiac'
+        ]
+      },
+      {
+        id: 'star-of-life',
+        icon: 'star-of-life',
+        name: 'Star of Life',
+        alternatives: [
+          'Health',
+          'Medical',
+          'Emergency',
+          'Urgency',
+          'Star',
+          'Cross'
+        ]
+      }
+    ]
+  },
+  {
     id: 'arrows',
     name: 'Arrows',
     items: [
