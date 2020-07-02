@@ -173,6 +173,27 @@ export default [
     ]
   },
   {
+    id: 'arrows',
+    name: 'Arrows',
+    items: [
+      {
+        id: 'location',
+        icon: 'location',
+        name: 'Location'
+      },
+      {
+        id: 'arrow-3-triangle-path',
+        icon: 'arrow-3-triangle-path',
+        name: '3 Arrows in a Triangle Path',
+        alternatives: [
+          'Mobious Loop',
+          'Recycle',
+          'Reclycing Symbol'
+        ]
+      }
+    ]
+  },
+  {
     id: 'math',
     name: 'Math',
     items: [
