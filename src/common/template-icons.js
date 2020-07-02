@@ -136,6 +136,40 @@ export default [
     ]
   },
   {
+    id: 'commerce',
+    name: 'Commerce',
+    items: [
+      {
+        id: 'signature',
+        icon: 'signature',
+        name: 'Signature'
+      },
+      {
+        id: 'bag',
+        icon: 'bag',
+        name: 'Bag'
+      },
+      {
+        id: 'cart',
+        icon: 'cart',
+        name: 'Cart',
+        alternatives: [
+          'Shopping Cart'
+        ]
+      },
+      {
+        id: 'credit-card',
+        icon: 'credit-card',
+        name: 'Credit Card',
+        alternatives: [
+          'Debit Card',
+          'Money',
+          'Bank'
+        ]
+      }
+    ]
+  },
+  {
     id: 'time',
     name: 'Time',
     items: [
