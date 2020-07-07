@@ -191,7 +191,7 @@ function sanitize(options) {
   });
 
   // Expect a string. Default is 'word'.
-  options['amount-unit'] = sanitizeValue('string', options['amount-unit'], amountConfig.units.find(unit => unit.selected));
+  options['amount-unit'] = sanitizeValue('string', options['amount-unit'], amountConfig.units.find(unit => unit.selected).id);
 
   // Expect a number. Default is 3.
   options['word-min'] = sanitizeValue('number', options['word-min'], wordConfig.min.placeholder, {
@@ -236,7 +236,7 @@ function generate(options) {
   options = Object.assign({
     'amount-min': amountConfig.min.placeholder,
     'amount-max': amountConfig.max.placeholder,
-    'amount-unit': amountConfig.units.find(unit => unit.selected),
+    'amount-unit': amountConfig.units.find(unit => unit.selected).id,
     'word-min': wordConfig.min.placeholder,
     'word-max': wordConfig.max.placeholder,
     'sentence-separator': 'space', // TODO: Implement selected options in button-group and get default from there instead of hardcoding value.
