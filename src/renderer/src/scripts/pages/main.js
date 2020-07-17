@@ -30,7 +30,7 @@ const sidebarList = document.querySelector('.sidebar__list');
 
 
 
-function createSidebarItem (id = generateUUID(), icon = 'person', name = 'Template', dataConfig) {
+function createSidebarItem(id = generateUUID(), icon = 'puzzle-piece', name = 'Template', dataConfig) {
   const template = document.querySelector('#sidebar-item');
   const clone = template.content.cloneNode(template);
 
