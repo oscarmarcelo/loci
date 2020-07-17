@@ -17,7 +17,8 @@
     "start": "skpm-build --watch",
     "start:renderer": "(cd src/renderer && npm start)",
     "postinstall": "(cd src/renderer && npm install); npm run build",
-    "postupdate": "(cd src/renderer && npm update)"
+    "postupdate": "(cd src/renderer && npm update)",
+    "dist": "zip --symlinks -r loci.sketchplugin.zip 'loci.sketchplugin' -x '*.DS_Store'"
   },
   "private": true,
   "engines": {
