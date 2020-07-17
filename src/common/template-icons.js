@@ -28,6 +28,27 @@ export default [
           'Bucket',
           'Container'
         ]
+      },
+      {
+        id: 'doc',
+        icon: 'doc',
+        name: 'Document',
+        alternatives: [
+          'file',
+          'paper',
+          'sheet',
+          'archive'
+        ]
+      },
+      {
+        id: 'puzzle-piece',
+        icon: 'puzzle-piece',
+        name: 'Puzzle Piece',
+        alternatives: [
+          'build',
+          'game',
+          'toy'
+        ]
       }
     ]
   },
