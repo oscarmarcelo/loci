@@ -59,17 +59,8 @@
         --color-icon-solid-dark: var(--color-icon-solid-dark-blurred)
         --color-icon-translucent-dark: var(--color-icon-translucent-dark-blurred)
 
-    &--active
-      --color-icon-solid-light: var(--color-icon-solid-light-active)
-      --color-icon-translucent-light: var(--color-icon-translucent-light-active)
-      --color-icon-solid-dark: var(--color-icon-solid-dark-active)
-      --color-icon-translucent-dark: var(--color-icon-translucent-dark-active)
-
-      .window-blurred &
-        @media (prefers-color-scheme: dark)
-          --color-icon-solid-dark: var(--color-icon-solid-dark-blurred-active)
-          --color-icon-translucent-dark: var(--color-icon-translucent-dark-blurred-active)
-
+    &--active,
+    &--highlighted
       &::after
         content: ''
         background: rgba(#000, .15) // TODO:
@@ -83,6 +74,28 @@
 
         @media (prefers-color-scheme: dark)
           background: rgba(#fff, .18) // TODO:
+
+    &--active
+      --color-icon-solid-light: var(--color-icon-solid-light-active)
+      --color-icon-translucent-light: var(--color-icon-translucent-light-active)
+      --color-icon-solid-dark: var(--color-icon-solid-dark-active)
+      --color-icon-translucent-dark: var(--color-icon-translucent-dark-active)
+
+      .window-blurred &
+        @media (prefers-color-scheme: dark)
+          --color-icon-solid-dark: var(--color-icon-solid-dark-blurred-active)
+          --color-icon-translucent-dark: var(--color-icon-translucent-dark-blurred-active)
+
+    &--highlighted
+      &::after
+        opacity: .35
+
+    &--modified
+      #{$element}-name:not([contenteditable])
+        font-style: italic
+
+        &::after
+          content: '*'
 
     &-icon
       width: 15px

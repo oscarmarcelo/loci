@@ -159,7 +159,6 @@ function createWindow(dataKey, items) {
 
       templateId = undefined;
   });
-  updateMenuItem.setEnabled(false);
 
   const resetMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Reset', nil, '');
   resetMenuItem.setCOSJSTargetFunction(() => {
@@ -170,7 +169,6 @@ function createWindow(dataKey, items) {
 
       templateId = undefined;
   });
-  resetMenuItem.setEnabled(false);
 
   const changeIconMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Change Icon...', nil, '');
   changeIconMenuItem.setCOSJSTargetFunction(() => {
@@ -184,9 +182,9 @@ function createWindow(dataKey, items) {
 
   const renameMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent('Rename', nil, '');
   renameMenuItem.setCOSJSTargetFunction(() => {
-    window.webContents.executeJavaScript(`renameTemplate("${templateId}")`)
+    window.webContents.executeJavaScript(`requestTemplateNameChange("${templateId}")`)
       .catch(error => {
-        console.error('renameTemplate', error);
+        console.error('requestTemplateNameChange', error);
       });
 
     templateId = undefined;
@@ -211,8 +209,11 @@ function createWindow(dataKey, items) {
   menu.addItem(deleteMenuItem);
 
 
-  window.webContents.on('open-sidebar-item-context-menu', id => {
+  window.webContents.on('open-sidebar-item-context-menu', (id, modified) => {
     templateId = id;
+
+    updateMenuItem.setEnabled(Boolean(modified));
+    resetMenuItem.setEnabled(Boolean(modified));
 
     menu.popUpMenuPositioningItem_atLocation_inView(nil, NSEvent.mouseLocation(), nil);
   });
@@ -577,7 +578,12 @@ export function setSelection(dataKey, items) {
     const documentId = getSelectedDocument().id;
 
     // FIXME: BrowserWindow somehow silently breaks internally on this step, breaking `remembersWindowFrame` feature.
-    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify({dataKey, dataItems, documentId})})`)
+    window.webContents.executeJavaScript(`setDataConfig(${JSON.stringify({
+        dataKey,
+        dataItems,
+        documentId,
+        selectMatchingTemplate: true
+    })})`)
       .catch(error => {
         console.error('setDataConfig', error);
       });

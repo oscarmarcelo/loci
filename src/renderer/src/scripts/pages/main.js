@@ -43,35 +43,32 @@ function createSidebarItem(id = generateUUID(), icon = 'puzzle-piece', name = 'T
   sidebarItem.dataConfig = dataConfig;
 
   sidebarItem.addEventListener('click', () => {
-    // Ignore if it's not the first click of a click sequence or is in edit mode.
-    if (event.detail > 1 || sidebarItemName.contentEditable === 'plaintext-only') {
+    // Ignore event if item is already active, if it's not the first click of a click sequence, or if the item is in edit mode.
+    if (sidebarItem.classList.contains('sidebar__item--active') || event.detail > 1 || sidebarItemName.contentEditable === 'plaintext-only') {
       return;
     }
+
+    sidebarList.querySelector('.sidebar__item--active')?.classList.remove('sidebar__item--active', 'sidebar__item--modified');
+
+    sidebarItem.classList.add('sidebar__item--active');
+    sidebarItem.classList.remove('sidebar__item--highlighted');
 
     setDataConfig({
       dataConfig: sidebarItem.dataConfig
     });
   });
 
-  sidebarItem.addEventListener('dblclick', () => {
-    sidebarItemName.originalText = sidebarItemName.textContent;
-    sidebarItemName.contentEditable = 'plaintext-only';
-
-    const range = document.createRange();
-    const selection = window.getSelection();
-
-    range.selectNodeContents(sidebarItemName);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  });
-
   sidebarItem.addEventListener('contextmenu', () => {
+    sidebarItem.click();
+
     // Ensure native context menu still opens when in edit mode.
     if (sidebarItemName.contentEditable === 'inherit') {
-      window.postMessage('open-sidebar-item-context-menu', sidebarItem.dataset.id)
-      .catch(error => {
-        console.error('open-sidebar-item-context-menu', error);
-      });
+      const modified = sidebarItem.classList.contains('sidebar__item--modified');
+
+      window.postMessage('open-sidebar-item-context-menu', sidebarItem.dataset.id, modified)
+        .catch(error => {
+          console.error('open-sidebar-item-context-menu', error);
+        });
     }
   });
 
@@ -130,9 +127,9 @@ function updateSidebarSelection(dataConfig = getDataConfig()) {
   dataConfigString = JSON.stringify(dataConfigString)
   dataConfigString = dataConfigString.replace('\xA0', ' '); // Normalize spaces before comparison.
 
-  const sidebarItemList = document.querySelectorAll('.sidebar__item');
+  const sidebarItems = document.querySelectorAll('.sidebar__item');
 
-  [...sidebarItemList].forEach(sidebarItem => {
+  sidebarItems.forEach(sidebarItem => {
     let sidebarItemDataConfigString = sidebarItem.dataConfig;
 
     sidebarItemDataConfigString.tokens = sidebarItemDataConfigString.tokens?.map(token => {
@@ -144,12 +141,19 @@ function updateSidebarSelection(dataConfig = getDataConfig()) {
     sidebarItemDataConfigString = JSON.stringify(sidebarItemDataConfigString);
     sidebarItemDataConfigString = sidebarItemDataConfigString.replace('\xA0', ' '); // Normalize spaces before comparison.
 
-    sidebarItem.classList.toggle('sidebar__item--active', dataConfigString === sidebarItemDataConfigString);
+    if (sidebarItem.classList.contains('sidebar__item--active')) {
+      sidebarItem.classList.toggle('sidebar__item--modified', dataConfigString !== sidebarItemDataConfigString);
+    } else {
+      sidebarItem.classList.toggle('sidebar__item--highlighted', dataConfigString === sidebarItemDataConfigString);
+    }
   });
 
-  document.querySelector('.sidebar__item--active')?.scrollIntoView({
-    block: 'nearest'
-  });
+  if (document.querySelector('.sidebar__item--active') === null) {
+    document.querySelector('.sidebar__item--highlighted')?.scrollIntoView({
+      block: 'nearest'
+    });
+  }
+
 }
 
 
@@ -184,6 +188,11 @@ updateSidebarObserver.observe(document.querySelector('.token-box__scroller'), {
   childList: true
 });
 
+['input', 'change'].forEach(eventName => {
+  document.querySelector('.js-data-general-settings-form').addEventListener(eventName, () => {
+    updateSidebarSelection();
+  });
+});
 
 
 const addTemplateButton = document.querySelector('.js-add-template');
@@ -216,18 +225,37 @@ function createTemplate() {
 
   updateTemplateSettings();
 
-  renameTemplate(templateId);
+  requestTemplateNameChange(templateId);
 }
 
 
 
-function requestTemplateIconChange (id) {
+function updateTemplate(id) {
+  const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+
+  sidebarItem.dataConfig = getDataConfig();
+  sidebarItem.classList.remove('sidebar__item--modified');
+
+  updateTemplateSettings();
+}
+
+
+
+function resetTemplate(id) {
+  const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+
+  setDataConfig({
+    dataConfig: sidebarItem.dataConfig
+  });
+}
+
+
+
+function requestTemplateIconChange(id) {
   const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
   const sidebarItemIcon = sidebarItem.querySelector('.sidebar__item-icon');
   const sidebarItemIconUse = sidebarItem.querySelector('.sidebar__item-icon use');
   const icon = sidebarItemIconUse.getAttributeNS('http://www.w3.org/1999/xlink', 'href').slice('#template-icon__'.length);
-
-  sidebarItem.classList.add('sidebar__item--active');
 
   window.postMessage('open-icon-popover', id, icon, sidebarItemIcon.getBoundingClientRect())
     .catch(error => {
@@ -248,14 +276,19 @@ function changeTemplateIcon(id, icon) {
 
 
 
-function renameTemplate(id) {
+function requestTemplateNameChange(id) {
   const sidebarItem = sidebarList.querySelector(`[data-id="${id}"]`);
+  const sidebarItemName = sidebarItem.querySelector('.sidebar__item-name');
 
-  sidebarItem.classList.add('sidebar__item--active');
+  sidebarItemName.originalText = sidebarItemName.textContent;
+  sidebarItemName.contentEditable = 'plaintext-only';
 
-  sidebarItem.dispatchEvent(new Event('dblclick', {
-    cancelable: true
-  }));
+  const range = document.createRange();
+  const selection = window.getSelection();
+
+  range.selectNodeContents(sidebarItemName);
+  selection.removeAllRanges();
+  selection.addRange(range);
 }
 
 
@@ -412,6 +445,10 @@ function setDataConfig(options) {
 
   if (typeof options.documentId !== 'undefined') {
     window.loci.document = options.documentId || undefined;
+  }
+
+  if (options.selectMatchingTemplate) {
+    document.querySelector('.sidebar__item--active')?.classList.remove('sidebar__item--active');
   }
 
   const tokens = tokenBoxScroller.querySelectorAll('.token');
