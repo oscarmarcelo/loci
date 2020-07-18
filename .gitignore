@@ -6,6 +6,7 @@
 # =========================
 build
 *.sketchplugin
+*.zip
 
 
 # Sass
