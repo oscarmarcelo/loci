@@ -7,6 +7,22 @@
     <language>en</language>
 
     <item>
+      <title>Version 0.4.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Added support for Templates. Now you can save your token configurations to be reused later! (Beware: This is still a work in progress. Expect some inconsistencies or bugs.)</li>
+            <li>Added some example templates: "Name" and "IP". More will come with the next releases.</li>
+            <li>Fixed a bug in "Lorem Ipsum" data token that made it print "undefined" if none of its options were changed, even if all reverted to their defaults.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Sat, 18 Jul 2020 12:29:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.4.0</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.4.0/loci.sketchplugin.zip" sparkle:version="0.4.0"/>
+    </item>
+
+    <item>
       <title>Version 0.3.1</title>
       <description>
         <![CDATA[

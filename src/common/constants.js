@@ -6,7 +6,7 @@ const selectPopover = 'select-popover';
 export default {
   PLUGIN_NAME: 'Loci',
   PLUGIN_ID: pluginId,
-  PLUGIN_VERSION: '0.3.1', // TODO: Get version from manifest.json.
+  PLUGIN_VERSION: '0.4.0', // TODO: Get version from manifest.json.
   MAIN_WINDOW_ID: `${pluginId}.${mainWindow}`,
   MAIN_WINDOW_OBSERVERS: `${pluginId}.${mainWindow}.observers`,
   ICON_POPOVER_WINDOW_ID: `${pluginId}.${selectPopover}.icons`,
