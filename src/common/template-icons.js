@@ -152,6 +152,162 @@ export default [
     ]
   },
   {
+    id: 'devices',
+    name: 'Devices',
+    items: [
+      {
+        id: 'keyboard',
+        icon: 'keyboard',
+        name: 'Keyboard',
+        alternatives: [
+          'Write',
+          'Input',
+          'Type',
+          'Text',
+          'Typewriter',
+          'Keys'
+        ]
+      },
+      {
+        id: 'printer',
+        icon: 'printer',
+        name: 'Printer',
+        alternatives: [
+          'Copy',
+          'Paste',
+          'Paper',
+          'Document',
+          'Office'
+        ]
+      },
+      {
+        id: 'tv',
+        icon: 'tv',
+        name: 'TV',
+        alternatives: [
+          'Television',
+          'Display',
+          'Screen',
+          'Monitor',
+          'Movie',
+          'Show'
+        ]
+      },
+      {
+        id: 'display',
+        icon: 'display',
+        name: 'Display',
+        alternatives: [
+          'Television',
+          'Display',
+          'Screen',
+          'Monitor',
+          'Computer'
+        ]
+      },
+      {
+        id: 'server-rack',
+        icon: 'server-rack',
+        name: 'Server Rack',
+        alternatives: [
+          'Hosting',
+          'CPU',
+          'Computer',
+          'Network',
+          'Hardware',
+          'Database',
+          'Website'
+        ]
+      },
+      {
+        id: 'laptop',
+        icon: 'laptop',
+        name: 'Laptop',
+        alternatives: [
+          'Computer',
+          'CPU',
+          'MacBook',
+          'Machine',
+          'PC'
+        ]
+      },
+      {
+        id: 'flip-phone',
+        icon: 'flip-phone',
+        name: 'Flip Phone',
+        alternatives: [
+          'Mobile',
+          'Cell',
+          'iPhone',
+          'Call',
+          'Telephone',
+          'Feature',
+          'Screen',
+          'Display'
+        ]
+      },
+      {
+        id: 'candy-bar-phone',
+        icon: 'candy-bar-phone',
+        name: 'Candy Bar Phone',
+        alternatives: [
+          'Mobile',
+          'Cell',
+          'iPhone',
+          'Call',
+          'Telephone',
+          'Feature',
+          'Keys',
+          'Screen',
+          'Display'
+        ]
+      },
+      {
+        id: 'hifi-speaker',
+        icon: 'hifi-speaker',
+        name: 'HiFi Speaker',
+        alternatives: [
+          'Sounds',
+          'Musics',
+          'Songs',
+          'Audio',
+          'Listen',
+          'Hear'
+        ]
+      },
+      {
+        id: 'game-controller',
+        icon: 'game-controller',
+        name: 'Game Controller',
+        alternatives: [
+          'Gamepad',
+          'Joystick',
+          'Games',
+          'Arcade',
+          'D-Pad',
+          'Video'
+        ]
+      },
+      {
+        id: 'headphones',
+        icon: 'headphones',
+        name: 'Headphones',
+        alternatives: [
+          'Sounds',
+          'Musics',
+          'Songs',
+          'Audio',
+          'Listen',
+          'Hear',
+          'Speakers',
+          'Earphones',
+          'EarPods',
+          'AirPods'
+        ]
+      }
+    ]
+  },
+  {
     id: 'connectivity',
     name: 'Connectivity',
     items: [
