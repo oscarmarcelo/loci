@@ -212,9 +212,143 @@ export default [
         ]
       },
       {
+        id: 'eyes',
+        icon: 'eyes',
+        name: 'Eyes',
+        alternatives: [
+          'Look',
+          'See',
+          'Watch',
+          'View',
+          'Sight'
+        ]
+      },
+      {
+        id: 'eyebrow',
+        icon: 'eyebrow',
+        name: 'Eyebrow',
+        alternatives: [
+          'Look',
+          'See',
+          'Watch',
+          'View',
+          'Sight',
+          'Closed',
+          'Eye',
+          'Sleep'
+        ]
+      },
+      {
+        id: 'nose',
+        icon: 'nose',
+        name: 'Nose',
+        alternatives: [
+          'Smell',
+          'Sneeze',
+          'Snot'
+        ]
+      },
+      {
+        id: 'mustache',
+        icon: 'mustache',
+        name: 'Mustache',
+        alternatives: [
+          'Moustache',
+          'Facial',
+          'Hair'
+        ]
+      },
+      {
+        id: 'mouth',
+        icon: 'mouth',
+        name: 'Mouth',
+        alternatives: [
+          'Lips',
+          'Eat',
+          'Kiss',
+          'Love',
+          'Passion',
+          'Smile'
+        ]
+      },
+      {
+        id: 'lungs',
+        icon: 'lungs',
+        name: 'Lungs',
+        alternatives: [
+          'Breathe',
+          'Hair',
+          'Respiratory',
+          'Illness',
+          'Air'
+        ]
+      },
+      {
+        id: 'face-smiling',
+        icon: 'face-smiling',
+        name: 'Smiling Face',
+        alternatives: [
+          'Emotion',
+          'Emoticon',
+          'Smiley',
+          'Smile',
+          'Approve',
+          'Happy',
+          'Satisfied',
+          'Positive'
+        ]
+      },
+      {
+        id: 'figure-walk',
+        icon: 'figure-walk',
+        name: 'Figure Walking',
+        alternatives: [
+          'Activity',
+          'Exercise',
+          'Health',
+          'Pedometer',
+          'Person',
+          'Human',
+          'Steps',
+          'Transportation',
+          'Fitness',
+          'Outdoors',
+          'Feet'
+        ]
+      },
+      {
+        id: 'figure-wave',
+        icon: 'figure-wave',
+        name: 'Figure Waving',
+        alternatives: [
+          'Wave',
+          'Greeting',
+          'Raised',
+          'Arm',
+          'Hand',
+          'Welcome'
+        ]
+      },
+      {
         id: 'ear',
         icon: 'ear',
-        name: 'Ear'
+        name: 'Ear',
+        alternatives: [
+          'Listen',
+          'Audio',
+          'Hearing',
+          'Sound'
+        ]
+      },
+      {
+        id: 'hand-raised',
+        icon: 'hand-raised',
+        name: 'Raised Hand',
+        alternatives: [
+          'Stop',
+          'Wave',
+          'Greeting'
+        ]
       },
       {
         id: 'thumbs-up',
@@ -222,7 +356,53 @@ export default [
         name: 'Thumbs Up',
         alternatives: [
           'Hands',
-          'Finger'
+          'Fingers',
+          'Approvement',
+          'Positive',
+          'Agreement'
+        ]
+      },
+      {
+        id: 'thumbs-down',
+        icon: 'thumbs-down',
+        name: 'Thumbs Down',
+        alternatives: [
+          'Hands',
+          'Fingers',
+          'Disaprovement',
+          'Negative',
+          'Negation',
+          'Disagreement'
+        ]
+      },
+      {
+        id: 'hand-point-up-left',
+        icon: 'hand-point-up-left',
+        name: 'Hand Pointing Up Left',
+        alternatives: [
+          'Fingers',
+          'Directions',
+          'Instructions'
+        ]
+      },
+      {
+        id: 'hand-point-right',
+        icon: 'hand-point-right',
+        name: 'Hand Pointing Right',
+        alternatives: [
+          'Fingers',
+          'Directions',
+          'Instructions'
+        ]
+      },
+      {
+        id: 'hand-wave',
+        icon: 'hand-wave',
+        name: 'Waving Hand',
+        alternatives: [
+          'Hands',
+          'Fingers',
+          'Greeting'
         ]
       }
     ]
