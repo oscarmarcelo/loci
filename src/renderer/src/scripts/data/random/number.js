@@ -24,6 +24,11 @@ const config = {
     },
     {
       type: 'checkbox',
+      id: 'keep-leading-zeros',
+      text: 'Keep leading zeros'
+    },
+    {
+      type: 'checkbox',
       id: 'keep-decimal-zeros',
       text: 'Keep decimal zeros'
     },
@@ -162,6 +167,9 @@ function sanitize(options) {
   });
 
   // Expect a boolean. Default is `false`.
+  options['keep-leading-zeros'] = sanitizeValue('boolean', options['keep-leading-zeros'], false);
+
+  // Expect a boolean. Default is `false`.
   options['keep-decimal-zeros'] = sanitizeValue('boolean', options['keep-decimal-zeros'], false);
 
   // Expect a string. Default is `none`.
@@ -197,6 +205,7 @@ function generate(options) {
   };
 
   return new Intl.NumberFormat('en', {
+    minimumIntegerDigits: options['keep-leading-zeros'] ? Math.log10(Math.max(Math.abs(options['limit-min']), Math.abs(options['limit-max']))) + 1 | 0 || 1 : 1,
     minimumFractionDigits: options['keep-decimal-zeros'] ? options['limit-precision'] : 0,
     maximumFractionDigits: options['limit-precision']
   })
