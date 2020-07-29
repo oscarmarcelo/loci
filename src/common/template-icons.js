@@ -41,6 +41,19 @@ export default [
         ]
       },
       {
+        id: 'calendar',
+        icon: 'calendar',
+        name: 'Calendar',
+        alternatives: [
+          'date',
+          'time',
+          'day',
+          'month',
+          'event',
+          'schedule'
+        ]
+      },
+      {
         id: 'puzzle-piece',
         icon: 'puzzle-piece',
         name: 'Puzzle Piece',
