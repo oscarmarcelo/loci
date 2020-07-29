@@ -193,6 +193,68 @@ export default [
     ]
   },
   {
+    id: 'transportation',
+    name: 'Transportation',
+    items: [
+      {
+        id: 'car',
+        icon: 'car',
+        name: 'Car',
+        alternatives: [
+          'Automobile',
+          'Transportation',
+          'Vehicle',
+          'Travel'
+        ]
+      },
+      {
+        id: 'bus',
+        icon: 'bus',
+        name: 'Bus',
+        alternatives: [
+          'Public Transportation',
+          'Vehicle',
+          'Travel'
+        ]
+      },
+      {
+        id: 'tram',
+        icon: 'tram',
+        name: 'Tram',
+        alternatives: [
+          'Train',
+          'Transportation',
+          'Travel'
+        ]
+      },
+      {
+        id: 'bicycle',
+        icon: 'bicycle',
+        name: 'Bicycle',
+        alternatives: [
+          'Bike',
+          'Transportation',
+          'Vehicle',
+          'Travel',
+          'Pedal'
+        ]
+      },
+      {
+        id: 'airplane',
+        icon: 'airplane',
+        name: 'Airplane',
+        alternatives: [
+          'Fly',
+          'Transportation',
+          'Destination',
+          'Travel',
+          'Trip',
+          'Take Off'
+        ]
+      }
+    ]
+  },
+  {
     id: 'human',
     name: 'Human',
     items: [
