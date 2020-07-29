@@ -108,7 +108,8 @@ export default [
           'Man',
           'Men',
           'Woman',
-          'Women'
+          'Women',
+          'Profile'
         ]
       },
       {
