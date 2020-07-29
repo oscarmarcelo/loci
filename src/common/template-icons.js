@@ -1,5 +1,91 @@
 export default [
   {
+    id: 'communication',
+    name: 'Communication',
+    items: [
+      {
+        id: 'mic',
+        icon: 'mic',
+        name: 'Microphone',
+        alternatives: [
+          'Podcast',
+          'Audio',
+          'Record',
+          'Voice',
+          'Sound',
+          'Sing',
+          'Headset'
+        ]
+      },
+      {
+        id: 'bubble-left',
+        icon: 'bubble-left',
+        name: 'Bubble',
+        alternatives: [
+          'Chat',
+          'Comment',
+          'Message',
+          'Conversation',
+          'Talk',
+          'Note',
+          'SMS',
+          'Text',
+          'Speech',
+          'Support'
+        ]
+      },
+      {
+        id: 'phone',
+        icon: 'phone',
+        name: 'Phone',
+        alternatives: [
+          'Telephone',
+          'Number',
+          'Call',
+          'Earphone',
+          'Voice',
+          'Talk',
+          'Conversation',
+          'Support'
+        ]
+      },
+      {
+        id: 'envelope',
+        icon: 'envelope',
+        name: 'Envelope',
+        alternatives: [
+          'Letter',
+          'Email',
+          'E-mail',
+          'Mail',
+          'Message',
+          'Conversation',
+          'Support',
+          'Text',
+          'Archive',
+          'Postal',
+          'Post Office',
+          'Postcard',
+          'Send'
+        ]
+      },
+      {
+        id: 'waveform',
+        icon: 'waveform',
+        name: 'Waveform',
+        alternatives: [
+          'Airwave',
+          'Sound',
+          'Record',
+          'Voice',
+          'Talk',
+          'Speech',
+          'Conversation'
+        ]
+      }
+    ]
+  },
+  {
     id: 'objects-tools',
     name: 'Objects & Tools',
     items: [
