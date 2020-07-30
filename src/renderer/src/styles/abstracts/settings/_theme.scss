@@ -54,16 +54,22 @@ $theme: (
   sidebar-button: #0000007f #ffffff8c, // layerListTabButtonColor
   sidebar-button-pressed: #000000d8 #ffffffd8, // layerListSelectedTabButtonColor
   sidebar-input-background: #fff #1d1e1f, // canvasBackgroundColor
+  icon-opaque-light: rgba(#000, .525) transparent,
   icon-solid-light: rgba(#000, .415) transparent,
   icon-translucent-light: rgba(#000, .185) transparent,
+  icon-opaque-light-active: rgba(#000, .655) transparent,
   icon-solid-light-active: rgba(#000, .56) transparent,
   icon-translucent-light-active: rgba(#000, .215) transparent,
+  icon-opaque-dark: transparent rgba(#fff, .935),
   icon-solid-dark: transparent rgba(#fff, .84),
   icon-translucent-dark: transparent rgba(#fff, .58),
+  icon-opaque-dark-active: transparent #fff,
   icon-solid-dark-active: transparent #fff,
   icon-translucent-dark-active: transparent rgba(#fff, .88),
+  icon-opaque-dark-blurred: transparent rgba(#fff, .82),
   icon-solid-dark-blurred: transparent rgba(#fff, .665),
   icon-translucent-dark-blurred: transparent rgba(#fff, .46),
+  icon-opaque-dark-blurred-active: transparent rgba(#fff, .92),
   icon-solid-dark-blurred-active: transparent rgba(#fff, .82),
   icon-translucent-dark-blurred-active: transparent rgba(#fff, .57)
 );

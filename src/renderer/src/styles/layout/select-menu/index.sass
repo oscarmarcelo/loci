@@ -68,8 +68,10 @@
     letter-spacing: .05px
 
     &--selected
+      --color-icon-opaque-light: var(--color-icon-opaque-light-active)
       --color-icon-solid-light: var(--color-icon-solid-light-active)
       --color-icon-translucent-light: var(--color-icon-translucent-light-active)
+      --color-icon-opaque-dark: var(--color-icon-opaque-dark-active)
       --color-icon-solid-dark: var(--color-icon-solid-dark-active)
       --color-icon-translucent-dark: var(--color-icon-translucent-dark-active)
       background: var(--color-separator) // TODO: Not the right variable, but probably the right color.
@@ -81,10 +83,12 @@
       // FIXME: Currently, Sass doesn't support negation in media queries very well.
       //        Should be `@media not (prefers-color-scheme: dark)`.
       @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference)
+        --color-icon-opaque-light: #fff
         --color-icon-solid-light: #fff
         --color-icon-translucent-light: #{rgba(#fff, .4)}
 
       @media (prefers-color-scheme: dark)
+        --color-icon-opaque-dark: var(--color-icon-opaque-dark-active)
         --color-icon-solid-dark: var(--color-icon-solid-dark-active)
         --color-icon-translucent-dark: var(--color-icon-translucent-dark-active)
 

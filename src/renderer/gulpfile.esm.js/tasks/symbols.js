@@ -82,11 +82,15 @@ export const templateIcons = () =>
     .pipe(cheerio(($, file) => {
       $('svg').attr('overflow', 'visible');
 
+      $('#light #opaque').attr('fill', 'var(--color-icon-opaque-light)');
       $('#light #solid').attr('fill', 'var(--color-icon-solid-light)');
-      $('#light #translucent').attr('fill', 'var(--color-icon-translucent-light)').removeAttr('opacity');
+      $('#light #translucent').attr('fill', 'var(--color-icon-translucent-light)');
 
+      $('#dark #opaque').attr('fill', 'var(--color-icon-opaque-dark)');
       $('#dark #solid').attr('fill', 'var(--color-icon-solid-dark)');
-      $('#dark #translucent').attr('fill', 'var(--color-icon-translucent-dark)').removeAttr('opacity');
+      $('#dark #translucent').attr('fill', 'var(--color-icon-translucent-dark)');
+
+      $('[opacity]').removeAttr('opacity');
     }))
     .pipe(imagemin({
       svgoPlugins: [{
