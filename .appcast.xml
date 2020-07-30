@@ -7,6 +7,22 @@
     <language>en</language>
 
     <item>
+      <title>Version 0.5.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Added support to keep leading zeros in the "Number" data token.</li>
+            <li>Added more 36 Template icons.</li>
+            <li>Improved the color rendering of the Template icons.</li>
+          </ul>
+        ]]>
+      </description>
+      <pubDate>Thu, 30 Jul 2020 02:16:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://github.com/oscarmarcelo/loci/releases/tag/v0.5.0</sparkle:releaseNotesLink>
+      <enclosure url="https://github.com/oscarmarcelo/loci/releases/download/v0.5.0/loci.sketchplugin.zip" sparkle:version="0.5.0"/>
+    </item>
+
+    <item>
       <title>Version 0.4.0</title>
       <description>
         <![CDATA[
